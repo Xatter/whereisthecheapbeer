@@ -1,4 +1,4 @@
-package com.mapitprices.WheresTheCheapBeer;
+package com.mapitprices.wheresthecheapbeer;
 
 import android.app.Activity;
 import android.app.TabActivity;
