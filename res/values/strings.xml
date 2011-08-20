@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">com.mapitprices.WheresTheCheapBeer</string>
+    <string name="no_items">Looks like there\'s no items in the database near you. Sorry.</string>
 </resources>

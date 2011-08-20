@@ -1,4 +1,4 @@
-package com.mapitprices.wheresthecheapbeer;
+package com.mapitprices.WheresTheCheapBeer;
 
 import android.app.Activity;
 import android.os.Bundle;

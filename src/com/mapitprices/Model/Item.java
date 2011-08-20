@@ -9,6 +9,8 @@ public class Item implements Parcelable {
     String _upc;
     String Size;
     String Brand;
+    double Price;
+    int StoreID;
 
     public Item() {
 
@@ -63,6 +65,10 @@ public class Item implements Parcelable {
 
     public String getBrand() {
         return Brand;
+    }
+
+    public double getPrice() {
+        return Price;
     }
 
     public int describeContents() {
