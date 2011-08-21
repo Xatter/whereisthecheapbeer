@@ -4,44 +4,47 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 public class Store implements Parcelable {
-    int _id = -1;
-    String _name;
-    Address _address;
-    GPS _gps;
+    int ID = -1;
+    String Name;
+    Address Address;
+    double Latitude;
+    double Longitude;
+    double Distance;
+
+    public Store() {
+
+    }
 
     public Store(String name, Address address) {
-        _name = name;
-        _address = address;
+        Name = name;
+        Address = address;
     }
 
     public Store(int id, String name, Address address, GPS gps) {
-        _id = id;
-        _name = name;
-        _address = address;
-        _gps = gps;
+        ID = id;
+        Name = name;
+        Address = address;
     }
 
     public Store(Parcel in) {
-        _id = in.readInt();
-        _name = in.readString();
-        _address = in.readParcelable(Address.class.getClassLoader());
-        _gps = in.readParcelable(GPS.class.getClassLoader());
+        ID = in.readInt();
+        Name = in.readString();
+        Address = in.readParcelable(Address.class.getClassLoader());
+        Latitude = in.readDouble();
+        Longitude = in.readDouble();
+        Distance = in.readDouble();
     }
 
     public int getID() {
-        return _id;
+        return ID;
     }
 
     public String getName() {
-        return _name;
+        return Name;
     }
 
     public Address getAddress() {
-        return _address;
-    }
-
-    public GPS getGPS() {
-        return _gps;
+        return Address;
     }
 
     public int describeContents() {
@@ -50,10 +53,12 @@ public class Store implements Parcelable {
     }
 
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeInt(_id);
-        dest.writeString(_name);
-        dest.writeParcelable(_address, flags);
-        dest.writeParcelable(_gps, flags);
+        dest.writeInt(ID);
+        dest.writeString(Name);
+        dest.writeParcelable(Address, flags);
+        dest.writeDouble(Latitude);
+        dest.writeDouble(Longitude);
+        dest.writeDouble(Distance);
     }
 
     public static final Parcelable.Creator CREATOR = new Parcelable.Creator() {
@@ -65,4 +70,8 @@ public class Store implements Parcelable {
             return new Store[size];
         }
     };
+
+    public double getDistance() {
+        return Distance;
+    }
 }

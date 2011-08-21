@@ -4,39 +4,39 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 public class Address implements Parcelable {
-    String _street;
-    String _city;
-    String _state;
-    String _zip;
+    String Street;
+    String City;
+    String State;
+    String Zip;
 
     public Address(String street, String city, String state, String zip) {
-        _street = street;
-        _city = city;
-        _state = state;
-        _zip = zip;
+        Street = street;
+        City = city;
+        State = state;
+        Zip = zip;
     }
 
     public Address(Parcel in) {
-        _street = in.readString();
-        _city = in.readString();
-        _state = in.readString();
-        _zip = in.readString();
+        Street = in.readString();
+        City = in.readString();
+        State = in.readString();
+        Zip = in.readString();
     }
 
     public String getStreet() {
-        return _street;
+        return Street;
     }
 
     public String getCity() {
-        return _city;
+        return City;
     }
 
     public String getState() {
-        return _state;
+        return State;
     }
 
     public String getZip() {
-        return _zip;
+        return Zip;
     }
 
     public int describeContents() {
