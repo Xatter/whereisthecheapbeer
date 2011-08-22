@@ -8,6 +8,7 @@ public class Address implements Parcelable {
     String City;
     String State;
     String Zip;
+    String CrossStreets;
 
     public Address(String street, String city, String state, String zip) {
         Street = street;
@@ -21,6 +22,7 @@ public class Address implements Parcelable {
         City = in.readString();
         State = in.readString();
         Zip = in.readString();
+        CrossStreets = in.readString();
     }
 
     public String getStreet() {
@@ -39,6 +41,10 @@ public class Address implements Parcelable {
         return Zip;
     }
 
+    public String getCrossStreets() {
+        return CrossStreets;
+    }
+
     public int describeContents() {
         // TODO Auto-generated method stub
         return 0;
@@ -46,7 +52,11 @@ public class Address implements Parcelable {
 
     public void writeToParcel(Parcel dest, int flags) {
         // TODO Auto-generated method stub
-
+        dest.writeString(Street);
+        dest.writeString(City);
+        dest.writeString(State);
+        dest.writeString(Zip);
+        dest.writeString(CrossStreets);
     }
 
     public static final Parcelable.Creator<Address> CREATOR = new Parcelable.Creator<Address>() {

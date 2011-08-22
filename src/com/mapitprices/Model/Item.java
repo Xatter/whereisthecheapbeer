@@ -2,6 +2,11 @@ package com.mapitprices.Model;
 
 import android.os.Parcel;
 import android.os.Parcelable;
+import org.apache.http.NameValuePair;
+import org.apache.http.message.BasicNameValuePair;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class Item implements Parcelable {
     int ID;
@@ -82,6 +87,18 @@ public class Item implements Parcelable {
         dest.writeString(_upc);
         dest.writeString(Size);
         dest.writeString(Brand);
+        dest.writeDouble(Price);
+    }
+
+    public List<NameValuePair> toNameValuePairs() {
+        List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(7);
+        nameValuePairs.add(new BasicNameValuePair("ID", Integer.toString(ID)));
+        nameValuePairs.add(new BasicNameValuePair("Name", Name));
+        nameValuePairs.add(new BasicNameValuePair("UPC", _upc));
+        nameValuePairs.add(new BasicNameValuePair("Size", Size));
+        nameValuePairs.add(new BasicNameValuePair("Brand", Brand));
+        nameValuePairs.add(new BasicNameValuePair("Price", Double.toString(Price)));
+        return nameValuePairs;
     }
 
     public static final Parcelable.Creator CREATOR = new Parcelable.Creator() {

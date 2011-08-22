@@ -22,5 +22,6 @@
         <activity android:name="com.mapitprices.WheresTheCheapBeer.NearbyStoresActivity"/>
         <activity android:name="com.mapitprices.WheresTheCheapBeer.NearbyItemsActivity"/>
         <activity android:name=".StoreItemsActivity"/>
+        <activity android:name=".NewStoreActivity"/>
     </application>
 </manifest> 
