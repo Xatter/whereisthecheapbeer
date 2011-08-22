@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/com.mapitprices.wheresthecheapbeer.iml" filepath="$PROJECT_DIR$/com.mapitprices.wheresthecheapbeer.iml" />
+      <module fileurl="file://$PROJECT_DIR$/com.mapitprices.WheresTheCheapBeer.iml" filepath="$PROJECT_DIR$/com.mapitprices.WheresTheCheapBeer.iml" />
     </modules>
   </component>
 </project>

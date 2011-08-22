@@ -1,7 +1,8 @@
-package com.mapitprices.WheresTheCheapBeer;
+package com.mapitprices.WhereIsTheCheapBeer;
 
 import android.app.ListActivity;
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationListener;
@@ -12,9 +13,13 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.ArrayAdapter;
+import android.widget.Toast;
+import com.google.zxing.integration.android.IntentIntegrator;
+import com.google.zxing.integration.android.IntentResult;
 import com.mapitprices.Model.Item;
 import com.mapitprices.Utilities.ItemResultAdapter;
 import com.mapitprices.Utilities.MapItPricesServer;
+import com.mapitprices.WheresTheCheapBeer.R;
 
 import java.util.Collection;
 
@@ -99,10 +104,46 @@ public class NearbyItemsActivity extends ListActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.menu_new_price:
+                Intent i = new Intent().setClass(NearbyItemsActivity.this,ReportPriceActivity.class);
+                startActivity(i);
+                return true;
+            case R.id.menu_scan_barcode:
+                IntentIntegrator.initiateScan(NearbyItemsActivity.this);
+                return true;
+            case R.id.menu_map_items:
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        IntentResult scanResult = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
+	    if (scanResult != null) {
+	    	String result = scanResult.getContents();
+	    	if (result != null)
+	    	{
+                int len = result.length();
+                if (len != 8 ||
+                        len != 12 ||
+                        len != 13 ||
+                        len != 14)
+                {
+                  //not enough digits, rescan
+                    Toast toast = Toast.makeText(this,"Scan didn't get all the digits, please try again.", 2000);
+                    toast.show();
+                    IntentIntegrator.initiateScan(NearbyItemsActivity.this);
+                }
+
+				Bundle bundle = new Bundle();
+				bundle.putString("barcode", result);
+
+				Intent searchResults = new Intent().setClass(this, BarCodeScanItemActivity.class);
+				searchResults.putExtras(bundle);
+				startActivity(searchResults);
+	    	}
+	    }
     }
 
     private void registerListener() {
@@ -122,13 +163,10 @@ public class NearbyItemsActivity extends ListActivity {
             _progressDialog.show();
             new GetLocationTask().execute(location);
 
-            mlocManager.requestLocationUpdates(provider, MIN_TIME,
-                    MIN_DISTANCE, currentListener);
+            mlocManager.requestLocationUpdates(provider, MapItPricesServer.MIN_TIME,
+                    MapItPricesServer.MIN_DISTANCE, currentListener);
         }
     }
-
-    private static final int MIN_DISTANCE = 200; // in meters
-    private static final int MIN_TIME = 300000; // 5 minutes in ms
 
     private void unregisterListener() {
         LocationManager mlocManager = (LocationManager) getSystemService(LOCATION_SERVICE);

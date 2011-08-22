@@ -1,4 +1,4 @@
-package com.mapitprices.WheresTheCheapBeer;
+package com.mapitprices.WhereIsTheCheapBeer;
 
 import android.app.TabActivity;
 import android.content.Intent;
@@ -6,6 +6,7 @@ import android.content.res.Resources;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.TabHost;
+import com.mapitprices.WheresTheCheapBeer.R;
 
 public class MainActivity extends TabActivity {
     /**

@@ -34,14 +34,7 @@ public class MapItPricesServer {
 
         String result = RestClient.ExecuteCommand(SERVER_URL + "GetAllItemsAtStore", nameValuePairs);
 
-        if (result != null && result.length() != 0) {
-            Gson gson = new Gson();
-            Type collectionType = new TypeToken<Collection<Item>>() {
-            }.getType();
-            return gson.fromJson(result, collectionType);
-        }
-
-        return null;
+        return jsonResultToItemCollection(result);
     }
 
     public static Collection<Item> getItemsFromServer(Location loc) {
@@ -49,14 +42,7 @@ public class MapItPricesServer {
 
         String result = RestClient.ExecuteCommand(SERVER_URL + "GetItems", nameValuePairs);
 
-        if (result != null && result.length() != 0) {
-            Gson gson = new Gson();
-            Type collectionType = new TypeToken<Collection<Item>>() {
-            }.getType();
-            return gson.fromJson(result, collectionType);
-        }
-
-        return null;
+        return jsonResultToItemCollection(result);
     }
 
     public static Collection<Store> getStoresFromServer(Location loc) {
@@ -64,6 +50,10 @@ public class MapItPricesServer {
 
         String result = RestClient.ExecuteCommand(SERVER_URL + "GetStores", nameValuePairs);
 
+        return jsonResultToStoreCollection(result);
+    }
+
+    private static Collection<Store> jsonResultToStoreCollection(String result) {
         if (result != null && result.length() != 0) {
             Gson gson = new Gson();
             Type collectionType = new TypeToken<Collection<Store>>() {
@@ -74,9 +64,22 @@ public class MapItPricesServer {
         return null;
     }
 
-    public static boolean reportPrice(Item item) {
-        String result = RestClient.ExecuteCommand(SERVER_URL + "GetStores", item.toNameValuePairs());
+        private static Collection<Item> jsonResultToItemCollection(String result) {
+        if (result != null && result.length() != 0) {
+            Gson gson = new Gson();
+            Type collectionType = new TypeToken<Collection<Item>>() {
+            }.getType();
+            return gson.fromJson(result, collectionType);
+        }
 
-        return false;
+        return null;
+    }
+
+    public static Collection<Item> getItemsByBarCode(String barcode) {
+        List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(1);
+        nameValuePairs.add(new BasicNameValuePair("barcode", barcode));
+
+        String result = RestClient.ExecuteCommand(SERVER_URL + "ItemsFromBarcode", nameValuePairs);
+        return jsonResultToItemCollection(result);
     }
 }

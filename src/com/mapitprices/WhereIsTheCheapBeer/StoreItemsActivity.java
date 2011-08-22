@@ -1,4 +1,4 @@
-package com.mapitprices.WheresTheCheapBeer;
+package com.mapitprices.WhereIsTheCheapBeer;
 
 import android.app.ListActivity;
 import android.app.ProgressDialog;
@@ -10,6 +10,7 @@ import com.mapitprices.Model.Item;
 import com.mapitprices.Model.Store;
 import com.mapitprices.Utilities.ItemResultAdapter;
 import com.mapitprices.Utilities.MapItPricesServer;
+import com.mapitprices.WheresTheCheapBeer.R;
 
 import java.util.Collection;
 
