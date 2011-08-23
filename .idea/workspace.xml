@@ -2,14 +2,13 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="994a4b93-ea11-4208-97bb-4ea61cc5e1a5" name="Default" comment="BarCode scan for nearby items should work now.">
-      <change type="MOVED" beforePath="$PROJECT_DIR$/.idea/libraries/libs.xml" afterPath="$PROJECT_DIR$/.idea/libraries/Libraries2.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/.name" afterPath="$PROJECT_DIR$/.idea/.name" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/libraries/Libraries.xml" afterPath="$PROJECT_DIR$/.idea/libraries/Libraries.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/misc.xml" afterPath="$PROJECT_DIR$/.idea/misc.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/modules.xml" afterPath="$PROJECT_DIR$/.idea/modules.xml" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/res/menu/item_price_list_option_menu.xml" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/com/mapitprices/WhereIsTheCheapBeer/NewItemActivity.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/WheresTheCheapBeer.iml" afterPath="$PROJECT_DIR$/WheresTheCheapBeer.iml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/mapitprices/Utilities/MapItPricesServer.java" afterPath="$PROJECT_DIR$/src/com/mapitprices/Utilities/MapItPricesServer.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/AndroidManifest.xml" afterPath="$PROJECT_DIR$/AndroidManifest.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/res/menu/item_list_option_menu.xml" afterPath="$PROJECT_DIR$/res/menu/item_list_option_menu.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/mapitprices/WhereIsTheCheapBeer/ListAllDistinctItemsActivity.java" afterPath="$PROJECT_DIR$/src/com/mapitprices/WhereIsTheCheapBeer/ListAllDistinctItemsActivity.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/mapitprices/WhereIsTheCheapBeer/NearbyItemsActivity.java" afterPath="$PROJECT_DIR$/src/com/mapitprices/WhereIsTheCheapBeer/NearbyItemsActivity.java" />
     </list>
     <ignored path="WheresTheCheapBeer.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -67,28 +66,7 @@
     <favorites_list name="WheresTheCheapBeer" />
   </component>
   <component name="FileEditorManager">
-    <leaf>
-      <file leaf-file-name="Store.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/com/mapitprices/Model/Store.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="19" column="40" selection-start="377" selection-end="377" vertical-scroll-proportion="0.0">
-              <folding>
-                <element signature="imports" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="MapItPricesServer.java" pinned="false" current="true" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/src/com/mapitprices/Utilities/MapItPricesServer.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="89" column="70" selection-start="3191" selection-end="3191" vertical-scroll-proportion="0.56558776">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-    </leaf>
+    <leaf />
   </component>
   <component name="FindManager">
     <FindUsagesManager>
@@ -107,14 +85,11 @@
   <component name="IdeDocumentHistory">
     <option name="changedFiles">
       <list>
-        <option value="$PROJECT_DIR$/src/com/mapitprices/WhereIsTheCheapBeer/BarCodeScanItemActivity.java" />
         <option value="$PROJECT_DIR$/AndroidManifest.xml" />
         <option value="$PROJECT_DIR$/res/xml/searchable.xml" />
-        <option value="$PROJECT_DIR$/res/menu/item_list_option_menu.xml" />
         <option value="$PROJECT_DIR$/res/menu/store_list_option_menu.xml" />
         <option value="$PROJECT_DIR$/src/com/mapitprices/WhereIsTheCheapBeer/NearbyItemsActivity.java" />
         <option value="$PROJECT_DIR$/res/values/strings.xml" />
-        <option value="$PROJECT_DIR$/src/com/mapitprices/WhereIsTheCheapBeer/ListAllDistinctItemsActivity.java" />
         <option value="$PROJECT_DIR$/src/com/mapitprices/Utilities/RestClient.java" />
         <option value="$PROJECT_DIR$/src/com/mapitprices/Utilities/StoreResultAdapter.java" />
         <option value="$PROJECT_DIR$/src/com/mapitprices/WhereIsTheCheapBeer/NearbyStoresActivity.java" />
@@ -123,6 +98,9 @@
         <option value="$PROJECT_DIR$/src/com/mapitprices/WhereIsTheCheapBeer/ReportPriceActivity.java" />
         <option value="$PROJECT_DIR$/src/com/mapitprices/Model/Store.java" />
         <option value="$PROJECT_DIR$/src/com/mapitprices/Utilities/MapItPricesServer.java" />
+        <option value="$PROJECT_DIR$/res/menu/item_price_list_option_menu.xml" />
+        <option value="$PROJECT_DIR$/res/menu/item_list_option_menu.xml" />
+        <option value="$PROJECT_DIR$/src/com/mapitprices/WhereIsTheCheapBeer/ListAllDistinctItemsActivity.java" />
       </list>
     </option>
   </component>
@@ -226,8 +204,18 @@
               <option name="myItemId" value="mapitprices" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
+          </PATH>
+          <PATH>
             <PATH_ELEMENT>
-              <option name="myItemId" value="Utilities" />
+              <option name="myItemId" value="WheresTheCheapBeer" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="WheresTheCheapBeer" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="res" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -241,15 +229,11 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="src" />
+              <option name="myItemId" value="res" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="mapitprices" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="Model" />
+              <option name="myItemId" value="menu" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -264,6 +248,7 @@
   <component name="PropertiesComponent">
     <property name="GoToFile.includeJavaFiles" value="false" />
     <property name="project.structure.last.edited" value="Project" />
+    <property name="OverrideImplement.combined" value="true" />
     <property name="GoToClass.toSaveIncludeLibraries" value="false" />
     <property name="project.structure.proportion" value="0.15" />
     <property name="MemberChooser.sorted" value="false" />
@@ -454,19 +439,19 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="22" width="1280" height="734" extended-state="0" />
-    <editor active="true" />
+    <editor active="false" />
     <layout>
       <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32954547" sideWeight="0.96181965" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Debug" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.42207792" sideWeight="0.0" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.42207792" sideWeight="0.0" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32954547" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32954547" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="true" content_ui="tabs" />
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.2843217" sideWeight="0.67045456" order="0" side_tool="false" content_ui="tabs" />
+      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.2843217" sideWeight="0.5779221" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Dependency Viewer" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Android Logcat" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32954547" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
@@ -524,31 +509,6 @@
     <option name="FILTER_TARGETS" value="false" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/res/menu/item_list_option_menu.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="6" column="71" selection-start="390" selection-end="390" vertical-scroll-proportion="0.0" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/res/menu/store_list_option_menu.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="5" column="75" selection-start="257" selection-end="257" vertical-scroll-proportion="0.0" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/res/values/strings.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="14" column="5" selection-start="608" selection-end="608" vertical-scroll-proportion="0.0" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/mapitprices/Utilities/RestClient.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="72" column="7" selection-start="2244" selection-end="2244" vertical-scroll-proportion="1.8164557" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/mapitprices/Utilities/ItemResultAdapter.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="18" column="0" selection-start="463" selection-end="1521" vertical-scroll-proportion="0.0" />
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/com/mapitprices/Utilities/StoreResultAdapter.java">
       <provider selected="true" editor-type-id="text-editor">
         <state line="21" column="47" selection-start="588" selection-end="588" vertical-scroll-proportion="0.0" />
@@ -569,24 +529,9 @@
         <state line="26" column="47" selection-start="930" selection-end="930" vertical-scroll-proportion="0.3100511" />
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/mapitprices/WhereIsTheCheapBeer/ListAllDistinctItemsActivity.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="54" column="0" selection-start="1617" selection-end="1701" vertical-scroll-proportion="0.6678024" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/mapitprices/WhereIsTheCheapBeer/NearbyStoresActivity.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="34" column="0" selection-start="1042" selection-end="1515" vertical-scroll-proportion="0.026132405" />
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/AndroidManifest.xml">
       <provider selected="true" editor-type-id="text-editor">
         <state line="36" column="36" selection-start="2094" selection-end="2094" vertical-scroll-proportion="0.79094076" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/mapitprices/WhereIsTheCheapBeer/NearbyItemsActivity.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="25" column="38" selection-start="844" selection-end="844" vertical-scroll-proportion="0.6533101" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/com/mapitprices/WhereIsTheCheapBeer/ReportPriceActivity.java">
@@ -596,18 +541,74 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/mapitprices/Utilities/MapItPricesServer.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="89" column="70" selection-start="3191" selection-end="3191" vertical-scroll-proportion="0.22018349">
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/com/mapitprices/Model/Store.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="19" column="40" selection-start="377" selection-end="377" vertical-scroll-proportion="0.0">
+        <state line="19" column="40" selection-start="377" selection-end="377" vertical-scroll-proportion="0.8715596">
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/mapitprices/Utilities/MapItPricesServer.java">
+    <entry file="file://$PROJECT_DIR$/src/com/mapitprices/WhereIsTheCheapBeer/NewStoreActivity.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="89" column="70" selection-start="3191" selection-end="3191" vertical-scroll-proportion="0.56558776">
+        <state line="12" column="13" selection-start="267" selection-end="267" vertical-scroll-proportion="0.51140064">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/mapitprices/WhereIsTheCheapBeer/NearbyStoresActivity.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="34" column="0" selection-start="1042" selection-end="1515" vertical-scroll-proportion="0.05102041">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/mapitprices/WhereIsTheCheapBeer/NearbyItemsActivity.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="150" column="0" selection-start="3603" selection-end="4664" vertical-scroll-proportion="1.6050955">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/res/menu/item_price_list_option_menu.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="4" column="28" selection-start="205" selection-end="205" vertical-scroll-proportion="0.18348624">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/res/menu/item_list_option_menu.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="1" column="0" selection-start="39" selection-end="39" vertical-scroll-proportion="0.04587156">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/mapitprices/WhereIsTheCheapBeer/NewItemActivity.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="16" column="46" selection-start="408" selection-end="408" vertical-scroll-proportion="0.6880734">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/mapitprices/WhereIsTheCheapBeer/ListAllDistinctItemsActivity.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="103" column="39" selection-start="3527" selection-end="3527" vertical-scroll-proportion="0.18789808">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/mapitprices/WhereIsTheCheapBeer/MapActivity.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="12" column="13" selection-start="268" selection-end="268" vertical-scroll-proportion="0.5045872">
           <folding />
         </state>
       </provider>

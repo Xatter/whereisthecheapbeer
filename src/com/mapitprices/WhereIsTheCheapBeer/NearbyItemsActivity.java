@@ -96,7 +96,7 @@ public class NearbyItemsActivity extends ListActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.item_list_option_menu, menu);
+        inflater.inflate(R.menu.item_price_list_option_menu, menu);
         return true;
     }
 

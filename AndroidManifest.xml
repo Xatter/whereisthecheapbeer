@@ -34,5 +34,6 @@
                     android:resource="@xml/searchable"/>
         </activity>
         <activity android:name="com.mapitprices.WhereIsTheCheapBeer.SelectStoreActivity"/>
+        <activity android:name="com.mapitprices.WhereIsTheCheapBeer.NewItemActivity"/>
     </application>
 </manifest>
