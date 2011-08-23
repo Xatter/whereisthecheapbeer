@@ -112,6 +112,9 @@ public class NearbyItemsActivity extends ListActivity {
                 return true;
             case R.id.menu_map_items:
                 return true;
+            case R.id.menu_item_refresh:
+                _progressDialog.show();
+                new GetLocationTask().execute(_currentLocation);
             default:
                 return super.onOptionsItemSelected(item);
         }
@@ -160,6 +163,7 @@ public class NearbyItemsActivity extends ListActivity {
 
         if (provider != null) {
             Location location = mlocManager.getLastKnownLocation(provider);
+            _currentLocation = location;
             _progressDialog.show();
             new GetLocationTask().execute(location);
 
@@ -179,7 +183,7 @@ public class NearbyItemsActivity extends ListActivity {
         @Override
         protected Collection<Item> doInBackground(Location... params) {
             Location loc = params[0];
-            return MapItPricesServer.getItemsFromServer(loc);
+            return MapItPricesServer.getNearbyPrices(loc);
         }
 
         @Override

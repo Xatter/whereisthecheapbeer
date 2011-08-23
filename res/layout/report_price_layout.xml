@@ -1,7 +1,47 @@
 <?xml version="1.0" encoding="utf-8"?>
-
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:layout_width="fill_parent"
-              android:layout_height="fill_parent">
-
-</LinearLayout>
+<AbsoluteLayout
+        android:id="@+id/widget0"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        >
+    <TextView
+            android:id="@+id/report_price_store"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:hint="Press to select Store"
+            android:layout_x="0px"
+            android:layout_y="52px"
+            >
+    </TextView>
+    <TextView
+            android:id="@+id/report_price_item"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:hint="Press to select Item"
+            android:layout_x="0px"
+            android:layout_y="19px"
+            >
+    </TextView>
+    <EditText
+            android:id="@+id/report_price_price"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:hint="Price"
+            android:textSize="18sp"
+            android:numeric="decimal"
+            android:layout_x="0px"
+            android:layout_y="87px"
+            >
+    </EditText>
+    <Button
+            android:id="@+id/report_price_save"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="Share Price!"
+            android:layout_x="0px"
+            android:layout_y="142px"
+            android:onClick="sharePrice"
+            >
+    </Button>
+</AbsoluteLayout>

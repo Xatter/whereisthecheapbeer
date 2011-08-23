@@ -1,5 +1,6 @@
 package com.mapitprices.WhereIsTheCheapBeer;
 
+import android.app.Activity;
 import android.app.ListActivity;
 import android.app.ProgressDialog;
 import android.content.Intent;
@@ -12,9 +13,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
-import com.mapitprices.Model.Item;
 import com.mapitprices.Model.Store;
-import com.mapitprices.Utilities.ItemResultAdapter;
 import com.mapitprices.Utilities.MapItPricesServer;
 import com.mapitprices.Utilities.StoreResultAdapter;
 import com.mapitprices.WheresTheCheapBeer.R;
@@ -23,15 +22,14 @@ import java.util.Collection;
 
 /**
  * Created by IntelliJ IDEA.
- * User: Xatter
- * Date: 8/17/11
- * Time: 2:36 AM
+ * User: xatter
+ * Date: 8/22/11
+ * Time: 9:16 PM
  * To change this template use File | Settings | File Templates.
  */
-public class NearbyStoresActivity extends ListActivity {
-    private Location _currentLocation;
+public class SelectStoreActivity extends ListActivity {
+    Store[] _stores;
     private ProgressDialog _progressDialog;
-
     private final LocationListener currentListener = new LocationListener() {
 
         public void onLocationChanged(Location location) {
@@ -48,11 +46,11 @@ public class NearbyStoresActivity extends ListActivity {
         public void onStatusChanged(String provider, int status, Bundle extras) {
         }
     };
-
-    private Store[] _stores;
+    private Location _currentLocation;
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.stores_layout);
 
         ProgressDialog progressDialog = new ProgressDialog(this);
         progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
@@ -61,14 +59,6 @@ public class NearbyStoresActivity extends ListActivity {
         progressDialog.setCancelable(true);
         _progressDialog = progressDialog;
     }
-
-    @Override
-    protected void onListItemClick(ListView l, View v, int position, long id) {
-        Intent i = new Intent().setClass(this,StoreItemsActivity.class);
-        i.putExtra("store", _stores[position]);
-        startActivity(i);
-    }
-
     private void registerListener() {
         // Define a set of criteria used to select a location provider.
         Criteria criteria = new Criteria();
@@ -128,6 +118,13 @@ public class NearbyStoresActivity extends ListActivity {
             mlocManager.removeUpdates(currentListener);
         }
     }
+    @Override
+    protected void onListItemClick(ListView l, View v, int position, long id) {
+        Intent data = new Intent();
+        data.putExtra("store", _stores[position]);
+        setResult(RESULT_OK, data);
+        finish();
+    }
 
     private class GetLocationTask extends AsyncTask<Location, Void, Collection<Store>> {
         @Override
@@ -142,11 +139,10 @@ public class NearbyStoresActivity extends ListActivity {
             _stores = result.toArray(new Store[0]);
 
             if (result != null) {
-                ArrayAdapter<Store> adaptor = new StoreResultAdapter(NearbyStoresActivity.this, R.id.item_row_name, _stores);
+                ArrayAdapter<Store> adaptor = new StoreResultAdapter(SelectStoreActivity.this, R.id.item_row_name, _stores);
                 setListAdapter(adaptor);
             }
         }
     }
-
 
 }

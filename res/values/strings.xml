@@ -1,10 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">com.mapitprices.WheresTheCheapBeer</string>
+    <string name="app_name">Where\'s the cheap Beer?</string>
     <string name="no_items">Looks like there\'s no prices in the database near you. If you know the price of some beer
         near you, please share it with everyone!
     </string>
     <string name="no_stores">Looks like there\'s no stores in the database near you. If you know the price of some beer
         near you, please share it with everyone!
     </string>
+
+    <string name="search_hint">Search items</string>
+    <string name="app_label">Where\'s the Cheap Beer</string>
+
 </resources>

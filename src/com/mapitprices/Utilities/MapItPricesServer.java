@@ -22,8 +22,8 @@ import java.util.List;
  */
 public class MapItPricesServer {
 
-    //public static final String SERVER_URL = "http://www.mapitprices.com/Beer/";
-    public static final String SERVER_URL = "http://10.0.2.2/Beer/";
+    public static final String SERVER_URL = "http://www.mapitprices.com/Beer/";
+    //public static final String SERVER_URL = "http://10.0.2.2/Beer/";
 
     public static final int MIN_DISTANCE = 200; // in meters
     public static final int MIN_TIME = 300000; // 5 minutes in ms
@@ -37,10 +37,10 @@ public class MapItPricesServer {
         return jsonResultToItemCollection(result);
     }
 
-    public static Collection<Item> getItemsFromServer(Location loc) {
+    public static Collection<Item> getNearbyPrices(Location loc) {
         List<NameValuePair> nameValuePairs = Utils.locationToNameValuePair(loc);
 
-        String result = RestClient.ExecuteCommand(SERVER_URL + "GetItems", nameValuePairs);
+        String result = RestClient.ExecuteCommand(SERVER_URL + "GetItemPrices", nameValuePairs);
 
         return jsonResultToItemCollection(result);
     }
@@ -81,5 +81,20 @@ public class MapItPricesServer {
 
         String result = RestClient.ExecuteCommand(SERVER_URL + "ItemsFromBarcode", nameValuePairs);
         return jsonResultToItemCollection(result);
+    }
+
+    public static Collection<Item> getAllItems() {
+        String result = RestClient.ExecuteCommand(SERVER_URL + "GetAllItems");
+        return jsonResultToItemCollection(result);
+    }
+
+    public static boolean ReportPrice(Item item, Store store, Double newPrice) {
+        List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(3);
+        nameValuePairs.add(new BasicNameValuePair("itemid", Integer.toString(item.getID())));
+        nameValuePairs.add(new BasicNameValuePair("storeid", Integer.toOctalString(store.getID())));
+        nameValuePairs.add(new BasicNameValuePair("price", Double.toString(newPrice)));
+
+        String result = RestClient.ExecuteCommand(SERVER_URL + "ReportPrice", nameValuePairs);
+        return true;
     }
 }

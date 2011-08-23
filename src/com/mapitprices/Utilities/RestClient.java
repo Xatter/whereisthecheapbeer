@@ -58,14 +58,15 @@ public class RestClient {
         return null;
     }
 
-    public static JSONObject ExecuteCommand(String url) {
+    public static String ExecuteCommand(String url) {
         HttpClient httpclient = new DefaultHttpClient();
-        HttpGet httpget = new HttpGet(url);
-        httpget.setHeader("Content-Type", "application/json");
+        HttpPost post = new HttpPost(url);
+
+        //httpget.setHeader("Content-Type", "application/json");
 
         HttpResponse response;
         try {
-            response = httpclient.execute(httpget);
+            response = httpclient.execute(post);
             Log.i("HTTP Response", response.getStatusLine().toString());
 
             HttpEntity entity = response.getEntity();
@@ -76,10 +77,9 @@ public class RestClient {
 
                 Log.i("Http Response", result);
 
-                JSONObject json = new JSONObject(result);
                 instream.close();
 
-                return json;
+                return result;
             } else {
                 return null;
             }
@@ -87,8 +87,6 @@ public class RestClient {
             e.printStackTrace();
         } catch (IOException e) {
             // TODO Auto-generated catch block
-            e.printStackTrace();
-        } catch (JSONException e) {
             e.printStackTrace();
         } finally {
 

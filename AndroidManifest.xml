@@ -24,5 +24,15 @@
         <activity android:name="com.mapitprices.WhereIsTheCheapBeer.StoreItemsActivity"/>
         <activity android:name="com.mapitprices.WhereIsTheCheapBeer.NewStoreActivity"/>
         <activity android:name="com.mapitprices.WhereIsTheCheapBeer.BarCodeScanItemActivity"/>
+        <activity android:name="com.mapitprices.WhereIsTheCheapBeer.ListAllDistinctItemsActivity">
+            <intent-filter>
+                <action
+                        android:name="android.intent.action.SEARCH"/>
+            </intent-filter>
+            <meta-data
+                    android:name="android.app.searchable"
+                    android:resource="@xml/searchable"/>
+        </activity>
+        <activity android:name="com.mapitprices.WhereIsTheCheapBeer.SelectStoreActivity"/>
     </application>
-</manifest> 
+</manifest>
