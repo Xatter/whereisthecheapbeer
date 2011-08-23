@@ -91,7 +91,7 @@ public class MapItPricesServer {
     public static boolean ReportPrice(Item item, Store store, Double newPrice) {
         List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(3);
         nameValuePairs.add(new BasicNameValuePair("itemid", Integer.toString(item.getID())));
-        nameValuePairs.add(new BasicNameValuePair("storeid", Integer.toOctalString(store.getID())));
+        nameValuePairs.add(new BasicNameValuePair("storeid", Integer.toString(store.getID())));
         nameValuePairs.add(new BasicNameValuePair("price", Double.toString(newPrice)));
 
         String result = RestClient.ExecuteCommand(SERVER_URL + "ReportPrice", nameValuePairs);

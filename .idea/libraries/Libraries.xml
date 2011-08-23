@@ -1,10 +1,11 @@
 <component name="libraryTable">
   <library name="Libraries">
     <CLASSES>
-      <root url="file://$PROJECT_DIR$/libs" />
+      <root url="jar://$PROJECT_DIR$/libs/core.jar!/" />
+      <root url="jar://$PROJECT_DIR$/libs/android-integration.jar!/" />
+      <root url="jar://$PROJECT_DIR$/libs/gson-1.7.1.jar!/" />
     </CLASSES>
     <JAVADOC />
     <SOURCES />
-    <jarDirectory url="file://$PROJECT_DIR$/libs" recursive="false" />
   </library>
 </component>
