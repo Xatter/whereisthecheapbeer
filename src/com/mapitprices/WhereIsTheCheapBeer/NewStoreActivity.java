@@ -2,6 +2,7 @@ package com.mapitprices.WhereIsTheCheapBeer;
 
 import android.app.Activity;
 import android.os.Bundle;
+import com.mapitprices.WheresTheCheapBeer.R;
 
 /**
  * Created by IntelliJ IDEA.
@@ -13,5 +14,6 @@ import android.os.Bundle;
 public class NewStoreActivity extends Activity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.store_editor);
     }
 }

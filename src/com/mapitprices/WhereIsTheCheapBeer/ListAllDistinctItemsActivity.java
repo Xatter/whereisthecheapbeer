@@ -4,19 +4,24 @@ import android.app.ListActivity;
 import android.app.SearchManager;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.AndroidCharacter;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
-import android.widget.Toast;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 import com.mapitprices.Model.Item;
 import com.mapitprices.Utilities.ItemResultAdapter;
 import com.mapitprices.Utilities.MapItPricesServer;
+import com.mapitprices.Utilities.Utils;
 import com.mapitprices.WheresTheCheapBeer.R;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 /**
  * Created by IntelliJ IDEA.
@@ -27,7 +32,7 @@ import java.util.Collection;
  */
 public class ListAllDistinctItemsActivity extends ListActivity {
     Item[] _items;
-    Collection<Item> _filteredItems;
+    List<Item> _filteredItems = new ArrayList<Item>();
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -46,9 +51,17 @@ public class ListAllDistinctItemsActivity extends ListActivity {
         if (result != null) {
             _items = result.toArray(new Item[0]);
 
-            ArrayAdapter<Item> adaptor = new ItemResultAdapter(this, R.id.item_row_name, _items);
-            setListAdapter(adaptor);
+            ArrayAdapter<Item> adapter = new ArrayAdapter<Item>(this, android.R.layout.simple_list_item_1, _items);
+            setListAdapter(adapter);
         }
+    }
+
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.item_list_option_menu, menu);
+        return true;
     }
 
     @Override
@@ -65,42 +78,28 @@ public class ListAllDistinctItemsActivity extends ListActivity {
                 return true;
         }
     }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         IntentResult scanResult = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
-	    if (scanResult != null) {
-	    	String result = scanResult.getContents();
-	    	if (result != null)
-	    	{
-                int len = result.length();
-                if (len != 8 ||
-                        len != 12 ||
-                        len != 13 ||
-                        len != 14)
-                {
-                  //not enough digits, rescan
-                    Toast toast = Toast.makeText(this,"Scan didn't get all the digits, please try again.", 2000);
-                    toast.show();
-                    IntentIntegrator.initiateScan(this);
-                }
+        if (scanResult != null) {
+            String result = scanResult.getContents();
+            if (result != null) {
+                if (Utils.validate_or_rescan_upc(this, result)) {
+                    _filteredItems.clear();
 
-                _filteredItems.clear();
-
-                for(int i = 0;i<_items.length;i++)
-                {
-                    if (_items[i].getUPC() == result)
-                    {
-                        _filteredItems.add(_items[i]);
-                        break;
+                    for (int i = 0; i < _items.length; i++) {
+                        if (_items[i].getUPC() == result) {
+                            _filteredItems.add(_items[i]);
+                            break;
+                        }
                     }
-                }
 
-                ItemResultAdapter adapter = new ItemResultAdapter(this, R.id.item_row_name, _filteredItems.toArray(new Item[0]));
-                setListAdapter(adapter);
-	    	}
-	    }
-        else if (requestCode == 7 && resultCode == RESULT_OK)
-        {
+                    ArrayAdapter<Item> adapter = new ArrayAdapter<Item>(this, android.R.layout.simple_list_item_1, _filteredItems);
+                    setListAdapter(adapter);
+                }
+            }
+        } else if (requestCode == 7 && resultCode == RESULT_OK) {
             setResult(RESULT_OK, data);
         }
     }

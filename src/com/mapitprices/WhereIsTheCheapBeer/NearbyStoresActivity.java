@@ -31,6 +31,7 @@ import java.util.Collection;
 public class NearbyStoresActivity extends ListActivity {
     private Location _currentLocation;
     private ProgressDialog _progressDialog;
+    private Store[] _stores = new Store[0];
 
     private final LocationListener currentListener = new LocationListener() {
 
@@ -48,8 +49,6 @@ public class NearbyStoresActivity extends ListActivity {
         public void onStatusChanged(String provider, int status, Bundle extras) {
         }
     };
-
-    private Store[] _stores;
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -84,11 +83,15 @@ public class NearbyStoresActivity extends ListActivity {
         if (provider != null) {
             Location location = mlocManager.getLastKnownLocation(provider);
             _currentLocation = location;
-            _progressDialog.show();
-            new GetLocationTask().execute(location);
+            if(_stores.length == 0)
+            {
+                _progressDialog.show();
+                new GetLocationTask().execute(location);
+            }
 
             mlocManager.requestLocationUpdates(provider, MapItPricesServer.MIN_TIME,
                     MapItPricesServer.MIN_DISTANCE, currentListener);
+
         }
     }
 

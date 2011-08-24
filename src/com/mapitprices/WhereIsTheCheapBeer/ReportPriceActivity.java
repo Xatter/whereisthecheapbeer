@@ -31,6 +31,9 @@ public class ReportPriceActivity extends Activity {
 
     private void selectItem() {
         Intent i = new Intent().setClass(this, ListAllDistinctItemsActivity.class);
+
+
+
         startActivityForResult(i, 0);
     }
 
@@ -45,6 +48,10 @@ public class ReportPriceActivity extends Activity {
     {
         EditText newPriceControl = (EditText)this.findViewById(R.id.report_price_price);
 		Double newPrice = Double.parseDouble(newPriceControl.getText().toString());
+
+        EditText quantity = (EditText)findViewById(R.id.report_price_quantity);
+        Integer q = Integer.parseInt(quantity.getText().toString());
+        _item.setQuantity(q);
 
         boolean success = MapItPricesServer.ReportPrice(_item, _store, newPrice);
         if(success)
@@ -63,6 +70,13 @@ public class ReportPriceActivity extends Activity {
 
                     TextView tv = (TextView) findViewById(R.id.report_price_item);
                     tv.setText(_item.getName());
+
+                    if(_item.getQuantity() > 0)
+                    {
+                        EditText quantity = (EditText) findViewById(R.id.report_price_quantity);
+                        quantity.setText(Integer.toString(_item.getQuantity()));
+                    }
+
                     selectStore();
                 }
                 break;

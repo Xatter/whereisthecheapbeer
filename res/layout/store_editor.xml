@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+android:id="@+id/widget62"
+android:layout_width="fill_parent"
+android:layout_height="fill_parent"
+xmlns:android="http://schemas.android.com/apk/res/android"
+>
+<EditText
+android:id="@+id/widget66"
+android:layout_width="wrap_content"
+android:layout_height="wrap_content"
+android:hint="Address (optional)"
+android:textSize="18sp"
+android:layout_below="@+id/widget63"
+android:layout_alignParentLeft="true"
+>
+</EditText>
+<EditText
+android:id="@+id/widget63"
+android:layout_width="fill_parent"
+android:layout_height="wrap_content"
+android:hint="Store Name"
+android:textSize="18sp"
+android:layout_alignParentTop="true"
+android:layout_alignParentLeft="true"
+>
+</EditText>
+<Button
+android:id="@+id/widget67"
+android:layout_width="fill_parent"
+android:layout_height="wrap_content"
+android:text="Add New Place"
+android:layout_alignParentBottom="true"
+android:layout_alignParentLeft="true"
+>
+</Button>
+</RelativeLayout>

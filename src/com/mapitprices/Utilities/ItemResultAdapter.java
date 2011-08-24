@@ -9,6 +9,8 @@ import android.widget.TextView;
 import com.mapitprices.Model.Item;
 import com.mapitprices.WheresTheCheapBeer.R;
 
+import java.text.NumberFormat;
+
 /**
  * Created by IntelliJ IDEA.
  * User: Xatter
@@ -36,13 +38,13 @@ public class ItemResultAdapter extends ArrayAdapter<Item> {
 
         Item i = _items[position];
         TextView tvName = (TextView) v.findViewById(R.id.item_row_name);
-        tvName.setText(i.getName());
-
-        TextView tvSize = (TextView) v.findViewById(R.id.item_row_size);
-        tvSize.setText(i.getSize());
+        tvName.setText(i.toString());
 
         TextView tvPrice = (TextView) v.findViewById(R.id.item_row_price);
-        tvPrice.setText(Double.toString(i.getPrice()));
+        NumberFormat currencyFormatter;
+        currencyFormatter = NumberFormat.getCurrencyInstance();
+        String formattedPrice = currencyFormatter.format(i.getPrice());
+        tvPrice.setText(formattedPrice);
 
         return v;
     }

@@ -1,6 +1,9 @@
 package com.mapitprices.Utilities;
 
+import android.app.Activity;
 import android.location.Location;
+import android.widget.Toast;
+import com.google.zxing.integration.android.IntentIntegrator;
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
 
@@ -26,5 +29,21 @@ public class Utils {
         }
 
         return nameValuePairs;
+    }
+
+    public static boolean validate_or_rescan_upc(Activity context, String result) {
+        int len = result.length();
+        if (len != 8 ||
+                len != 12 ||
+                len != 13 ||
+                len != 14) {
+            //not enough digits, rescan
+            Toast toast = Toast.makeText(context, "Scan didn't get all the digits, please try again.", 2000);
+            toast.show();
+            IntentIntegrator.initiateScan(context);
+            return false;
+        }
+
+        return true;
     }
 }

@@ -10,6 +10,8 @@ import com.mapitprices.Model.Item;
 import com.mapitprices.Model.Store;
 import com.mapitprices.WheresTheCheapBeer.R;
 
+import java.text.DecimalFormat;
+
 /**
  * Created by IntelliJ IDEA.
  * User: xatter
@@ -39,6 +41,11 @@ public class StoreResultAdapter extends ArrayAdapter<Store> {
         Store i = _stores[position];
         TextView tvName = (TextView) v.findViewById(R.id.store_row_name);
         tvName.setText(i.getName());
+
+        TextView tvDistance = (TextView) v.findViewById(R.id.store_row_distance);
+        DecimalFormat formatter = new DecimalFormat("#.##");
+        String distanceString = formatter.format(i.getDistance());
+        tvDistance.setText(distanceString);
 
         return v;
     }

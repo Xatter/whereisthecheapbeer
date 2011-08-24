@@ -8,48 +8,32 @@ import org.apache.http.message.BasicNameValuePair;
 import java.util.ArrayList;
 import java.util.List;
 
+
+// Currently this object is overloaded as both the representation of an Item AND a StoreItem
+// from the database's perspective.
 public class Item implements Parcelable {
     int ID;
     String Name;
-    String _upc;
+    String UPC;
     String Size;
     String Brand;
     double Price;
     int StoreID;
+    int Quantity;
 
     public Item() {
 
     }
 
-    public Item(String name) {
-        this(-1, name, "", "");
-    }
-
-    public Item(String name, String size) {
-        this(-1, name, "", size);
-    }
-
-    public Item(String name, String size, String upc) {
-        this(-1, name, upc, size);
-    }
-
-    public Item(int id, String name, String upc) {
-        this(id, name, upc, "");
-    }
-
-    public Item(int id, String name, String upc, String size) {
-        ID = id;
-        Name = name;
-        _upc = upc;
-        Size = size;
-    }
-
     public Item(Parcel in) {
         ID = in.readInt();
         Name = in.readString();
-        _upc = in.readString();
+        UPC = in.readString();
         Size = in.readString();
         Brand = in.readString();
+        Price = in.readDouble();
+        Quantity = in.readInt();
+        StoreID = in.readInt();
     }
 
     public int getID() {
@@ -61,7 +45,7 @@ public class Item implements Parcelable {
     }
 
     public String getUPC() {
-        return _upc;
+        return UPC;
     }
 
     public String getSize() {
@@ -84,20 +68,24 @@ public class Item implements Parcelable {
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeInt(ID);
         dest.writeString(Name);
-        dest.writeString(_upc);
+        dest.writeString(UPC);
         dest.writeString(Size);
         dest.writeString(Brand);
         dest.writeDouble(Price);
+        dest.writeInt(Quantity);
+        dest.writeInt(StoreID);
     }
 
     public List<NameValuePair> toNameValuePairs() {
-        List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(7);
+        List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(8);
         nameValuePairs.add(new BasicNameValuePair("ID", Integer.toString(ID)));
         nameValuePairs.add(new BasicNameValuePair("Name", Name));
-        nameValuePairs.add(new BasicNameValuePair("UPC", _upc));
+        nameValuePairs.add(new BasicNameValuePair("UPC", UPC));
         nameValuePairs.add(new BasicNameValuePair("Size", Size));
         nameValuePairs.add(new BasicNameValuePair("Brand", Brand));
         nameValuePairs.add(new BasicNameValuePair("Price", Double.toString(Price)));
+        nameValuePairs.add(new BasicNameValuePair("Quantity", Integer.toString(Quantity)));
+
         return nameValuePairs;
     }
 
@@ -110,4 +98,37 @@ public class Item implements Parcelable {
             return new Item[size];
         }
     };
+
+    public void setName(String text) {
+        Name = text;
+    }
+
+    public void setBrand(String s) {
+        Brand = s;
+    }
+
+    public void setUPC(String s) {
+        UPC = s;
+    }
+
+    public void setSize(String selectedSize) {
+        Size = selectedSize;
+    }
+
+    public void setQuantity(Integer q)
+    {
+        Quantity = q;
+    }
+
+    @Override
+    public String toString() {
+        if(Quantity > 0)
+            return Name + ", " + Size + " x " + Quantity;
+        else
+            return Name + ", " + Size;
+    }
+
+    public int getQuantity() {
+        return Quantity;
+    }
 }

@@ -23,7 +23,7 @@ import java.util.List;
 public class MapItPricesServer {
 
     public static final String SERVER_URL = "http://www.mapitprices.com/Beer/";
-    //public static final String SERVER_URL = "http://10.0.2.2/Beer/";
+    //public static final String SERVER_URL = "http://10.0.2.2:61418/Beer/";
 
     public static final int MIN_DISTANCE = 200; // in meters
     public static final int MIN_TIME = 300000; // 5 minutes in ms
@@ -93,8 +93,17 @@ public class MapItPricesServer {
         nameValuePairs.add(new BasicNameValuePair("itemid", Integer.toString(item.getID())));
         nameValuePairs.add(new BasicNameValuePair("storeid", Integer.toString(store.getID())));
         nameValuePairs.add(new BasicNameValuePair("price", Double.toString(newPrice)));
+        nameValuePairs.add(new BasicNameValuePair("quantity", Integer.toString(item.getQuantity())));
 
         String result = RestClient.ExecuteCommand(SERVER_URL + "ReportPrice", nameValuePairs);
         return true;
+    }
+
+    public static Item createNewItem(Item item) {
+        List<NameValuePair> itemValues = item.toNameValuePairs();
+        String result = RestClient.ExecuteCommand(SERVER_URL + "CreateItem", itemValues);
+
+        Gson gson = new Gson();
+        return gson.fromJson(result,Item.class);
     }
 }

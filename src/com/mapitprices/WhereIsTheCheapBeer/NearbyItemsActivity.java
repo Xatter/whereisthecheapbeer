@@ -13,12 +13,12 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.ArrayAdapter;
-import android.widget.Toast;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 import com.mapitprices.Model.Item;
 import com.mapitprices.Utilities.ItemResultAdapter;
 import com.mapitprices.Utilities.MapItPricesServer;
+import com.mapitprices.Utilities.Utils;
 import com.mapitprices.WheresTheCheapBeer.R;
 
 import java.util.Collection;
@@ -104,7 +104,7 @@ public class NearbyItemsActivity extends ListActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.menu_new_price:
-                Intent i = new Intent().setClass(NearbyItemsActivity.this,ReportPriceActivity.class);
+                Intent i = new Intent().setClass(NearbyItemsActivity.this, ReportPriceActivity.class);
                 startActivity(i);
                 return true;
             case R.id.menu_scan_barcode:
@@ -123,31 +123,21 @@ public class NearbyItemsActivity extends ListActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         IntentResult scanResult = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
-	    if (scanResult != null) {
-	    	String result = scanResult.getContents();
-	    	if (result != null)
-	    	{
-                int len = result.length();
-                if (len != 8 ||
-                        len != 12 ||
-                        len != 13 ||
-                        len != 14)
-                {
-                  //not enough digits, rescan
-                    Toast toast = Toast.makeText(this,"Scan didn't get all the digits, please try again.", 2000);
-                    toast.show();
-                    IntentIntegrator.initiateScan(NearbyItemsActivity.this);
+        if (scanResult != null) {
+            String result = scanResult.getContents();
+            if (result != null) {
+                if (Utils.validate_or_rescan_upc(this, result)) {
+                    Bundle bundle = new Bundle();
+                    bundle.putString("barcode", result);
+
+                    Intent searchResults = new Intent().setClass(this, BarCodeScanItemActivity.class);
+                    searchResults.putExtras(bundle);
+                    startActivity(searchResults);
                 }
-
-				Bundle bundle = new Bundle();
-				bundle.putString("barcode", result);
-
-				Intent searchResults = new Intent().setClass(this, BarCodeScanItemActivity.class);
-				searchResults.putExtras(bundle);
-				startActivity(searchResults);
-	    	}
-	    }
+            }
+        }
     }
+
 
     private void registerListener() {
         // Define a set of criteria used to select a location provider.
@@ -164,11 +154,14 @@ public class NearbyItemsActivity extends ListActivity {
         if (provider != null) {
             Location location = mlocManager.getLastKnownLocation(provider);
             _currentLocation = location;
-            _progressDialog.show();
-            new GetLocationTask().execute(location);
 
+            if (_items.length == 0) {
+                _progressDialog.show();
+                new GetLocationTask().execute(location);
+            }
             mlocManager.requestLocationUpdates(provider, MapItPricesServer.MIN_TIME,
                     MapItPricesServer.MIN_DISTANCE, currentListener);
+
         }
     }
 
@@ -178,6 +171,8 @@ public class NearbyItemsActivity extends ListActivity {
             mlocManager.removeUpdates(currentListener);
         }
     }
+
+    Item[] _items = new Item[0];
 
     private class GetLocationTask extends AsyncTask<Location, Void, Collection<Item>> {
         @Override
@@ -191,7 +186,8 @@ public class NearbyItemsActivity extends ListActivity {
             _progressDialog.dismiss();
 
             if (result != null) {
-                ArrayAdapter<Item> adaptor = new ItemResultAdapter(NearbyItemsActivity.this, R.id.item_row_name, result.toArray(new Item[0]));
+                _items = result.toArray(new Item[0]);
+                ArrayAdapter<Item> adaptor = new ItemResultAdapter(NearbyItemsActivity.this, R.id.item_row_name, _items);
                 setListAdapter(adaptor);
             }
         }
