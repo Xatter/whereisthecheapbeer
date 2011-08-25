@@ -10,7 +10,6 @@ import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
 
 import java.lang.reflect.Type;
-import java.security.cert.TrustAnchor;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -67,7 +66,7 @@ public class MapItPricesServer {
         return null;
     }
 
-        private static Collection<Item> jsonResultToItemCollection(String result) {
+    private static Collection<Item> jsonResultToItemCollection(String result) {
         if (result != null && result.length() != 0) {
             Gson gson = new Gson();
             Type collectionType = new TypeToken<Collection<Item>>() {
@@ -104,13 +103,10 @@ public class MapItPricesServer {
 
     public static Item createNewItem(Item item) {
         String result = RestClient.ExecuteCommand(SERVER_URL + "CreateItem", item.toNameValuePairs());
-        try
-        {
-        Gson gson = new Gson();
-        return gson.fromJson(result,Item.class);
-        }
-        catch(JsonParseException e)
-        {
+        try {
+            Gson gson = new Gson();
+            return gson.fromJson(result, Item.class);
+        } catch (JsonParseException e) {
             return null;
         }
 
@@ -119,13 +115,10 @@ public class MapItPricesServer {
     public static Store createNewStore(Store s) {
         String result = RestClient.ExecuteCommand(SERVER_URL + "CreateStore", s.toNameValuePairs());
 
-        try
-        {
+        try {
             Gson gson = new Gson();
-            return gson.fromJson(result,Store.class);
-        }
-        catch(JsonParseException e)
-        {
+            return gson.fromJson(result, Store.class);
+        } catch (JsonParseException e) {
             return null;
         }
     }

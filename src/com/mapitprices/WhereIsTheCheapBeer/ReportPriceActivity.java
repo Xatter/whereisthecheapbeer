@@ -56,6 +56,9 @@ public class ReportPriceActivity extends Activity {
         boolean success = MapItPricesServer.ReportPrice(_item, _store, newPrice);
         if(success)
         {
+            Intent data = new Intent();
+            data.putExtra("item", _item);
+            setResult(RESULT_OK, data);
             finish();
         }
     }

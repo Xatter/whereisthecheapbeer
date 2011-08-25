@@ -21,7 +21,9 @@ import com.mapitprices.Utilities.MapItPricesServer;
 import com.mapitprices.Utilities.Utils;
 import com.mapitprices.WheresTheCheapBeer.R;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 /**
  * Created by IntelliJ IDEA.
@@ -105,7 +107,7 @@ public class NearbyItemsActivity extends ListActivity {
         switch (item.getItemId()) {
             case R.id.menu_new_price:
                 Intent i = new Intent().setClass(NearbyItemsActivity.this, ReportPriceActivity.class);
-                startActivity(i);
+                startActivityForResult(i, 0);
                 return true;
             case R.id.menu_scan_barcode:
                 IntentIntegrator.initiateScan(NearbyItemsActivity.this);
@@ -136,6 +138,13 @@ public class NearbyItemsActivity extends ListActivity {
                 }
             }
         }
+        else if (requestCode == 0 && resultCode == RESULT_OK)
+        {
+            Item i = data.getParcelableExtra("item");
+            _items.add(i);
+            ArrayAdapter<Item> adaptor = new ItemResultAdapter(NearbyItemsActivity.this, R.id.item_row_name, _items.toArray(new Item[0]));
+            setListAdapter(adaptor);
+        }
     }
 
 
@@ -155,7 +164,7 @@ public class NearbyItemsActivity extends ListActivity {
             Location location = mlocManager.getLastKnownLocation(provider);
             _currentLocation = location;
 
-            if (_items.length == 0) {
+            if (_items.size() == 0) {
                 _progressDialog.show();
                 new GetLocationTask().execute(location);
             }
@@ -172,7 +181,7 @@ public class NearbyItemsActivity extends ListActivity {
         }
     }
 
-    Item[] _items = new Item[0];
+    List<Item> _items = new ArrayList<Item>();
 
     private class GetLocationTask extends AsyncTask<Location, Void, Collection<Item>> {
         @Override
@@ -186,8 +195,9 @@ public class NearbyItemsActivity extends ListActivity {
             _progressDialog.dismiss();
 
             if (result != null) {
-                _items = result.toArray(new Item[0]);
-                ArrayAdapter<Item> adaptor = new ItemResultAdapter(NearbyItemsActivity.this, R.id.item_row_name, _items);
+                _items.clear();
+                _items.addAll(result);
+                ArrayAdapter<Item> adaptor = new ItemResultAdapter(NearbyItemsActivity.this, R.id.item_row_name, _items.toArray(new Item[0]));
                 setListAdapter(adaptor);
             }
         }

@@ -15,9 +15,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
-import com.mapitprices.Model.Item;
 import com.mapitprices.Model.Store;
-import com.mapitprices.Utilities.ItemResultAdapter;
 import com.mapitprices.Utilities.MapItPricesServer;
 import com.mapitprices.Utilities.StoreResultAdapter;
 import com.mapitprices.WheresTheCheapBeer.R;
@@ -54,6 +52,7 @@ public class NearbyStoresActivity extends ListActivity {
         public void onStatusChanged(String provider, int status, Bundle extras) {
         }
     };
+    private ArrayAdapter<Store> _adaptor;
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -64,15 +63,14 @@ public class NearbyStoresActivity extends ListActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId())
-        {
+        switch (item.getItemId()) {
             case R.id.menu_add_store:
                 Intent i = new Intent().setClass(this, NewStoreActivity.class);
                 startActivityForResult(i, 0);
                 return true;
             case R.id.menu_store_refresh:
                 _progressDialog.show();
-                new GetStoresFromServerTask().execute(_currentLocation);
+                new GetLocationTask().execute(_currentLocation);
                 return true;
         }
 
@@ -81,10 +79,11 @@ public class NearbyStoresActivity extends ListActivity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if(requestCode == 0 && resultCode == RESULT_OK)
-        {
+        if (requestCode == 0 && resultCode == RESULT_OK) {
             Store s = data.getParcelableExtra("store");
             _stores.add(s);
+            ArrayAdapter<Store> adaptor = new StoreResultAdapter(NearbyStoresActivity.this, R.id.item_row_name, _stores.toArray(new Store[0]));
+            setListAdapter(adaptor);
         }
     }
 
@@ -99,11 +98,15 @@ public class NearbyStoresActivity extends ListActivity {
         progressDialog.setIndeterminate(true);
         progressDialog.setCancelable(true);
         _progressDialog = progressDialog;
+
+        _adaptor = new StoreResultAdapter(NearbyStoresActivity.this, R.id.item_row_name, _stores.toArray(new Store[0]));
+        setListAdapter(_adaptor);
+
     }
 
     @Override
     protected void onListItemClick(ListView l, View v, int position, long id) {
-        Intent i = new Intent().setClass(this,StoreItemsActivity.class);
+        Intent i = new Intent().setClass(this, StoreItemsActivity.class);
         i.putExtra("store", _stores.get(position));
         startActivity(i);
     }
@@ -123,8 +126,7 @@ public class NearbyStoresActivity extends ListActivity {
         if (provider != null) {
             Location location = mlocManager.getLastKnownLocation(provider);
             _currentLocation = location;
-            if(_stores.size() == 0)
-            {
+            if (_stores.size() == 0) {
                 _progressDialog.show();
                 new GetLocationTask().execute(location);
             }
@@ -181,32 +183,12 @@ public class NearbyStoresActivity extends ListActivity {
 
         @Override
         protected void onPostExecute(Collection<Store> result) {
-            _stores.clear();
-            _stores.addAll(result);
 
             if (result != null) {
-                ArrayAdapter<Store> adaptor = new StoreResultAdapter(NearbyStoresActivity.this, R.id.item_row_name, result.toArray(new Store[0]));
-                setListAdapter(adaptor);
-            }
+                _stores.clear();
+                _stores.addAll(result);
 
-            _progressDialog.dismiss();
-        }
-    }
-
-    private class GetStoresFromServerTask extends AsyncTask<Location, Void, Collection<Store>> {
-        @Override
-        protected Collection<Store> doInBackground(Location... locations) {
-            return MapItPricesServer.getStoresFromServer(locations[0]);
-        }
-
-        @Override
-        protected void onPostExecute(Collection<Store> result)
-        {
-            _stores.clear();
-            _stores.addAll(result);
-
-            if (result != null) {
-                ArrayAdapter<Store> adaptor = new StoreResultAdapter(NearbyStoresActivity.this, R.id.item_row_name, result.toArray(new Store[0]));
+                ArrayAdapter<Store> adaptor = new StoreResultAdapter(NearbyStoresActivity.this, R.id.item_row_name, _stores.toArray(new Store[0]));
                 setListAdapter(adaptor);
             }
 

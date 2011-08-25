@@ -43,7 +43,7 @@ public class StoreResultAdapter extends ArrayAdapter<Store> {
         tvName.setText(i.getName());
 
         TextView tvDistance = (TextView) v.findViewById(R.id.store_row_distance);
-        DecimalFormat formatter = new DecimalFormat("#.##");
+        DecimalFormat formatter = new DecimalFormat("#.## Mi");
         String distanceString = formatter.format(i.getDistance());
         tvDistance.setText(distanceString);
 

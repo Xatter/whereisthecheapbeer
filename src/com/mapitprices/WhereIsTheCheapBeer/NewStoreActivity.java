@@ -52,28 +52,34 @@ public class NewStoreActivity extends Activity {
 
     public void saveStore(View v)
     {
+        Store s = new Store();
+        EditText et = (EditText) findViewById(R.id.store_name);
+        s.setName(et.getText().toString());
+
         if(_currentLocation != null)
         {
-            Store s = new Store();
             s.setLocation(_currentLocation);
-
-            EditText et = (EditText) findViewById(R.id.store_name);
-            s.setName(et.getText().toString());
-
-            Store returnedStore = MapItPricesServer.createNewStore(s);
-            if(returnedStore != null)
-            {
-                Intent data = new Intent();
-                data.putExtra("store", returnedStore);
-                setResult(RESULT_OK, data);
-                finish();
-            }
         }
         else
         {
             Toast.makeText(this, "Couldn't get location of store", Toast.LENGTH_SHORT)
                     .show();
         }
+
+        Store returnedStore = MapItPricesServer.createNewStore(s);
+        if(returnedStore != null)
+        {
+            Intent data = new Intent();
+            data.putExtra("store", returnedStore);
+            setResult(RESULT_OK, data);
+            finish();
+        }
+        else
+        {
+            Toast.makeText(this, "Store didn't save for some reason", Toast.LENGTH_SHORT)
+                    .show();
+        }
+
     }
 
     @Override
