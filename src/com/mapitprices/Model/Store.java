@@ -1,7 +1,13 @@
 package com.mapitprices.Model;
 
+import android.location.Location;
 import android.os.Parcel;
 import android.os.Parcelable;
+import org.apache.http.NameValuePair;
+import org.apache.http.message.BasicNameValuePair;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class Store implements Parcelable {
     int ID = -1;
@@ -73,5 +79,24 @@ public class Store implements Parcelable {
 
     public double getDistance() {
         return Distance;
+    }
+
+    public void setName(String s) {
+        Name = s;
+    }
+
+    public List<NameValuePair> toNameValuePairs() {
+        List<NameValuePair> values = new ArrayList<NameValuePair>(3);
+
+        values.add(new BasicNameValuePair("Name", Name));
+        values.add(new BasicNameValuePair("Latitude", Double.toString(Latitude)));
+        values.add(new BasicNameValuePair("Longitude", Double.toString(Longitude)));
+
+        return values;
+    }
+
+    public void setLocation(Location currentLocation) {
+        Latitude = currentLocation.getLatitude();
+        Longitude = currentLocation.getLongitude();
     }
 }

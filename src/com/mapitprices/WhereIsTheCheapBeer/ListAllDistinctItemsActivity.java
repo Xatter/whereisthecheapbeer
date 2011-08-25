@@ -31,7 +31,7 @@ import java.util.List;
  * To change this template use File | Settings | File Templates.
  */
 public class ListAllDistinctItemsActivity extends ListActivity {
-    Item[] _items;
+    List<Item> _items = new ArrayList<Item>();
     List<Item> _filteredItems = new ArrayList<Item>();
 
     public void onCreate(Bundle savedInstanceState) {
@@ -49,9 +49,10 @@ public class ListAllDistinctItemsActivity extends ListActivity {
         Collection<Item> result = MapItPricesServer.getAllItems();
 
         if (result != null) {
-            _items = result.toArray(new Item[0]);
+            _items.clear();
+            _items.addAll(result);
 
-            ArrayAdapter<Item> adapter = new ArrayAdapter<Item>(this, android.R.layout.simple_list_item_1, _items);
+            ArrayAdapter<Item> adapter = new ArrayAdapter<Item>(this, android.R.layout.simple_list_item_1, result.toArray(new Item[0]));
             setListAdapter(adapter);
         }
     }
@@ -88,9 +89,10 @@ public class ListAllDistinctItemsActivity extends ListActivity {
                 if (Utils.validate_or_rescan_upc(this, result)) {
                     _filteredItems.clear();
 
-                    for (int i = 0; i < _items.length; i++) {
-                        if (_items[i].getUPC() == result) {
-                            _filteredItems.add(_items[i]);
+                    int arraySize = _items.size();
+                    for (int i = 0; i < arraySize; i++) {
+                        if (_items.get(i).getUPC() == result) {
+                            _filteredItems.add(_items.get(i));
                             break;
                         }
                     }
@@ -100,14 +102,17 @@ public class ListAllDistinctItemsActivity extends ListActivity {
                 }
             }
         } else if (requestCode == 7 && resultCode == RESULT_OK) {
+            Item i = data.getParcelableExtra("item");
+            _items.add(i);
             setResult(RESULT_OK, data);
+            finish();
         }
     }
 
     @Override
     protected void onListItemClick(ListView l, View v, int position, long id) {
         Intent data = new Intent();
-        data.putExtra("item", _items[position]);
+        data.putExtra("item", _items.get(position));
         setResult(RESULT_OK, data);
         finish();
     }

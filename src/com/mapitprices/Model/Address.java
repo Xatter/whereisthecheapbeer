@@ -68,4 +68,8 @@ public class Address implements Parcelable {
             return new Address[size];
         }
     };
+
+    public void setStreet(String s) {
+        Street = s;
+    }
 }
