@@ -33,9 +33,9 @@ public class Utils {
 
     public static boolean validate_or_rescan_upc(Activity context, String result) {
         int len = result.length();
-        if (len != 8 ||
-                len != 12 ||
-                len != 13 ||
+        if (len != 8 &&
+                len != 12 &&
+                len != 13 &&
                 len != 14) {
             //not enough digits, rescan
             Toast toast = Toast.makeText(context, "Scan didn't get all the digits, please try again.", 2000);

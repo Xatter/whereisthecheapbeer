@@ -2,6 +2,7 @@ package com.mapitprices.Utilities;
 
 import android.location.Location;
 import com.google.gson.Gson;
+import com.google.gson.JsonParseException;
 import com.google.gson.reflect.TypeToken;
 import com.mapitprices.Model.Item;
 import com.mapitprices.Model.Store;
@@ -9,6 +10,7 @@ import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
 
 import java.lang.reflect.Type;
+import java.security.cert.TrustAnchor;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -102,14 +104,29 @@ public class MapItPricesServer {
 
     public static Item createNewItem(Item item) {
         String result = RestClient.ExecuteCommand(SERVER_URL + "CreateItem", item.toNameValuePairs());
+        try
+        {
         Gson gson = new Gson();
         return gson.fromJson(result,Item.class);
+        }
+        catch(JsonParseException e)
+        {
+            return null;
+        }
+
     }
 
     public static Store createNewStore(Store s) {
         String result = RestClient.ExecuteCommand(SERVER_URL + "CreateStore", s.toNameValuePairs());
 
-        Gson gson = new Gson();
-        return gson.fromJson(result,Store.class);
+        try
+        {
+            Gson gson = new Gson();
+            return gson.fromJson(result,Store.class);
+        }
+        catch(JsonParseException e)
+        {
+            return null;
+        }
     }
 }
