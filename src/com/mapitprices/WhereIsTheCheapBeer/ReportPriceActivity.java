@@ -26,14 +26,24 @@ public class ReportPriceActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.report_price_layout);
 
-        selectItem();
+        Intent i = getIntent();
+        if(i != null)
+        {
+            _item = i.getParcelableExtra("item");
+            if(_item == null)
+            {
+                selectItem();
+            }
+            else
+            {
+                _store = i.getParcelableExtra("store");
+            }
+        }
+
     }
 
     private void selectItem() {
         Intent i = new Intent().setClass(this, ListAllDistinctItemsActivity.class);
-
-
-
         startActivityForResult(i, 0);
     }
 
@@ -71,15 +81,7 @@ public class ReportPriceActivity extends Activity {
                     Bundle b = data.getExtras();
                     _item = b.getParcelable("item");
 
-                    TextView tv = (TextView) findViewById(R.id.report_price_item);
-                    tv.setText(_item.getName());
-
-                    if(_item.getQuantity() > 0)
-                    {
-                        EditText quantity = (EditText) findViewById(R.id.report_price_quantity);
-                        quantity.setText(Integer.toString(_item.getQuantity()));
-                    }
-
+                    setItemText();
                     selectStore();
                 }
                 break;
@@ -87,12 +89,27 @@ public class ReportPriceActivity extends Activity {
                 if (resultCode == RESULT_OK) {
                     Bundle b = data.getExtras();
                     _store = b.getParcelable("store");
-                    TextView tv = (TextView) findViewById(R.id.report_price_store);
-                    tv.setText(_store.getName());
+                    setStoreText();
                 }
                 break;
             default:
                 break;
+        }
+    }
+
+    private void setStoreText() {
+        TextView tv = (TextView) findViewById(R.id.report_price_store);
+        tv.setText(_store.getName());
+    }
+
+    private void setItemText() {
+        TextView tv = (TextView) findViewById(R.id.report_price_item);
+        tv.setText(_item.getName());
+
+        if(_item.getQuantity() > 0)
+        {
+            EditText quantity = (EditText) findViewById(R.id.report_price_quantity);
+            quantity.setText(Integer.toString(_item.getQuantity()));
         }
     }
 }

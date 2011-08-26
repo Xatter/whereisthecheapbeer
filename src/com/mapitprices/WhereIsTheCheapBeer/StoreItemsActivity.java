@@ -12,7 +12,9 @@ import com.mapitprices.Utilities.ItemResultAdapter;
 import com.mapitprices.Utilities.MapItPricesServer;
 import com.mapitprices.WheresTheCheapBeer.R;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 /**
  * Created by IntelliJ IDEA.
@@ -57,8 +59,10 @@ public class StoreItemsActivity extends ListActivity {
         protected void onPostExecute(Collection<Item> items) {
             _progressDialog.dismiss();
 
+            List<Item> itemList = new ArrayList<Item>(items);
+
             if (items != null) {
-                ArrayAdapter<Item> adapter = new ItemResultAdapter(StoreItemsActivity.this, R.id.item_row_name, items.toArray(new Item[0]));
+                ArrayAdapter<Item> adapter = new ItemResultAdapter(StoreItemsActivity.this, R.id.item_row_name, itemList);
                 setListAdapter(adapter);
             }
         }

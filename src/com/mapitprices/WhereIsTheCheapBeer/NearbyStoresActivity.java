@@ -82,7 +82,7 @@ public class NearbyStoresActivity extends ListActivity {
         if (requestCode == 0 && resultCode == RESULT_OK) {
             Store s = data.getParcelableExtra("store");
             _stores.add(s);
-            ArrayAdapter<Store> adaptor = new StoreResultAdapter(NearbyStoresActivity.this, R.id.item_row_name, _stores.toArray(new Store[0]));
+            ArrayAdapter<Store> adaptor = new StoreResultAdapter(NearbyStoresActivity.this, R.id.item_row_name, _stores);
             setListAdapter(adaptor);
         }
     }
@@ -99,7 +99,7 @@ public class NearbyStoresActivity extends ListActivity {
         progressDialog.setCancelable(true);
         _progressDialog = progressDialog;
 
-        _adaptor = new StoreResultAdapter(NearbyStoresActivity.this, R.id.item_row_name, _stores.toArray(new Store[0]));
+        _adaptor = new StoreResultAdapter(NearbyStoresActivity.this, R.id.item_row_name, _stores);
         setListAdapter(_adaptor);
 
     }
@@ -188,7 +188,7 @@ public class NearbyStoresActivity extends ListActivity {
                 _stores.clear();
                 _stores.addAll(result);
 
-                ArrayAdapter<Store> adaptor = new StoreResultAdapter(NearbyStoresActivity.this, R.id.item_row_name, _stores.toArray(new Store[0]));
+                ArrayAdapter<Store> adaptor = new StoreResultAdapter(NearbyStoresActivity.this, R.id.item_row_name, _stores);
                 setListAdapter(adaptor);
             }
 

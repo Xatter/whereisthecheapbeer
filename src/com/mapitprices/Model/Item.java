@@ -131,4 +131,8 @@ public class Item implements Parcelable {
     public int getQuantity() {
         return Quantity;
     }
+
+    public int getStoreID() {
+        return StoreID;
+    }
 }

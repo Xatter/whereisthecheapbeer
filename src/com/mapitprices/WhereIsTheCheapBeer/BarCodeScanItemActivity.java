@@ -13,7 +13,9 @@ import com.mapitprices.Utilities.ItemResultAdapter;
 import com.mapitprices.Utilities.MapItPricesServer;
 import com.mapitprices.WheresTheCheapBeer.R;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 /**
  * Created by IntelliJ IDEA.
@@ -40,10 +42,12 @@ public class BarCodeScanItemActivity extends ListActivity {
         //new GetLocationTask().execute(searchText);
 
         progressDialog.show();
-        Collection<Item> items = MapItPricesServer.getItemsByBarCode(barcode);
+        Collection<Item> result = MapItPricesServer.getItemsByBarCode(barcode);
         progressDialog.cancel();
 
-        ItemResultAdapter adapter = new ItemResultAdapter(this, R.id.item_row_name, items.toArray(new Item[0]));
+        List<Item> items = new ArrayList<Item>(result);
+
+        ItemResultAdapter adapter = new ItemResultAdapter(this, R.id.item_row_name, items);
         setListAdapter(adapter);
     }
 }

@@ -13,12 +13,15 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import com.mapitprices.Model.Item;
 import com.mapitprices.Model.Store;
 import com.mapitprices.Utilities.MapItPricesServer;
 import com.mapitprices.Utilities.StoreResultAdapter;
 import com.mapitprices.WheresTheCheapBeer.R;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 /**
  * Created by IntelliJ IDEA.
@@ -28,7 +31,8 @@ import java.util.Collection;
  * To change this template use File | Settings | File Templates.
  */
 public class SelectStoreActivity extends ListActivity {
-    Store[] _stores;
+    List<Store> _stores = new ArrayList<Store>();
+
     private ProgressDialog _progressDialog;
     private final LocationListener currentListener = new LocationListener() {
 
@@ -121,7 +125,7 @@ public class SelectStoreActivity extends ListActivity {
     @Override
     protected void onListItemClick(ListView l, View v, int position, long id) {
         Intent data = new Intent();
-        data.putExtra("store", _stores[position]);
+        data.putExtra("store", _stores.get(position));
         setResult(RESULT_OK, data);
         finish();
     }
@@ -136,7 +140,8 @@ public class SelectStoreActivity extends ListActivity {
         @Override
         protected void onPostExecute(Collection<Store> result) {
             _progressDialog.dismiss();
-            _stores = result.toArray(new Store[0]);
+            _stores.clear();
+            _stores.addAll(result);
 
             if (result != null) {
                 ArrayAdapter<Store> adaptor = new StoreResultAdapter(SelectStoreActivity.this, R.id.item_row_name, _stores);

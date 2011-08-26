@@ -1,19 +1,59 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/widget47"
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:background="#ffc0c0c0"
+        android:padding="5dp"
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        >
     <TextView
-            android:id="@+id/item_row_name"
-            android:textSize="18dip"
-            android:layout_alignParentLeft="true"
+            android:id="@+id/item_row_size"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content"
+            android:textColor="#FF000000"
+            android:hint="size"
+            android:textSize="10dp"
+            android:layout_alignParentLeft="true"
+            android:layout_below="@+id/item_row_name"
+            />
     <TextView
             android:id="@+id/item_row_price"
-            android:textSize="18dip"
-            android:layout_alignParentRight="true"
-            android:textColor="#00FF00"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content"
+            android:hint="price"
+            android:textSize="18dp"
+            android:textColor="#ff009933"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentRight="true"
+            />
+    <TextView
+            android:id="@+id/item_row_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="#FF000000"
+            android:hint="name"
+            android:textSize="18dp"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentLeft="true"
+            />
+    <TextView android:id="@+id/item_row_quantity"
+              android:textColor="#ff808080"
+              android:layout_height="wrap_content"
+              android:layout_width="wrap_content"
+              android:textSize="18dp"
+              android:layout_marginRight="15dp"
+              android:layout_toLeftOf="@+id/item_row_price"
+            />
+
+    <TextView
+            android:id="@+id/item_row_brand"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="#ff808080"
+            android:textSize="10dp"
+            android:layout_below="@+id/item_row_name"
+            android:layout_toRightOf="@+id/item_row_size"
+            android:layout_marginLeft="20dp"
+            />
 </RelativeLayout>

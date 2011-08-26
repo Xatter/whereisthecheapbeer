@@ -24,14 +24,16 @@ public class MainActivity extends TabActivity {
 
         // Add first tab
         intent = new Intent().setClass(this, NearbyItemsActivity.class);
-        spec = tabHost.newTabSpec("blah").setIndicator(
-                "Nearby Prices",
-                res.getDrawable(android.R.drawable.ic_menu_mylocation))
-                .setContent(intent);
+        //spec = tabHost.newTabSpec("blah").setIndicator(
+//                "Nearby Prices",
+//                res.getDrawable(android.R.drawable.ic_menu_mylocation))
+//                .setContent(intent);
+        spec = tabHost.newTabSpec("items").setIndicator("Beers")
+                    .setContent(intent);
         tabHost.addTab(spec);
 
         intent = new Intent().setClass(this, NearbyStoresActivity.class);
-        spec = tabHost.newTabSpec("statelookup").setIndicator("Stores")
+        spec = tabHost.newTabSpec("stores").setIndicator("Stores")
                 .setContent(intent);
         tabHost.addTab(spec);
 

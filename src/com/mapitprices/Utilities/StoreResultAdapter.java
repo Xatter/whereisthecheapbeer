@@ -11,6 +11,7 @@ import com.mapitprices.Model.Store;
 import com.mapitprices.WheresTheCheapBeer.R;
 
 import java.text.DecimalFormat;
+import java.util.List;
 
 /**
  * Created by IntelliJ IDEA.
@@ -21,10 +22,10 @@ import java.text.DecimalFormat;
  */
 
 public class StoreResultAdapter extends ArrayAdapter<Store> {
-    public Store[] _stores;
+    public List<Store> _stores;
     private Context _context;
 
-    public StoreResultAdapter(Context context, int textViewResourceId, Store[] objects) {
+    public StoreResultAdapter(Context context, int textViewResourceId, List<Store> objects) {
         super(context, textViewResourceId, objects);
         _stores = objects;
         _context = context;
@@ -38,14 +39,17 @@ public class StoreResultAdapter extends ArrayAdapter<Store> {
             v = vi.inflate(R.layout.store_row_layout, null);
         }
 
-        Store i = _stores[position];
+        Store i = _stores.get(position);
         TextView tvName = (TextView) v.findViewById(R.id.store_row_name);
         tvName.setText(i.getName());
 
         TextView tvDistance = (TextView) v.findViewById(R.id.store_row_distance);
-        DecimalFormat formatter = new DecimalFormat("#.## Mi");
+        DecimalFormat formatter = new DecimalFormat("#.## mi");
         String distanceString = formatter.format(i.getDistance());
         tvDistance.setText(distanceString);
+
+        TextView tvAddress = (TextView) v.findViewById(R.id.store_address);
+        tvAddress.setText(i.getAddress().getStreet());
 
         return v;
     }

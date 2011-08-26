@@ -3,7 +3,9 @@ package com.mapitprices.Utilities;
 import android.app.Activity;
 import android.location.Location;
 import android.widget.Toast;
+import com.google.android.maps.GeoPoint;
 import com.google.zxing.integration.android.IntentIntegrator;
+import org.apache.commons.logging.Log;
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
 
@@ -45,5 +47,16 @@ public class Utils {
         }
 
         return true;
+    }
+
+    public static GeoPoint LocationToGeoPoint(Location loc)
+    {
+        return Utils.LocationToGeoPoint(loc.getLatitude(), loc.getLongitude());
+    }
+
+    public static GeoPoint LocationToGeoPoint(double latitude, double longitude)
+    {
+        return new GeoPoint((int)(latitude * 1e6),
+                            (int)(longitude * 1e6));
     }
 }

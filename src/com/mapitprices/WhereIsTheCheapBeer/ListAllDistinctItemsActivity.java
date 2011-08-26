@@ -97,7 +97,7 @@ public class ListAllDistinctItemsActivity extends ListActivity {
                         }
                     }
 
-                    ArrayAdapter<Item> adapter = new ArrayAdapter<Item>(this, android.R.layout.simple_list_item_1, _filteredItems);
+                    ArrayAdapter<Item> adapter = new ItemResultAdapter(this, android.R.layout.simple_list_item_1, _filteredItems);
                     setListAdapter(adapter);
                 }
             }

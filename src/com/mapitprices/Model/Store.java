@@ -99,4 +99,12 @@ public class Store implements Parcelable {
         Latitude = currentLocation.getLatitude();
         Longitude = currentLocation.getLongitude();
     }
+
+    public double getLatitude() {
+        return Latitude;
+    }
+
+    public double getLongitude() {
+        return Longitude;
+    }
 }

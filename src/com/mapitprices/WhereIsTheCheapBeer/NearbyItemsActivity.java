@@ -12,7 +12,9 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.ListView;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 import com.mapitprices.Model.Item;
@@ -52,6 +54,13 @@ public class NearbyItemsActivity extends ListActivity {
         public void onStatusChanged(String provider, int status, Bundle extras) {
         }
     };
+
+    @Override
+    protected void onListItemClick(ListView l, View v, int position, long id) {
+        Intent i = new Intent().setClass(this, BeerMapActivity.class);
+        i.putExtra("item", _items.get(position));
+        startActivity(i);
+    }
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -106,13 +115,15 @@ public class NearbyItemsActivity extends ListActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.menu_new_price:
-                Intent i = new Intent().setClass(NearbyItemsActivity.this, ReportPriceActivity.class);
+                Intent i = new Intent().setClass(this, ReportPriceActivity.class);
                 startActivityForResult(i, 0);
                 return true;
             case R.id.menu_scan_barcode:
-                IntentIntegrator.initiateScan(NearbyItemsActivity.this);
+                IntentIntegrator.initiateScan(this);
                 return true;
             case R.id.menu_map_items:
+                Intent mapIntent = new Intent().setClass(this, BeerMapActivity.class);
+                startActivity(mapIntent);
                 return true;
             case R.id.menu_item_refresh:
                 _progressDialog.show();
@@ -142,7 +153,7 @@ public class NearbyItemsActivity extends ListActivity {
         {
             Item i = data.getParcelableExtra("item");
             _items.add(i);
-            ArrayAdapter<Item> adaptor = new ItemResultAdapter(NearbyItemsActivity.this, R.id.item_row_name, _items.toArray(new Item[0]));
+            ArrayAdapter<Item> adaptor = new ItemResultAdapter(NearbyItemsActivity.this, R.id.item_row_name, _items);
             setListAdapter(adaptor);
         }
     }
@@ -197,7 +208,7 @@ public class NearbyItemsActivity extends ListActivity {
             if (result != null) {
                 _items.clear();
                 _items.addAll(result);
-                ArrayAdapter<Item> adaptor = new ItemResultAdapter(NearbyItemsActivity.this, R.id.item_row_name, _items.toArray(new Item[0]));
+                ArrayAdapter<Item> adaptor = new ItemResultAdapter(NearbyItemsActivity.this, R.id.item_row_name, _items);
                 setListAdapter(adaptor);
             }
         }
