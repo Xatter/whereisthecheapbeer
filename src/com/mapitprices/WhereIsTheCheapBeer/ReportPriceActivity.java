@@ -63,8 +63,15 @@ public class ReportPriceActivity extends Activity {
 		Double newPrice = Double.parseDouble(newPriceControl.getText().toString());
 
         EditText quantity = (EditText)findViewById(R.id.report_price_quantity);
-        Integer q = Integer.parseInt(quantity.getText().toString());
-        _item.setQuantity(q);
+        if(!quantity.getText().toString().isEmpty())
+        {
+            Integer q = Integer.parseInt(quantity.getText().toString());
+            _item.setQuantity(q);
+        }
+        else
+        {
+            _item.setQuantity(1);
+        }
 
         boolean success = MapItPricesServer.ReportPrice(_item, _store, newPrice);
         if(success)

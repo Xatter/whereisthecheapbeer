@@ -55,7 +55,7 @@ public class SelectStoreActivity extends ListActivity {
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.stores_layout);
+        setContentView(R.layout.select_store_layout);
 
         ProgressDialog progressDialog = new ProgressDialog(this);
         progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
@@ -63,6 +63,9 @@ public class SelectStoreActivity extends ListActivity {
         progressDialog.setIndeterminate(true);
         progressDialog.setCancelable(true);
         _progressDialog = progressDialog;
+
+        progressDialog.show();
+        new GetLocationTask().execute(_currentLocation);
     }
 
     @Override
