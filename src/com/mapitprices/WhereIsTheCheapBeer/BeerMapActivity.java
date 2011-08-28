@@ -47,7 +47,7 @@ public class BeerMapActivity extends MapActivity {
         mapView.setBuiltInZoomControls(true);
 
         mapOverlays = mapView.getOverlays();
-        drawable = this.getResources().getDrawable(R.drawable.androidmarker);
+        drawable = this.getResources().getDrawable(R.drawable.mapmarker);
         itemizedOverlay = new HelloItemizedOverlay(drawable, this);
 
         Intent intent = getIntent();
@@ -56,18 +56,25 @@ public class BeerMapActivity extends MapActivity {
             _item = intent.getParcelableExtra("item");
             _store = MapItPricesServer.getStore(_item);
 
-            GeoPoint point = Utils.LocationToGeoPoint(_store.getLatitude(), _store.getLongitude());
+            GeoPoint point;// = Utils.LocationToGeoPoint(_currentLocation);
+            OverlayItem overlayitem;// = new OverlayItem(point, "You are here");
+            //itemizedOverlay.addOverlay(overlayitem);
+            //mapOverlays.add(itemizedOverlay);
+
+            point = Utils.LocationToGeoPoint(_store.getLatitude(), _store.getLongitude());
 
             String snippet = _item.getName() + ", " + _item.getSize() + " - " + _item.getPrice();
-
-            OverlayItem overlayitem = new OverlayItem(point, _store.getName(), snippet);
+            overlayitem = new OverlayItem(point, _store.getName(), snippet);
             itemizedOverlay.addOverlay(overlayitem);
 
             mapOverlays.add(itemizedOverlay);
+            MapController controller = mapView.getController();
 
-            mapView.getController().setCenter(point);
-            mapView.getController().setZoom(18);
+            controller.setCenter(point);
+            controller.setZoom(18);
             mapView.setBuiltInZoomControls(true);
+
+
         }
     }
 

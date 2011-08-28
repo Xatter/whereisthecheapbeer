@@ -3,10 +3,8 @@ package com.mapitprices.WhereIsTheCheapBeer;
 import android.app.ListActivity;
 import android.app.ProgressDialog;
 import android.content.Intent;
-import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationListener;
-import android.location.LocationManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.Menu;
@@ -18,11 +16,11 @@ import android.widget.ListView;
 import com.mapitprices.Model.Store;
 import com.mapitprices.Utilities.MapItPricesServer;
 import com.mapitprices.Utilities.StoreResultAdapter;
+import com.mapitprices.Utilities.Utils;
 import com.mapitprices.WheresTheCheapBeer.R;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
 
 /**
  * Created by IntelliJ IDEA.
@@ -32,14 +30,15 @@ import java.util.List;
  * To change this template use File | Settings | File Templates.
  */
 public class NearbyStoresActivity extends ListActivity {
-    private Location _currentLocation;
-    private ProgressDialog _progressDialog;
-    private List<Store> _stores = new ArrayList<Store>();
+    private Location mCurrentLocation;
+    private ProgressDialog mProgressDialog;
+    private ArrayList<Store> mStoresCache = new ArrayList<Store>();
+    private ArrayAdapter<Store> mAdapter;
 
-    private final LocationListener currentListener = new LocationListener() {
+    private final LocationListener mCurrentListener = new LocationListener() {
 
         public void onLocationChanged(Location location) {
-            _progressDialog.show();
+            mProgressDialog.show();
             new GetLocationTask().execute(location);
         }
 
@@ -52,7 +51,29 @@ public class NearbyStoresActivity extends ListActivity {
         public void onStatusChanged(String provider, int status, Bundle extras) {
         }
     };
-    private ArrayAdapter<Store> _adaptor;
+
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        setContentView(R.layout.stores_layout);
+
+        ProgressDialog progressDialog = new ProgressDialog(this);
+        progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+        progressDialog.setMessage("Getting nearby stores...");
+        progressDialog.setIndeterminate(true);
+        progressDialog.setCancelable(true);
+        mProgressDialog = progressDialog;
+
+        mAdapter = new StoreResultAdapter(NearbyStoresActivity.this, R.id.item_row_name, mStoresCache);
+        setListAdapter(mAdapter);
+
+        if(mStoresCache.size() == 0)
+        {
+            mProgressDialog.show();
+            new GetLocationTask().execute(mCurrentLocation);
+            mAdapter.notifyDataSetChanged();
+        }
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -69,8 +90,8 @@ public class NearbyStoresActivity extends ListActivity {
                 startActivityForResult(i, 0);
                 return true;
             case R.id.menu_store_refresh:
-                _progressDialog.show();
-                new GetLocationTask().execute(_currentLocation);
+                mProgressDialog.show();
+                new GetLocationTask().execute(mCurrentLocation);
                 return true;
         }
 
@@ -81,103 +102,63 @@ public class NearbyStoresActivity extends ListActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == 0 && resultCode == RESULT_OK) {
             Store s = data.getParcelableExtra("store");
-            _stores.add(s);
-            ArrayAdapter<Store> adaptor = new StoreResultAdapter(NearbyStoresActivity.this, R.id.item_row_name, _stores);
-            setListAdapter(adaptor);
+            mStoresCache.add(s);
+            mAdapter.notifyDataSetChanged();
         }
-    }
-
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
-        setContentView(R.layout.stores_layout);
-
-        ProgressDialog progressDialog = new ProgressDialog(this);
-        progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-        progressDialog.setMessage("Getting nearby stores...");
-        progressDialog.setIndeterminate(true);
-        progressDialog.setCancelable(true);
-        _progressDialog = progressDialog;
-
-        _adaptor = new StoreResultAdapter(NearbyStoresActivity.this, R.id.item_row_name, _stores);
-        setListAdapter(_adaptor);
-
     }
 
     @Override
     protected void onListItemClick(ListView l, View v, int position, long id) {
         Intent i = new Intent().setClass(this, StoreItemsActivity.class);
-        i.putExtra("store", _stores.get(position));
+        i.putExtra("store", mStoresCache.get(position));
         startActivity(i);
-    }
-
-    private void registerListener() {
-        // Define a set of criteria used to select a location provider.
-        Criteria criteria = new Criteria();
-        criteria.setAccuracy(Criteria.ACCURACY_FINE);
-        criteria.setAltitudeRequired(false);
-        criteria.setBearingRequired(false);
-        criteria.setCostAllowed(true);
-        criteria.setPowerRequirement(Criteria.POWER_LOW);
-
-        LocationManager mlocManager = (LocationManager) getSystemService(LOCATION_SERVICE);
-        String provider = mlocManager.getBestProvider(criteria, true);
-
-        if (provider != null) {
-            Location location = mlocManager.getLastKnownLocation(provider);
-            _currentLocation = location;
-            if (_stores.size() == 0) {
-                _progressDialog.show();
-                new GetLocationTask().execute(location);
-            }
-
-            mlocManager.requestLocationUpdates(provider, MapItPricesServer.MIN_TIME,
-                    MapItPricesServer.MIN_DISTANCE, currentListener);
-
-        }
     }
 
     @Override
     protected void onPause() {
-        unregisterListener();
+        Utils.unregisterListener(this, mCurrentListener);
         super.onPause();
     }
 
     @Override
     protected void onRestart() {
         super.onRestart();
-        registerListener();
+        mCurrentLocation = Utils.registerListener(this, mCurrentListener);
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        registerListener();
+        mCurrentLocation = Utils.registerListener(this, mCurrentListener);
     }
 
     @Override
     protected void onStart() {
         super.onStart();
-        registerListener();
+        mCurrentLocation = Utils.registerListener(this, mCurrentListener);
     }
 
     @Override
     protected void onStop() {
-        unregisterListener();
+        Utils.unregisterListener(this, mCurrentListener);
         super.onStop();
     }
 
-    private void unregisterListener() {
-        LocationManager mlocManager = (LocationManager) getSystemService(LOCATION_SERVICE);
-        if (currentListener != null) {
-            mlocManager.removeUpdates(currentListener);
-        }
+    @Override
+    public boolean onSearchRequested() {
+        Bundle appData = new Bundle();
+        appData.putBoolean(SearchActivity.STORE_SEARCH, true);
+        appData.putParcelableArrayList("stores", mStoresCache);
+        startSearch(null, false, appData, false);
+        return true;
     }
+
 
     private class GetLocationTask extends AsyncTask<Location, Void, Collection<Store>> {
         @Override
         protected Collection<Store> doInBackground(Location... params) {
             Location loc = params[0];
+            mCurrentLocation = loc;
             return MapItPricesServer.getStoresFromServer(loc);
         }
 
@@ -185,14 +166,13 @@ public class NearbyStoresActivity extends ListActivity {
         protected void onPostExecute(Collection<Store> result) {
 
             if (result != null) {
-                _stores.clear();
-                _stores.addAll(result);
+                mStoresCache.clear();
+                mStoresCache.addAll(result);
 
-                ArrayAdapter<Store> adaptor = new StoreResultAdapter(NearbyStoresActivity.this, R.id.item_row_name, _stores);
-                setListAdapter(adaptor);
+                mAdapter.notifyDataSetChanged();
             }
 
-            _progressDialog.dismiss();
+            mProgressDialog.dismiss();
         }
     }
 }

@@ -1,6 +1,7 @@
 package com.mapitprices.WhereIsTheCheapBeer;
 
 import android.app.ListActivity;
+import android.app.ProgressDialog;
 import android.app.SearchManager;
 import android.content.Intent;
 import android.os.Bundle;
@@ -31,22 +32,22 @@ import java.util.List;
  * To change this template use File | Settings | File Templates.
  */
 public class ListAllDistinctItemsActivity extends ListActivity {
-    List<Item> _items = new ArrayList<Item>();
-    List<Item> _filteredItems = new ArrayList<Item>();
+    ArrayList<Item> _items = new ArrayList<Item>();
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.items_layout);
+        setContentView(R.layout.select_item_layout);
 
-        Intent intent = getIntent();
-        if (intent != null) {
-            if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
-                _filteredItems.clear();
-                String query = intent.getStringExtra(SearchManager.QUERY);
-            }
-        }
+        ProgressDialog progressDialog = new ProgressDialog(this);
+        progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+        progressDialog.setMessage("Getting available items...");
+        progressDialog.setIndeterminate(true);
+        progressDialog.setCancelable(true);
 
+
+        progressDialog.show();
         Collection<Item> result = MapItPricesServer.getAllItems();
+        progressDialog.cancel();
 
         if (result != null) {
             _items.clear();
@@ -56,7 +57,6 @@ public class ListAllDistinctItemsActivity extends ListActivity {
             setListAdapter(adapter);
         }
     }
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -87,18 +87,18 @@ public class ListAllDistinctItemsActivity extends ListActivity {
             String result = scanResult.getContents();
             if (result != null) {
                 if (Utils.validate_or_rescan_upc(this, result)) {
-                    _filteredItems.clear();
-
-                    int arraySize = _items.size();
-                    for (int i = 0; i < arraySize; i++) {
-                        if (_items.get(i).getUPC() == result) {
-                            _filteredItems.add(_items.get(i));
-                            break;
-                        }
-                    }
-
-                    ArrayAdapter<Item> adapter = new ItemResultAdapter(this, android.R.layout.simple_list_item_1, _filteredItems);
-                    setListAdapter(adapter);
+//                    _filteredItems.clear();
+//
+//                    int arraySize = _items.size();
+//                    for (int i = 0; i < arraySize; i++) {
+//                        if (_items.get(i).getUPC() == result) {
+//                            _filteredItems.add(_items.get(i));
+//                            break;
+//                        }
+//                    }
+//
+//                    ArrayAdapter<Item> adapter = new ItemResultAdapter(this, android.R.layout.simple_list_item_1, _filteredItems);
+//                    setListAdapter(adapter);
                 }
             }
         } else if (requestCode == 7 && resultCode == RESULT_OK) {
@@ -116,4 +116,14 @@ public class ListAllDistinctItemsActivity extends ListActivity {
         setResult(RESULT_OK, data);
         finish();
     }
+
+    @Override
+    public boolean onSearchRequested() {
+        Bundle appData = new Bundle();
+        appData.putBoolean(SearchActivity.ITEM_SELECT_SEARCH, true);
+        appData.putParcelableArrayList("items", _items);
+        startSearch(null, false, appData, false);
+        return true;
+    }
+
 }

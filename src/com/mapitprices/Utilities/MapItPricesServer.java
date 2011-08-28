@@ -23,8 +23,8 @@ import java.util.List;
  */
 public class MapItPricesServer {
 
-    //public static final String SERVER_URL = "http://www.mapitprices.com/Beer/";
-    public static final String SERVER_URL = "http://10.0.2.2:61418/Beer/"; //Emulator localhost
+    public static final String SERVER_URL = "http://www.mapitprices.com/Beer/";
+    //public static final String SERVER_URL = "http://10.0.2.2:61418/Beer/"; //Emulator localhost
     //public static final String SERVER_URL = "http://10.0.1.8:61418/Beer"; //Device local computer
 
     public static final int MIN_DISTANCE = 200; // in meters

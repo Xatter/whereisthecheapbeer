@@ -11,14 +11,17 @@
             ></uses-permission>
 
     <supports-screens
-                  android:smallScreens="true"
-                  android:normalScreens="true"
-                  android:largeScreens="true"
-                  android:xlargeScreens="true"
-                  android:anyDensity="true"/>
+            android:smallScreens="true"
+            android:normalScreens="true"
+            android:largeScreens="true"
+            android:xlargeScreens="true"
+            android:anyDensity="true"/>
 
     <application android:label="@string/app_name" android:icon="@drawable/icon">
-        <uses-library android:name="com.google.android.maps" />
+        <uses-library android:name="com.google.android.maps"/>
+        <meta-data android:name="android.app.default_searchable"
+                   android:value="com.mapitprices.WhereIsTheCheapBeer.SearchActivity"/>
+
         <activity android:name="com.mapitprices.WhereIsTheCheapBeer.MainActivity"
                   android:label="@string/app_name">
             <intent-filter>
@@ -27,22 +30,31 @@
             </intent-filter>
         </activity>
         <activity android:name="com.mapitprices.WhereIsTheCheapBeer.ReportPriceActivity" android:label="Report Price"/>
-        <activity android:name="com.mapitprices.WhereIsTheCheapBeer.NearbyStoresActivity"/>
-        <activity android:name="com.mapitprices.WhereIsTheCheapBeer.NearbyItemsActivity"/>
+        <activity android:name="com.mapitprices.WhereIsTheCheapBeer.NearbyStoresActivity">
+            <meta-data android:name="android.app"
+                       android:value="com.mapitprices.WhereIsTheCheapBeer.SearchActivity"/>
+        </activity>
+        <activity android:name="com.mapitprices.WhereIsTheCheapBeer.NearbyItemsActivity">
+            <meta-data android:name="android.app"
+                       android:value="com.mapitprices.WhereIsTheCheapBeer.SearchActivity"/>
+        </activity>
         <activity android:name="com.mapitprices.WhereIsTheCheapBeer.StoreItemsActivity"/>
         <activity android:name="com.mapitprices.WhereIsTheCheapBeer.NewStoreActivity"/>
         <activity android:name="com.mapitprices.WhereIsTheCheapBeer.BarCodeScanItemActivity"/>
         <activity android:name="com.mapitprices.WhereIsTheCheapBeer.ListAllDistinctItemsActivity">
+        </activity>
+        <activity android:name="com.mapitprices.WhereIsTheCheapBeer.SelectStoreActivity"/>
+        <activity android:name="com.mapitprices.WhereIsTheCheapBeer.NewItemActivity"/>
+        <activity android:name="com.mapitprices.WhereIsTheCheapBeer.BeerMapActivity" android:label="Map"/>
+        <activity android:name="com.mapitprices.WhereIsTheCheapBeer.ItemDetailsActivity"/>
+
+        <activity android:name="com.mapitprices.WhereIsTheCheapBeer.SearchActivity">
             <intent-filter>
-                <action
-                        android:name="android.intent.action.SEARCH"/>
+                <action android:name="android.intent.action.SEARCH"/>
             </intent-filter>
             <meta-data
                     android:name="android.app.searchable"
                     android:resource="@xml/searchable"/>
         </activity>
-        <activity android:name="com.mapitprices.WhereIsTheCheapBeer.SelectStoreActivity"/>
-        <activity android:name="com.mapitprices.WhereIsTheCheapBeer.NewItemActivity"/>
-        <activity android:name="com.mapitprices.WhereIsTheCheapBeer.BeerMapActivity" android:label="Map"/>
     </application>
 </manifest>

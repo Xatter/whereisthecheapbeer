@@ -17,6 +17,7 @@ import com.mapitprices.Model.Item;
 import com.mapitprices.Model.Store;
 import com.mapitprices.Utilities.MapItPricesServer;
 import com.mapitprices.Utilities.StoreResultAdapter;
+import com.mapitprices.Utilities.Utils;
 import com.mapitprices.WheresTheCheapBeer.R;
 
 import java.util.ArrayList;
@@ -63,65 +64,37 @@ public class SelectStoreActivity extends ListActivity {
         progressDialog.setCancelable(true);
         _progressDialog = progressDialog;
     }
-    private void registerListener() {
-        // Define a set of criteria used to select a location provider.
-        Criteria criteria = new Criteria();
-        criteria.setAccuracy(Criteria.ACCURACY_FINE);
-        criteria.setAltitudeRequired(false);
-        criteria.setBearingRequired(false);
-        criteria.setCostAllowed(true);
-        criteria.setPowerRequirement(Criteria.POWER_LOW);
-
-        LocationManager mlocManager = (LocationManager) getSystemService(LOCATION_SERVICE);
-        String provider = mlocManager.getBestProvider(criteria, true);
-
-        if (provider != null) {
-            Location location = mlocManager.getLastKnownLocation(provider);
-            _currentLocation = location;
-            _progressDialog.show();
-            new GetLocationTask().execute(location);
-
-            mlocManager.requestLocationUpdates(provider, MapItPricesServer.MIN_TIME,
-                    MapItPricesServer.MIN_DISTANCE, currentListener);
-        }
-    }
 
     @Override
     protected void onPause() {
-        unregisterListener();
+        Utils.unregisterListener(this, currentListener);
         super.onPause();
     }
 
     @Override
     protected void onRestart() {
         super.onRestart();
-        registerListener();
+        _currentLocation = Utils.registerListener(this, currentListener);
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        registerListener();
+        _currentLocation = Utils.registerListener(this, currentListener);
     }
 
     @Override
     protected void onStart() {
         super.onStart();
-        registerListener();
+        _currentLocation = Utils.registerListener(this, currentListener);
     }
 
     @Override
     protected void onStop() {
-        unregisterListener();
+        Utils.unregisterListener(this, currentListener);
         super.onStop();
     }
 
-    private void unregisterListener() {
-        LocationManager mlocManager = (LocationManager) getSystemService(LOCATION_SERVICE);
-        if (currentListener != null) {
-            mlocManager.removeUpdates(currentListener);
-        }
-    }
     @Override
     protected void onListItemClick(ListView l, View v, int position, long id) {
         Intent data = new Intent();
@@ -134,6 +107,7 @@ public class SelectStoreActivity extends ListActivity {
         @Override
         protected Collection<Store> doInBackground(Location... params) {
             Location loc = params[0];
+            _currentLocation = loc;
             return MapItPricesServer.getStoresFromServer(loc);
         }
 

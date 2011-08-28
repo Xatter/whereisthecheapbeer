@@ -2,11 +2,10 @@ package com.mapitprices.WhereIsTheCheapBeer;
 
 import android.app.ListActivity;
 import android.app.ProgressDialog;
+import android.app.SearchManager;
 import android.content.Intent;
-import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationListener;
-import android.location.LocationManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.Menu;
@@ -37,6 +36,8 @@ import java.util.List;
 public class NearbyItemsActivity extends ListActivity {
     private ProgressDialog _progressDialog;
     private Location _currentLocation;
+    ArrayList<Item> mCachedItems = new ArrayList<Item>();
+
 
     private final LocationListener currentListener = new LocationListener() {
 
@@ -54,13 +55,7 @@ public class NearbyItemsActivity extends ListActivity {
         public void onStatusChanged(String provider, int status, Bundle extras) {
         }
     };
-
-    @Override
-    protected void onListItemClick(ListView l, View v, int position, long id) {
-        Intent i = new Intent().setClass(this, BeerMapActivity.class);
-        i.putExtra("item", _items.get(position));
-        startActivity(i);
-    }
+    private ArrayAdapter<Item> mAdaptor;
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -72,35 +67,51 @@ public class NearbyItemsActivity extends ListActivity {
         progressDialog.setIndeterminate(true);
         progressDialog.setCancelable(true);
         _progressDialog = progressDialog;
+
+        mAdaptor = new ItemResultAdapter(NearbyItemsActivity.this, R.id.item_row_name, mCachedItems);
+        setListAdapter(mAdaptor);
+
+        if (mCachedItems.size() == 0)
+        {
+            _progressDialog.show();
+            new GetLocationTask().execute(_currentLocation);
+        }
+    }
+
+    @Override
+    protected void onListItemClick(ListView l, View v, int position, long id) {
+        Intent i = new Intent().setClass(this, BeerMapActivity.class);
+        i.putExtra("item", mCachedItems.get(position));
+        startActivity(i);
     }
 
     @Override
     protected void onPause() {
-        unregisterListener();
+        Utils.unregisterListener(this, currentListener);
         super.onPause();
     }
 
     @Override
     protected void onRestart() {
         super.onRestart();
-        registerListener();
+        _currentLocation = Utils.registerListener(this, currentListener);
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        registerListener();
+        _currentLocation = Utils.registerListener(this, currentListener);
     }
 
     @Override
     protected void onStart() {
         super.onStart();
-        registerListener();
+        _currentLocation = Utils.registerListener(this, currentListener);
     }
 
     @Override
     protected void onStop() {
-        unregisterListener();
+        Utils.unregisterListener(this, currentListener);
         super.onStop();
     }
 
@@ -148,56 +159,27 @@ public class NearbyItemsActivity extends ListActivity {
                     startActivity(searchResults);
                 }
             }
-        }
-        else if (requestCode == 0 && resultCode == RESULT_OK)
-        {
+        } else if (requestCode == 0 && resultCode == RESULT_OK) {
             Item i = data.getParcelableExtra("item");
-            _items.add(i);
-            ArrayAdapter<Item> adaptor = new ItemResultAdapter(NearbyItemsActivity.this, R.id.item_row_name, _items);
-            setListAdapter(adaptor);
+            mCachedItems.add(i);
+            mAdaptor.notifyDataSetChanged();
         }
     }
 
-
-    private void registerListener() {
-        // Define a set of criteria used to select a location provider.
-        Criteria criteria = new Criteria();
-        criteria.setAccuracy(Criteria.ACCURACY_FINE);
-        criteria.setAltitudeRequired(false);
-        criteria.setBearingRequired(false);
-        criteria.setCostAllowed(true);
-        criteria.setPowerRequirement(Criteria.POWER_LOW);
-
-        LocationManager mlocManager = (LocationManager) getSystemService(LOCATION_SERVICE);
-        String provider = mlocManager.getBestProvider(criteria, true);
-
-        if (provider != null) {
-            Location location = mlocManager.getLastKnownLocation(provider);
-            _currentLocation = location;
-
-            if (_items.size() == 0) {
-                _progressDialog.show();
-                new GetLocationTask().execute(location);
-            }
-            mlocManager.requestLocationUpdates(provider, MapItPricesServer.MIN_TIME,
-                    MapItPricesServer.MIN_DISTANCE, currentListener);
-
-        }
+    @Override
+    public boolean onSearchRequested() {
+        Bundle appData = new Bundle();
+        appData.putBoolean(SearchActivity.ITEM_SEARCH, true);
+        appData.putParcelableArrayList("items", mCachedItems);
+        startSearch(null, false, appData, false);
+        return true;
     }
-
-    private void unregisterListener() {
-        LocationManager mlocManager = (LocationManager) getSystemService(LOCATION_SERVICE);
-        if (currentListener != null) {
-            mlocManager.removeUpdates(currentListener);
-        }
-    }
-
-    List<Item> _items = new ArrayList<Item>();
 
     private class GetLocationTask extends AsyncTask<Location, Void, Collection<Item>> {
         @Override
         protected Collection<Item> doInBackground(Location... params) {
             Location loc = params[0];
+            _currentLocation = loc;
             return MapItPricesServer.getNearbyPrices(loc);
         }
 
@@ -206,10 +188,10 @@ public class NearbyItemsActivity extends ListActivity {
             _progressDialog.dismiss();
 
             if (result != null) {
-                _items.clear();
-                _items.addAll(result);
-                ArrayAdapter<Item> adaptor = new ItemResultAdapter(NearbyItemsActivity.this, R.id.item_row_name, _items);
-                setListAdapter(adaptor);
+                mCachedItems.clear();
+                mCachedItems.addAll(result);
+
+                mAdaptor.notifyDataSetChanged();
             }
         }
     }

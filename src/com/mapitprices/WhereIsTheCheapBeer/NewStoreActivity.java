@@ -12,6 +12,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 import com.mapitprices.Model.Store;
 import com.mapitprices.Utilities.MapItPricesServer;
+import com.mapitprices.Utilities.Utils;
 import com.mapitprices.WheresTheCheapBeer.R;
 
 import java.util.ArrayList;
@@ -84,59 +85,31 @@ public class NewStoreActivity extends Activity {
 
     @Override
     protected void onPause() {
-        unregisterListener();
+        Utils.unregisterListener(this, currentListener);
         super.onPause();
     }
 
     @Override
     protected void onRestart() {
         super.onRestart();
-        registerListener();
+        _currentLocation = Utils.registerListener(this, currentListener);
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        registerListener();
+        _currentLocation = Utils.registerListener(this, currentListener);
     }
 
     @Override
     protected void onStart() {
         super.onStart();
-        registerListener();
+        _currentLocation = Utils.registerListener(this, currentListener);
     }
 
     @Override
     protected void onStop() {
-        unregisterListener();
+        Utils.unregisterListener(this, currentListener);
         super.onStop();
-    }
-
-    private void registerListener() {
-        // Define a set of criteria used to select a location provider.
-        Criteria criteria = new Criteria();
-        criteria.setAccuracy(Criteria.ACCURACY_FINE);
-        criteria.setAltitudeRequired(false);
-        criteria.setBearingRequired(false);
-        criteria.setCostAllowed(true);
-        criteria.setPowerRequirement(Criteria.POWER_LOW);
-
-        LocationManager mlocManager = (LocationManager) getSystemService(LOCATION_SERVICE);
-        String provider = mlocManager.getBestProvider(criteria, true);
-
-        if (provider != null) {
-            Location location = mlocManager.getLastKnownLocation(provider);
-            _currentLocation = location;
-
-            mlocManager.requestLocationUpdates(provider, MapItPricesServer.MIN_TIME,
-                    MapItPricesServer.MIN_DISTANCE, currentListener);
-        }
-    }
-
-    private void unregisterListener() {
-        LocationManager mlocManager = (LocationManager) getSystemService(LOCATION_SERVICE);
-        if (currentListener != null) {
-            mlocManager.removeUpdates(currentListener);
-        }
     }
 }

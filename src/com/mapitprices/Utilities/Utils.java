@@ -1,7 +1,11 @@
 package com.mapitprices.Utilities;
 
 import android.app.Activity;
+import android.content.Context;
+import android.location.Criteria;
 import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
 import android.widget.Toast;
 import com.google.android.maps.GeoPoint;
 import com.google.zxing.integration.android.IntentIntegrator;
@@ -58,5 +62,39 @@ public class Utils {
     {
         return new GeoPoint((int)(latitude * 1e6),
                             (int)(longitude * 1e6));
+    }
+
+    public static Location registerListener(Context context, LocationListener listener)
+    {
+                 // Define a set of criteria used to select a location provider.
+        Criteria criteria = new Criteria();
+        criteria.setAccuracy(Criteria.ACCURACY_FINE);
+        criteria.setAltitudeRequired(false);
+        criteria.setBearingRequired(false);
+        criteria.setCostAllowed(true);
+        criteria.setPowerRequirement(Criteria.POWER_LOW);
+
+        LocationManager mlocManager = (LocationManager) context.getSystemService(context.LOCATION_SERVICE);
+        String provider = mlocManager.getBestProvider(criteria, true);
+
+        if (provider != null) {
+            Location location = mlocManager.getLastKnownLocation(provider);
+
+            mlocManager.requestLocationUpdates(provider, MapItPricesServer.MIN_TIME,
+                    MapItPricesServer.MIN_DISTANCE, listener);
+
+            return location;
+        }
+
+        return null;
+    }
+
+    public static void unregisterListener(Context context, LocationListener listener)
+    {
+        LocationManager mlocManager = (LocationManager) context.getSystemService(context.LOCATION_SERVICE);
+
+        if (listener != null) {
+            mlocManager.removeUpdates(listener);
+        }
     }
 }
