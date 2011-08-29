@@ -152,7 +152,7 @@ public class NearbyItemsActivity extends ListActivity {
             if (result != null) {
                 if (Utils.validate_or_rescan_upc(this, result)) {
                     Bundle bundle = new Bundle();
-                    bundle.putString("barcode", result);
+                    bundle.putString("upc", result);
 
                     Intent searchResults = new Intent().setClass(this, BarCodeScanItemActivity.class);
                     searchResults.putExtras(bundle);

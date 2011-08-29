@@ -7,7 +7,9 @@ import android.content.Intent;
 import android.location.Location;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.ListView;
 import com.mapitprices.Model.Item;
 import com.mapitprices.Utilities.ItemResultAdapter;
 import com.mapitprices.Utilities.MapItPricesServer;
@@ -25,6 +27,9 @@ import java.util.List;
  * To change this template use File | Settings | File Templates.
  */
 public class BarCodeScanItemActivity extends ListActivity {
+
+    private List<Item> mCachedItems;
+
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.items_layout);
@@ -38,16 +43,25 @@ public class BarCodeScanItemActivity extends ListActivity {
 
         Intent i = getIntent();
         Bundle b = i.getExtras();
-        String barcode = b.getString("barcode");
-        //new GetLocationTask().execute(searchText);
+        String barcode = b.getString("upc");
 
         progressDialog.show();
         Collection<Item> result = MapItPricesServer.getItemsByBarCode(barcode);
         progressDialog.cancel();
 
-        List<Item> items = new ArrayList<Item>(result);
+        mCachedItems = new ArrayList<Item>(result);
 
-        ItemResultAdapter adapter = new ItemResultAdapter(this, R.id.item_row_name, items);
+        ItemResultAdapter adapter = new ItemResultAdapter(this, R.id.item_row_name, mCachedItems);
         setListAdapter(adapter);
     }
+
+    @Override
+    protected void onListItemClick(ListView l, View v, int position, long id) {
+        Intent i = new Intent().setClass(this, BeerMapActivity.class);
+        i.putExtra("item", mCachedItems.get(position));
+        startActivity(i);
+    }
+
+
+
 }

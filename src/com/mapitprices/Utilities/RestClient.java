@@ -36,6 +36,7 @@ public class RestClient {
 
             List<Header> headers = new ArrayList<Header>();
             headers.add(new BasicHeader("Accept-Encoding", "gzip"));
+            headers.add(new BasicHeader("AuthToken", "12345"));
             //headers.add(new BasicHeader("Content-Type", "application/json"));
             post.setHeaders(headers.toArray(new Header[0]));
 

@@ -79,9 +79,9 @@ public class MapItPricesServer {
 
     public static Collection<Item> getItemsByBarCode(String barcode) {
         List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(1);
-        nameValuePairs.add(new BasicNameValuePair("barcode", barcode));
+        nameValuePairs.add(new BasicNameValuePair("upc", barcode));
 
-        String result = RestClient.ExecuteCommand(SERVER_URL + "ItemsFromBarcode", nameValuePairs);
+        String result = RestClient.ExecuteCommand(SERVER_URL + "GetItemPricesByUPC", nameValuePairs);
         return jsonResultToItemCollection(result);
     }
 
