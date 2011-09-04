@@ -51,10 +51,11 @@ public class ItemResultAdapter extends ArrayAdapter<Item> {
             tvPrice.setText(formattedPrice);
         }
 
+        TextView tvQuantity = (TextView) v.findViewById(R.id.item_row_quantity);
+        tvQuantity.setText("");
         int quantity = i.getQuantity();
         if(quantity > 1)
         {
-            TextView tvQuantity = (TextView) v.findViewById(R.id.item_row_quantity);
             tvQuantity.setText(Integer.toString(quantity) + " pack");
         }
 

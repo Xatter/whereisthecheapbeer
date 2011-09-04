@@ -56,5 +56,9 @@
                     android:name="android.app.searchable"
                     android:resource="@xml/searchable"/>
         </activity>
+        <activity android:name="com.mapitprices.WhereIsTheCheapBeer.LoginActivity"/>
+        <activity android:name="com.mapitprices.WhereIsTheCheapBeer.SignUpActivity"/>
+        <activity android:name="com.mapitprices.WhereIsTheCheapBeer.HomeScreenActivity"/>
+
     </application>
 </manifest>

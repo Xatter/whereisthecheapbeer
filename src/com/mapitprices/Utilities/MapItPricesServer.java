@@ -1,15 +1,20 @@
 package com.mapitprices.Utilities;
 
 import android.location.Location;
+import android.util.Base64;
 import com.google.gson.Gson;
+import com.google.gson.JsonIOException;
 import com.google.gson.JsonParseException;
 import com.google.gson.reflect.TypeToken;
 import com.mapitprices.Model.Item;
 import com.mapitprices.Model.Store;
+import com.mapitprices.Model.User;
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
 
+import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Type;
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -23,8 +28,8 @@ import java.util.List;
  */
 public class MapItPricesServer {
 
-    public static final String SERVER_URL = "http://www.mapitprices.com/Beer/";
-    //public static final String SERVER_URL = "http://10.0.2.2:61418/Beer/"; //Emulator localhost
+    //public static final String SERVER_URL = "http://www.mapitprices.com/Beer/";
+    public static final String SERVER_URL = "http://10.0.2.2:61418/Beer/"; //Emulator localhost
     //public static final String SERVER_URL = "http://10.0.1.8:61418/Beer"; //Device local computer
 
     public static final int MIN_DISTANCE = 200; // in meters
@@ -130,6 +135,63 @@ public class MapItPricesServer {
         Gson gson = new Gson();
         try {
             return gson.fromJson(result, Store.class);
+        } catch (JsonParseException e) {
+            return null;
+        }
+    }
+
+    public static User createNewUser(User i, String password) {
+        List<NameValuePair> values = new ArrayList<NameValuePair>(2);
+        values.add(new BasicNameValuePair("email", i.getEmail()));
+        try {
+            String hashedPassword = Base64.encodeToString(Utils.getHash(password), Base64.DEFAULT);
+            values.add(new BasicNameValuePair("password", hashedPassword));
+            String result = RestClient.ExecuteCommand(SERVER_URL + "CreateUser", values);
+            Gson gson = new Gson();
+            return gson.fromJson(result, User.class);
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+        } catch (JsonIOException e) {
+            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+        }
+
+        return null;
+    }
+
+    public static User login(String username, String password) {
+        List<NameValuePair> values = new ArrayList<NameValuePair>(2);
+        values.add(new BasicNameValuePair("email", username));
+
+        try {
+            String hashedPassword = Base64.encodeToString(Utils.getHash(password), Base64.DEFAULT);
+            values.add(new BasicNameValuePair("password", hashedPassword));
+            String result = RestClient.ExecuteCommand(SERVER_URL + "Login", values);
+            Gson gson = new Gson();
+            User returnedUser = gson.fromJson(result, User.class);
+
+            return returnedUser;
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+        } catch (JsonIOException e) {
+            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+        }
+
+        return null;
+    }
+
+    public static User login(String sessionToken) {
+        List<NameValuePair> values = new ArrayList<NameValuePair>();
+        values.add(new BasicNameValuePair("SessionToken", sessionToken));
+        String result = RestClient.ExecuteCommand(SERVER_URL + "Login", values);
+
+        try {
+            Gson gson = new Gson();
+            User returnedUser = gson.fromJson(result, User.class);
+            return returnedUser;
         } catch (JsonParseException e) {
             return null;
         }

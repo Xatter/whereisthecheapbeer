@@ -13,6 +13,10 @@ import org.apache.commons.logging.Log;
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
 
+import java.io.UnsupportedEncodingException;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -96,5 +100,13 @@ public class Utils {
         if (listener != null) {
             mlocManager.removeUpdates(listener);
         }
+    }
+
+    public static byte[] getHash(String password) throws NoSuchAlgorithmException, UnsupportedEncodingException {
+        byte[] salt = "2dzfQi1xA5nY3H5k5ecR".getBytes("UTF-8");
+        MessageDigest digest = MessageDigest.getInstance("SHA-256");
+        digest.reset();
+        digest.update(salt);
+        return digest.digest(password.getBytes("UTF-8"));
     }
 }
