@@ -23,25 +23,25 @@ public class MainActivity extends Activity {
         if(token != null && !token.isEmpty())
         {
             User u = MapItPricesServer.login(token);
-            User.getInstance().setSessionToken(u.getSessionToken());
 
             Intent i;
-            if(u == null)
+            if(u.getSessionToken() != null)
             {
-                i = new Intent().setClass(this, LoginActivity.class);
-            }
-            else
-            {
-                i = new Intent().setClass(this, HomeScreenActivity.class);
-            }
+                User.getInstance().setUsername(u.getUsername());
+                User.getInstance().setEmail(u.getEmail());
+                User.getInstance().setSessionToken(u.getSessionToken());
 
-            startActivity(i);
-            finish();
+                SharedPreferences.Editor editor = settings.edit();
+                editor.putString("SessionToken",User.getInstance().getSessionToken());
+                editor.commit();
+
+                i = new Intent().setClass(this, HomeScreenActivity.class);
+                startActivity(i);
+                finish();
+            }
         }
-        else
-        {
-            setContentView(R.layout.main_layout);
-        }
+
+        setContentView(R.layout.main_layout);
     }
 
     public void signup(View v)

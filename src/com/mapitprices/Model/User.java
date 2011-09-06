@@ -13,6 +13,7 @@ import android.os.Parcelable;
 
 public class User implements Parcelable {
     int ID;
+    String Username;
     String Email;
     String SessionToken;
 
@@ -31,6 +32,7 @@ public class User implements Parcelable {
     public User(Parcel in)
     {
         ID = in.readInt();
+        Username = in.readString();
         Email = in.readString();
         SessionToken = in.readString();
     }
@@ -43,6 +45,7 @@ public class User implements Parcelable {
     @Override
     public void writeToParcel(Parcel parcel, int i) {
         parcel.writeInt(ID);
+        parcel.writeString(Username);
         parcel.writeString(Email);
         parcel.writeString(SessionToken);
     }
@@ -62,5 +65,13 @@ public class User implements Parcelable {
 
     public void setSessionToken(String sessionToken) {
         SessionToken = sessionToken;
+    }
+
+    public void setUsername(String username) {
+        Username = username;
+    }
+
+    public String getUsername() {
+        return Username;
     }
 }

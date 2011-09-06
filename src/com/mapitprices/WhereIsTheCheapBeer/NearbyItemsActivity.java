@@ -2,7 +2,6 @@ package com.mapitprices.WhereIsTheCheapBeer;
 
 import android.app.ListActivity;
 import android.app.ProgressDialog;
-import android.app.SearchManager;
 import android.content.Intent;
 import android.location.Location;
 import android.location.LocationListener;
@@ -24,7 +23,6 @@ import com.mapitprices.WheresTheCheapBeer.R;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
 
 /**
  * Created by IntelliJ IDEA.
@@ -71,8 +69,7 @@ public class NearbyItemsActivity extends ListActivity {
         mAdaptor = new ItemResultAdapter(NearbyItemsActivity.this, R.id.item_row_name, mCachedItems);
         setListAdapter(mAdaptor);
 
-        if (mCachedItems.size() == 0)
-        {
+        if (mCachedItems.size() == 0) {
             _progressDialog.show();
             new GetLocationTask().execute(_currentLocation);
         }
@@ -124,9 +121,10 @@ public class NearbyItemsActivity extends ListActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+        Intent i;
         switch (item.getItemId()) {
             case R.id.menu_new_price:
-                Intent i = new Intent().setClass(this, ReportPriceActivity.class);
+                i = new Intent().setClass(this, ReportPriceActivity.class);
                 startActivityForResult(i, 0);
                 return true;
             case R.id.menu_scan_barcode:
@@ -139,6 +137,10 @@ public class NearbyItemsActivity extends ListActivity {
             case R.id.menu_item_refresh:
                 _progressDialog.show();
                 new GetLocationTask().execute(_currentLocation);
+            case R.id.menu_item_settings:
+                i = new Intent().setClass(this, SettingsActivity.class);
+                startActivity(i);
+                return true;
             default:
                 return super.onOptionsItemSelected(item);
         }

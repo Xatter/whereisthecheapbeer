@@ -5,4 +5,5 @@
     <item android:title="Scan Barcode" android:id="@+id/menu_scan_barcode"/>
     <item android:title="Map" android:id="@+id/menu_map_items"/>
     <item android:title="Refresh" android:id="@+id/menu_item_refresh"/>
+    <item android:title="Settings" android:id="@+id/menu_item_settings"/>
 </menu>

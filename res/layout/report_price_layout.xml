@@ -1,39 +1,76 @@
 <?xml version="1.0" encoding="utf-8"?>
-<AbsoluteLayout
+<LinearLayout
         android:id="@+id/widget0"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
+        android:orientation="vertical"
+        android:background="@color/lightgray"
         xmlns:android="http://schemas.android.com/apk/res/android"
         >
+    <TextView
+            android:id="@+id/widget52"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:layout_marginBottom="20dp"
+            android:layout_marginLeft="5px"
+            android:layout_marginRight="5px"
+            android:text="Share a new price with everyone!"
+            android:typeface="monospace"
+            android:textColor="@color/black"
+            android:textSize="20sp"
+            >
+    </TextView>
     <TextView
             android:id="@+id/report_price_store"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="10px"
+            android:layout_marginBottom="10px"
+            android:layout_marginLeft="10px"
+            android:layout_marginRight="10px"
             android:hint="Press to select Store"
+            android:textColor="@color/black"
             android:textSize="18dp"
-            android:layout_x="0dip"
-            android:layout_y="102dip"
             >
     </TextView>
     <TextView
             android:id="@+id/report_price_item"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="10px"
+            android:layout_marginBottom="10px"
+            android:layout_marginLeft="10px"
+            android:layout_marginRight="10px"
             android:hint="Press to select Item"
+            android:textColor="@color/black"
             android:textSize="18dp"
-            android:layout_x="0dip"
-            android:layout_y="62dip"
             >
     </TextView>
+    <EditText
+            android:id="@+id/report_price_quantity"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10px"
+            android:layout_marginBottom="10px"
+            android:layout_marginLeft="5px"
+            android:layout_marginRight="5px"
+            android:hint="Quantity (6 for 6-pack)"
+            android:numeric="integer"
+            android:textSize="18sp"
+            >
+    </EditText>
     <EditText
             android:id="@+id/report_price_price"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="5px"
+            android:layout_marginBottom="10px"
+            android:layout_marginLeft="5px"
+            android:layout_marginRight="5px"
             android:hint="Price"
             android:textSize="18sp"
             android:numeric="decimal"
-            android:layout_x="0dip"
-            android:layout_y="182dip"
             >
     </EditText>
     <Button
@@ -41,46 +78,7 @@
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:text="Share Price!"
-            android:layout_x="0dip"
-            android:layout_y="382dip"
             android:onClick="sharePrice"
             >
     </Button>
-    <TextView
-            android:id="@+id/widget52"
-            android:layout_width="fill_parent"
-            android:layout_height="29dip"
-            android:text="Share a new price with everyone!"
-            android:textSize="20sp"
-            android:layout_x="0dip"
-            android:layout_y="2dip"
-            >
-    </TextView>
-    <RatingBar
-            android:id="@+id/widget53"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_x="0dip"
-            android:layout_y="262dip"
-            >
-    </RatingBar>
-    <TextView
-            android:id="@+id/widget54"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="How good is this beer there? (optional)"
-            android:layout_x="0dip"
-            android:layout_y="232dip"
-            >
-    </TextView>
-    <EditText
-            android:id="@+id/report_price_quantity"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:hint="Quantity (6 for 6-pack)"
-            android:textSize="18sp"
-            android:layout_x="0dip"
-            android:layout_y="132dip"
-            >
-    </EditText>
-</AbsoluteLayout>
+</LinearLayout>

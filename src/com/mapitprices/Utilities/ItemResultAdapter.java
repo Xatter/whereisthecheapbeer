@@ -9,6 +9,7 @@ import android.widget.TextView;
 import com.mapitprices.Model.Item;
 import com.mapitprices.WheresTheCheapBeer.R;
 
+import java.text.DateFormat;
 import java.text.NumberFormat;
 import java.util.IllegalFormatCodePointException;
 import java.util.List;
@@ -41,10 +42,11 @@ public class ItemResultAdapter extends ArrayAdapter<Item> {
         Item i = _items.get(position);
         TextView tvName = (TextView) v.findViewById(R.id.item_row_name);
         tvName.setText(i.getName());
+        TextView tvPrice = (TextView) v.findViewById(R.id.item_row_price);
+        tvPrice.setText(" ");
 
         if(i.getPrice() > 0)
         {
-            TextView tvPrice = (TextView) v.findViewById(R.id.item_row_price);
             NumberFormat currencyFormatter;
             currencyFormatter = NumberFormat.getCurrencyInstance();
             String formattedPrice = currencyFormatter.format(i.getPrice());
@@ -64,6 +66,9 @@ public class ItemResultAdapter extends ArrayAdapter<Item> {
 
         TextView tvBrand = (TextView) v.findViewById(R.id.item_row_brand);
         tvBrand.setText(i.getBrand());
+
+        TextView tvLastUpdated = (TextView) v.findViewById(R.id.item_row_lastupdated);
+        tvLastUpdated.setText(i.getLastUpdated());
 
         return v;
     }

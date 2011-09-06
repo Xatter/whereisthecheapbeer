@@ -159,7 +159,7 @@ public class NearbyStoresActivity extends ListActivity {
         protected Collection<Store> doInBackground(Location... params) {
             Location loc = params[0];
             mCurrentLocation = loc;
-            return MapItPricesServer.getStoresFromServer(loc);
+            return MapItPricesServer.getNearbyStoresWithPricesFromServer(loc);
         }
 
         @Override

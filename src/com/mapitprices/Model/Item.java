@@ -5,7 +5,9 @@ import android.os.Parcelable;
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
 
+import java.text.DateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 
@@ -20,6 +22,7 @@ public class Item implements Parcelable {
     double Price;
     int StoreID;
     int Quantity;
+    Date LastUpdated;
 
     public Item() {
 
@@ -115,14 +118,13 @@ public class Item implements Parcelable {
         Size = selectedSize;
     }
 
-    public void setQuantity(Integer q)
-    {
+    public void setQuantity(Integer q) {
         Quantity = q;
     }
 
     @Override
     public String toString() {
-        if(Quantity > 0)
+        if (Quantity > 0)
             return Name + ", " + Size + " x " + Quantity;
         else
             return Name + ", " + Size;
@@ -134,5 +136,12 @@ public class Item implements Parcelable {
 
     public int getStoreID() {
         return StoreID;
+    }
+
+    public String getLastUpdated() {
+        if (LastUpdated != null) {
+            return DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.SHORT).format(LastUpdated);
+        } else
+            return "";
     }
 }

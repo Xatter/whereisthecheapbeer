@@ -32,10 +32,14 @@ public class SignUpActivity extends Activity {
         et = (EditText) findViewById(R.id.password);
         String password = et.getText().toString();
 
+        et = (EditText) findViewById(R.id.username);
+        String username = et.getText().toString();
+
         if(email != null && !email.isEmpty()
                 && password != null && !password.isEmpty())
         {
             User.getInstance().setEmail(email);
+            User.getInstance().setUsername(username);
             User returned = MapItPricesServer.createNewUser(User.getInstance(), password);
 
             if(returned != null)

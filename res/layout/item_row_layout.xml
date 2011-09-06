@@ -3,7 +3,7 @@
         android:id="@+id/widget47"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:background="#ffc0c0c0"
+        android:background="@color/lightgray"
         android:padding="5dp"
         xmlns:android="http://schemas.android.com/apk/res/android"
         >
@@ -11,7 +11,7 @@
             android:id="@+id/item_row_size"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="#FF000000"
+            android:textColor="@color/black"
             android:hint="size"
             android:textSize="10dp"
             android:layout_alignParentLeft="true"
@@ -23,7 +23,7 @@
             android:layout_height="wrap_content"
             android:hint="price"
             android:textSize="18dp"
-            android:textColor="#ff009933"
+            android:textColor="@color/subtle_text_color"
             android:layout_alignParentTop="true"
             android:layout_alignParentRight="true"
             />
@@ -31,14 +31,14 @@
             android:id="@+id/item_row_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="#FF000000"
+            android:textColor="@color/black"
             android:hint="name"
             android:textSize="18dp"
             android:layout_alignParentTop="true"
             android:layout_alignParentLeft="true"
             />
     <TextView android:id="@+id/item_row_quantity"
-              android:textColor="#ff808080"
+              android:textColor="@color/gray"
               android:layout_height="wrap_content"
               android:layout_width="wrap_content"
               android:textSize="18dp"
@@ -50,10 +50,20 @@
             android:id="@+id/item_row_brand"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="#ff808080"
+            android:textColor="@color/gray"
             android:textSize="10dp"
             android:layout_below="@+id/item_row_name"
             android:layout_toRightOf="@+id/item_row_size"
             android:layout_marginLeft="20dp"
             />
+
+    <TextView
+        android:id="@+id/item_row_lastupdated"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/gray"
+        android:textSize="10dp"
+        android:layout_below="@+id/item_row_price"
+        android:layout_alignParentRight="true"
+        />
 </RelativeLayout>

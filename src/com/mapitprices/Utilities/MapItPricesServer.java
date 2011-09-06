@@ -3,6 +3,7 @@ package com.mapitprices.Utilities;
 import android.location.Location;
 import android.util.Base64;
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.google.gson.JsonIOException;
 import com.google.gson.JsonParseException;
 import com.google.gson.reflect.TypeToken;
@@ -15,8 +16,10 @@ import org.apache.http.message.BasicNameValuePair;
 import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Type;
 import java.security.NoSuchAlgorithmException;
+import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -28,8 +31,8 @@ import java.util.List;
  */
 public class MapItPricesServer {
 
-    //public static final String SERVER_URL = "http://www.mapitprices.com/Beer/";
-    public static final String SERVER_URL = "http://10.0.2.2:61418/Beer/"; //Emulator localhost
+    public static final String SERVER_URL = "http://www.mapitprices.com/Beer/";
+    //public static final String SERVER_URL = "http://10.0.2.2:61418/Beer/"; //Emulator localhost
     //public static final String SERVER_URL = "http://10.0.1.8:61418/Beer"; //Device local computer
 
     public static final int MIN_DISTANCE = 200; // in meters
@@ -52,7 +55,7 @@ public class MapItPricesServer {
         return jsonResultToItemCollection(result);
     }
 
-    public static Collection<Store> getStoresFromServer(Location loc) {
+    public static Collection<Store> getNearbyStoresWithPricesFromServer(Location loc) {
         List<NameValuePair> nameValuePairs = Utils.locationToNameValuePair(loc);
 
         String result = RestClient.ExecuteCommand(SERVER_URL + "GetStores", nameValuePairs);
@@ -73,7 +76,12 @@ public class MapItPricesServer {
 
     private static Collection<Item> jsonResultToItemCollection(String result) {
         if (result != null && result.length() != 0) {
-            Gson gson = new Gson();
+
+            GsonBuilder builder = new GsonBuilder();
+            builder.setDateFormat(DateFormat.LONG);
+            builder.registerTypeAdapter(Date.class, new DotNetGsonDateTimeDeserializer());
+            Gson gson = builder.create();
+
             Type collectionType = new TypeToken<Collection<Item>>() {
             }.getType();
             return gson.fromJson(result, collectionType);
@@ -143,6 +151,7 @@ public class MapItPricesServer {
     public static User createNewUser(User i, String password) {
         List<NameValuePair> values = new ArrayList<NameValuePair>(2);
         values.add(new BasicNameValuePair("email", i.getEmail()));
+        values.add(new BasicNameValuePair("username", i.getUsername()));
         try {
             String hashedPassword = Base64.encodeToString(Utils.getHash(password), Base64.DEFAULT);
             values.add(new BasicNameValuePair("password", hashedPassword));
@@ -195,5 +204,13 @@ public class MapItPricesServer {
         } catch (JsonParseException e) {
             return null;
         }
+    }
+
+    public static Collection<Store> getAllNearbyStoresFromServer(Location loc) {
+        List<NameValuePair> nameValuePairs = Utils.locationToNameValuePair(loc);
+
+        String result = RestClient.ExecuteCommand(SERVER_URL + "GetNearbyStores", nameValuePairs);
+
+        return jsonResultToStoreCollection(result);
     }
 }

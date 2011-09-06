@@ -1,19 +1,15 @@
 package com.mapitprices.WhereIsTheCheapBeer;
 
-import android.app.Activity;
 import android.app.ListActivity;
 import android.app.ProgressDialog;
 import android.content.Intent;
-import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationListener;
-import android.location.LocationManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
-import com.mapitprices.Model.Item;
 import com.mapitprices.Model.Store;
 import com.mapitprices.Utilities.MapItPricesServer;
 import com.mapitprices.Utilities.StoreResultAdapter;
@@ -111,7 +107,7 @@ public class SelectStoreActivity extends ListActivity {
         protected Collection<Store> doInBackground(Location... params) {
             Location loc = params[0];
             _currentLocation = loc;
-            return MapItPricesServer.getStoresFromServer(loc);
+            return MapItPricesServer.getAllNearbyStoresFromServer(loc);
         }
 
         @Override

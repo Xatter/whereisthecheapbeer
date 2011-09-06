@@ -11,15 +11,34 @@
             android:id="@+id/widget56"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
+            android:textColor="@color/text_color"
             android:text="Create a new User Account"
             >
     </TextView>
+    <TextView android:id="@+id/tv1"
+              android:layout_width="fill_parent"
+              android:layout_height="wrap_content"
+              android:textColor="@color/text_color"
+              android:text="How you want others to see your updates:"/>
+
+    <EditText android:id="@+id/username"
+              android:layout_width="fill_parent"
+              android:layout_height="wrap_content"
+              android:hint="Username"
+              android:textSize="18dp"/>
+
+    <TextView android:id="@+id/tv2"
+              android:layout_width="fill_parent"
+              android:layout_height="wrap_content"
+              android:textColor="@color/text_color"
+              android:text="Login information:"/>
+
     <EditText
             android:id="@+id/email"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:hint="Email"
-            android:textSize="18sp"
+            android:textSize="18dp"
             >
     </EditText>
     <EditText
@@ -28,7 +47,7 @@
             android:layout_height="wrap_content"
             android:hint="Password"
             android:password="true"
-            android:textSize="18sp"
+            android:textSize="18dp"
             >
     </EditText>
     <Button

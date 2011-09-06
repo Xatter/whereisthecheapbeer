@@ -2,7 +2,11 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
           package="com.mapitprices.WheresTheCheapBeer"
           android:versionCode="1"
-          android:versionName="1.0">
+          android:versionName="1.0"
+        >
+
+    <uses-sdk android:minSdkVersion="5"/>
+
     <uses-permission
             android:name="android.permission.ACCESS_FINE_LOCATION"
             ></uses-permission>
@@ -29,8 +33,11 @@
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
-        <activity android:name="com.mapitprices.WhereIsTheCheapBeer.ReportPriceActivity" android:label="Report Price"/>
-        <activity android:name="com.mapitprices.WhereIsTheCheapBeer.NearbyStoresActivity">
+        <activity android:name="com.mapitprices.WhereIsTheCheapBeer.ReportPriceActivity"
+                  android:label="Report Price"
+                />
+        <activity android:name="com.mapitprices.WhereIsTheCheapBeer.NearbyStoresActivity"
+                >
             <meta-data android:name="android.app"
                        android:value="com.mapitprices.WhereIsTheCheapBeer.SearchActivity"/>
         </activity>
@@ -38,17 +45,17 @@
             <meta-data android:name="android.app"
                        android:value="com.mapitprices.WhereIsTheCheapBeer.SearchActivity"/>
         </activity>
-        <activity android:name="com.mapitprices.WhereIsTheCheapBeer.StoreItemsActivity"/>
-        <activity android:name="com.mapitprices.WhereIsTheCheapBeer.NewStoreActivity"/>
-        <activity android:name="com.mapitprices.WhereIsTheCheapBeer.BarCodeScanItemActivity"/>
-        <activity android:name="com.mapitprices.WhereIsTheCheapBeer.ListAllDistinctItemsActivity">
+        <activity android:name="com.mapitprices.WhereIsTheCheapBeer.StoreItemsActivity" />
+        <activity android:name="com.mapitprices.WhereIsTheCheapBeer.NewStoreActivity" />
+        <activity android:name="com.mapitprices.WhereIsTheCheapBeer.BarCodeScanItemActivity" />
+        <activity android:name="com.mapitprices.WhereIsTheCheapBeer.SelectItemActivity">
         </activity>
         <activity android:name="com.mapitprices.WhereIsTheCheapBeer.SelectStoreActivity"/>
-        <activity android:name="com.mapitprices.WhereIsTheCheapBeer.NewItemActivity"/>
-        <activity android:name="com.mapitprices.WhereIsTheCheapBeer.BeerMapActivity" android:label="Map"/>
-        <activity android:name="com.mapitprices.WhereIsTheCheapBeer.ItemDetailsActivity"/>
+        <activity android:name="com.mapitprices.WhereIsTheCheapBeer.NewItemActivity" />
+        <activity android:name="com.mapitprices.WhereIsTheCheapBeer.BeerMapActivity"  android:label="Map"/>
+        <activity android:name="com.mapitprices.WhereIsTheCheapBeer.ItemDetailsActivity" />
 
-        <activity android:name="com.mapitprices.WhereIsTheCheapBeer.SearchActivity">
+        <activity android:name="com.mapitprices.WhereIsTheCheapBeer.SearchActivity" >
             <intent-filter>
                 <action android:name="android.intent.action.SEARCH"/>
             </intent-filter>
@@ -56,9 +63,10 @@
                     android:name="android.app.searchable"
                     android:resource="@xml/searchable"/>
         </activity>
-        <activity android:name="com.mapitprices.WhereIsTheCheapBeer.LoginActivity"/>
-        <activity android:name="com.mapitprices.WhereIsTheCheapBeer.SignUpActivity"/>
-        <activity android:name="com.mapitprices.WhereIsTheCheapBeer.HomeScreenActivity"/>
+        <activity android:name="com.mapitprices.WhereIsTheCheapBeer.LoginActivity" />
+        <activity android:name="com.mapitprices.WhereIsTheCheapBeer.SignUpActivity" />
+        <activity android:name="com.mapitprices.WhereIsTheCheapBeer.HomeScreenActivity" />
+        <activity android:name="com.mapitprices.WhereIsTheCheapBeer.SettingsActivity" />
 
     </application>
 </manifest>

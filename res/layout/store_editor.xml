@@ -1,18 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
-
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:orientation="vertical"
-              android:layout_width="fill_parent"
-              android:layout_height="fill_parent">
-    <EditText android:id="@+id/store_name"
-              android:layout_width="fill_parent"
-              android:layout_height="wrap_content"
-              android:textSize="18dp"
-              android:hint="Store Name"/>
-    <Button android:id="@+id/save_store_button"
+<LinearLayout
+        android:id="@+id/widget31"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:orientation="vertical"
+        android:background="@color/green_base"
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        >
+    <EditText
+            android:id="@+id/store_name"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:hint="Store Name"
+            android:textSize="18dp"
+            >
+    </EditText>
+    <EditText
+            android:id="@+id/widget34"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:hint="Address (optional)"
+            android:textSize="18sp"
+            >
+    </EditText>
+    <Button
+            android:id="@+id/save_store_button"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:text="Save"
-            android:onClick="saveStore"
-            />
+            >
+    </Button>
 </LinearLayout>

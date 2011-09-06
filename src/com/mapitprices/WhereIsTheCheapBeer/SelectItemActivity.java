@@ -31,7 +31,7 @@ import java.util.List;
  * Time: 3:39 PM
  * To change this template use File | Settings | File Templates.
  */
-public class ListAllDistinctItemsActivity extends ListActivity {
+public class SelectItemActivity extends ListActivity {
     ArrayList<Item> _items = new ArrayList<Item>();
 
     public void onCreate(Bundle savedInstanceState) {
@@ -44,7 +44,6 @@ public class ListAllDistinctItemsActivity extends ListActivity {
         progressDialog.setIndeterminate(true);
         progressDialog.setCancelable(true);
 
-
         progressDialog.show();
         Collection<Item> result = MapItPricesServer.getAllItems();
         progressDialog.cancel();
@@ -53,7 +52,7 @@ public class ListAllDistinctItemsActivity extends ListActivity {
             _items.clear();
             _items.addAll(result);
 
-            ArrayAdapter<Item> adapter = new ArrayAdapter<Item>(this, android.R.layout.simple_list_item_1, result.toArray(new Item[0]));
+            ArrayAdapter<Item> adapter = new ItemResultAdapter(this, android.R.layout.simple_list_item_1, _items);
             setListAdapter(adapter);
         }
     }
@@ -67,13 +66,18 @@ public class ListAllDistinctItemsActivity extends ListActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+        Intent i;
         switch (item.getItemId()) {
             case R.id.add_item:
-                Intent i = new Intent().setClass(this, NewItemActivity.class);
+                 i = new Intent().setClass(this, NewItemActivity.class);
                 startActivityForResult(i, 7);
                 return true;
             case R.id.scan_barcode:
                 IntentIntegrator.initiateScan(this);
+                return true;
+            case R.id.menu_item_settings:
+                i = new Intent().setClass(this, SettingsActivity.class);
+                startActivity(i);
                 return true;
             default:
                 return true;

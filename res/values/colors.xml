@@ -14,4 +14,6 @@
     <color name="gray">#808080</color>
     <color name="cyan">#0FFFFF</color>
     <color name="text_color">#FFFFFF</color>
+    <color name="subtle_text_color">#009933</color>
+
 </resources>

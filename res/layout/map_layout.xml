@@ -4,6 +4,15 @@
     android:layout_width="fill_parent"
     android:layout_height="fill_parent" >
 
+    <!--debug key-->
+    <!--android:apiKey="0AikWNNoeB3BG_s02v_qMH-SxmGm5LrPh5-Yudg"-->
+
+    <!--pre-release key-->
+    <!--android:apiKey="0AikWNNoeB3Ak4Wbs4z4Pt-kTaqQHRHH61NpbZQ"-->
+
+    <!--release key-->
+    <!--android:apiKey="0AikWNNoeB3D0Hejz5xoQrPENQCObFk9Zbk_3ew"-->
+
     <com.google.android.maps.MapView
         android:id="@+id/mapview"
         android:layout_width="fill_parent"

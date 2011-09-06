@@ -2,8 +2,6 @@ package com.mapitprices.WhereIsTheCheapBeer;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.location.Location;
-import android.location.LocationListener;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
@@ -11,7 +9,6 @@ import android.widget.TextView;
 import com.mapitprices.Model.Item;
 import com.mapitprices.Model.Store;
 import com.mapitprices.Utilities.MapItPricesServer;
-import com.mapitprices.Utilities.Utils;
 import com.mapitprices.WheresTheCheapBeer.R;
 
 /**
@@ -46,7 +43,7 @@ public class ReportPriceActivity extends Activity {
     }
 
     private void selectItem() {
-        Intent i = new Intent().setClass(this, ListAllDistinctItemsActivity.class);
+        Intent i = new Intent().setClass(this, SelectItemActivity.class);
         startActivityForResult(i, 0);
     }
 
@@ -63,6 +60,7 @@ public class ReportPriceActivity extends Activity {
 		Double newPrice = Double.parseDouble(newPriceControl.getText().toString());
 
         EditText quantity = (EditText)findViewById(R.id.report_price_quantity);
+
         if(!quantity.getText().toString().isEmpty())
         {
             Integer q = Integer.parseInt(quantity.getText().toString());
