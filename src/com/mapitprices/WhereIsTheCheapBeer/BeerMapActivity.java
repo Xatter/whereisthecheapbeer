@@ -97,6 +97,10 @@ public class BeerMapActivity extends MapActivity {
                 i.putExtra("store",_store);
                 startActivity(i);
                 break;
+            case R.id.menu_item_settings:
+                i = new Intent().setClass(this, SettingsActivity.class);
+                startActivity(i);
+                break;
         }
 
         return true;

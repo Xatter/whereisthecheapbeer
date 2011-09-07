@@ -61,7 +61,7 @@ public class ReportPriceActivity extends Activity {
 
         EditText quantity = (EditText)findViewById(R.id.report_price_quantity);
 
-        if(!quantity.getText().toString().isEmpty())
+        if(quantity.getText().toString().length() != 0)
         {
             Integer q = Integer.parseInt(quantity.getText().toString());
             _item.setQuantity(q);

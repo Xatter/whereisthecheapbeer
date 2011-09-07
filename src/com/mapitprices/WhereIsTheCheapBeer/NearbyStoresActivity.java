@@ -93,6 +93,10 @@ public class NearbyStoresActivity extends ListActivity {
                 mProgressDialog.show();
                 new GetLocationTask().execute(mCurrentLocation);
                 return true;
+            case R.id.menu_item_settings:
+                i = new Intent().setClass(this, SettingsActivity.class);
+                startActivity(i);
+                return true;
         }
 
         return true;

@@ -65,7 +65,7 @@ public class MapItPricesServer {
 
     private static Collection<Store> jsonResultToStoreCollection(String result) {
         if (result != null && result.length() != 0) {
-            Gson gson = new Gson();
+            Gson gson = createGson();
             Type collectionType = new TypeToken<Collection<Store>>() {
             }.getType();
             return gson.fromJson(result, collectionType);
@@ -78,7 +78,6 @@ public class MapItPricesServer {
         if (result != null && result.length() != 0) {
 
             GsonBuilder builder = new GsonBuilder();
-            builder.setDateFormat(DateFormat.LONG);
             builder.registerTypeAdapter(Date.class, new DotNetGsonDateTimeDeserializer());
             Gson gson = builder.create();
 
@@ -117,9 +116,10 @@ public class MapItPricesServer {
     public static Item createNewItem(Item item) {
         String result = RestClient.ExecuteCommand(SERVER_URL + "CreateItem", item.toNameValuePairs());
         try {
-            Gson gson = new Gson();
+            Gson gson = createGson();
             return gson.fromJson(result, Item.class);
         } catch (JsonParseException e) {
+            e.printStackTrace();
             return null;
         }
 
@@ -129,21 +129,36 @@ public class MapItPricesServer {
         String result = RestClient.ExecuteCommand(SERVER_URL + "CreateStore", s.toNameValuePairs());
 
         try {
-            Gson gson = new Gson();
+            Gson gson = createGson();
             return gson.fromJson(result, Store.class);
         } catch (JsonParseException e) {
+            e.printStackTrace();
             return null;
         }
+    }
+
+    public static Gson createGson()
+    {
+        GsonBuilder builder = new GsonBuilder();
+        builder.registerTypeAdapter(Date.class, new DotNetGsonDateTimeDeserializer());
+        Gson gson = builder.create();
+        return gson;
     }
 
     public static Store getStore(Item i) {
         List<NameValuePair> values = new ArrayList<NameValuePair>(1);
         values.add(new BasicNameValuePair("storeid", Integer.toString(i.getStoreID())));
         String result = RestClient.ExecuteCommand(SERVER_URL + "GetStore", values);
-        Gson gson = new Gson();
+
+        GsonBuilder builder = new GsonBuilder();
+        builder.registerTypeAdapter(Date.class, new DotNetGsonDateTimeDeserializer());
+
+        Gson gson = builder.create();
+
         try {
             return gson.fromJson(result, Store.class);
         } catch (JsonParseException e) {
+            e.printStackTrace();
             return null;
         }
     }
@@ -156,7 +171,7 @@ public class MapItPricesServer {
             String hashedPassword = Base64.encodeToString(Utils.getHash(password), Base64.DEFAULT);
             values.add(new BasicNameValuePair("password", hashedPassword));
             String result = RestClient.ExecuteCommand(SERVER_URL + "CreateUser", values);
-            Gson gson = new Gson();
+            Gson gson = createGson();
             return gson.fromJson(result, User.class);
         } catch (NoSuchAlgorithmException e) {
             e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
@@ -177,7 +192,8 @@ public class MapItPricesServer {
             String hashedPassword = Base64.encodeToString(Utils.getHash(password), Base64.DEFAULT);
             values.add(new BasicNameValuePair("password", hashedPassword));
             String result = RestClient.ExecuteCommand(SERVER_URL + "Login", values);
-            Gson gson = new Gson();
+
+            Gson gson = createGson();
             User returnedUser = gson.fromJson(result, User.class);
 
             return returnedUser;
@@ -198,7 +214,7 @@ public class MapItPricesServer {
         String result = RestClient.ExecuteCommand(SERVER_URL + "Login", values);
 
         try {
-            Gson gson = new Gson();
+            Gson gson = createGson();
             User returnedUser = gson.fromJson(result, User.class);
             return returnedUser;
         } catch (JsonParseException e) {

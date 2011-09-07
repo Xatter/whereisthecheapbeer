@@ -23,6 +23,7 @@ public class Item implements Parcelable {
     int StoreID;
     int Quantity;
     Date LastUpdated;
+    User User;
 
     public Item() {
 

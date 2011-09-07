@@ -59,6 +59,7 @@ public class NewItemActivity extends Activity {
         _item.setUPC(et.getText().toString());
 
         Item returned = MapItPricesServer.createNewItem(_item);
+
         if (returned != null) {
             Intent i = new Intent();
             i.putExtra("item", returned);
@@ -66,7 +67,7 @@ public class NewItemActivity extends Activity {
             finish();
         } else {
             // maybe do a toast message
-            Toast.makeText(this,"Adding item failed", Toast.LENGTH_SHORT);
+            Toast.makeText(this,"Adding item failed", Toast.LENGTH_SHORT).show();
             setResult(RESULT_CANCELED);
         }
     }

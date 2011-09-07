@@ -35,8 +35,8 @@ public class SignUpActivity extends Activity {
         et = (EditText) findViewById(R.id.username);
         String username = et.getText().toString();
 
-        if(email != null && !email.isEmpty()
-                && password != null && !password.isEmpty())
+        if(email != null && email.length() != 0
+                && password != null && password.length() != 0)
         {
             User.getInstance().setEmail(email);
             User.getInstance().setUsername(username);
