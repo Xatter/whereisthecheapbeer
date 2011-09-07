@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.view.View;
 import com.mapitprices.Model.User;
 import com.mapitprices.Utilities.MapItPricesServer;
+import com.mapitprices.Utilities.Utils;
 import com.mapitprices.WheresTheCheapBeer.R;
 
 public class MainActivity extends Activity {
@@ -25,12 +26,7 @@ public class MainActivity extends Activity {
         String token = settings.getString("SessionToken", "");
 
         if (token != null && token.length() != 0) {
-            ProgressDialog progressDialog = new ProgressDialog(this);
-            progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-            progressDialog.setMessage("Logging in...");
-            progressDialog.setIndeterminate(true);
-            progressDialog.setCancelable(true);
-            _progressDialog = progressDialog;
+
 
             new LoginTask().execute(token);
         } else {
@@ -57,7 +53,11 @@ public class MainActivity extends Activity {
 
 
     private class LoginTask extends AsyncTask<String, Void, User> {
-
+        ProgressDialog mProgressDialog;
+        LoginTask()
+        {
+           mProgressDialog = Utils.createProgressDialog(MainActivity.this, "Logging in...");
+        }
         @Override
         protected User doInBackground(String... strings) {
             return MapItPricesServer.login(strings[0]);
@@ -65,12 +65,12 @@ public class MainActivity extends Activity {
 
         @Override
         protected void onPreExecute() {
-            _progressDialog.show();
+            mProgressDialog.show();
         }
 
         @Override
         protected void onPostExecute(User user) {
-            _progressDialog.cancel();
+            mProgressDialog.dismiss();
 
             Intent i;
             if (user.getSessionToken() != null) {

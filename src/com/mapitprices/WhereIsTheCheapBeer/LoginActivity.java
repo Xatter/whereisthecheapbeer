@@ -11,6 +11,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 import com.mapitprices.Model.User;
 import com.mapitprices.Utilities.MapItPricesServer;
+import com.mapitprices.Utilities.Utils;
 import com.mapitprices.WheresTheCheapBeer.R;
 
 /**
@@ -21,18 +22,9 @@ import com.mapitprices.WheresTheCheapBeer.R;
  * To change this template use File | Settings | File Templates.
  */
 public class LoginActivity extends Activity {
-    private ProgressDialog _progressDialog;
-
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.login_layout);
-
-        ProgressDialog progressDialog = new ProgressDialog(this);
-        progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-        progressDialog.setMessage("Logging in...");
-        progressDialog.setIndeterminate(true);
-        progressDialog.setCancelable(true);
-        _progressDialog = progressDialog;
     }
 
     public void signin(View v) {
@@ -48,7 +40,13 @@ public class LoginActivity extends Activity {
         }
     }
 
-        private class LoginTask extends AsyncTask<String, Void, User> {
+    private class LoginTask extends AsyncTask<String, Void, User> {
+        ProgressDialog mProgressDialog;
+
+        LoginTask()
+        {
+            mProgressDialog = Utils.createProgressDialog(LoginActivity.this, "Logging in...");
+        }
 
         @Override
         protected User doInBackground(String... strings) {
@@ -57,12 +55,12 @@ public class LoginActivity extends Activity {
 
         @Override
         protected void onPreExecute() {
-            _progressDialog.show();
+            mProgressDialog.show();
         }
 
         @Override
         protected void onPostExecute(User user) {
-            _progressDialog.cancel();
+            mProgressDialog.dismiss();
 
             Intent i;
             if (user.getSessionToken() != null) {

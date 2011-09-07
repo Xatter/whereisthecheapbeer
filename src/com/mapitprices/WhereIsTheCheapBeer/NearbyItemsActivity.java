@@ -32,7 +32,6 @@ import java.util.Collection;
  * To change this template use File | Settings | File Templates.
  */
 public class NearbyItemsActivity extends ListActivity {
-    private ProgressDialog _progressDialog;
     private Location _currentLocation;
     ArrayList<Item> mCachedItems = new ArrayList<Item>();
 
@@ -40,7 +39,7 @@ public class NearbyItemsActivity extends ListActivity {
     private final LocationListener currentListener = new LocationListener() {
 
         public void onLocationChanged(Location location) {
-            _progressDialog.show();
+
             new GetLocationTask().execute(location);
         }
 
@@ -59,18 +58,10 @@ public class NearbyItemsActivity extends ListActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.items_layout);
 
-        ProgressDialog progressDialog = new ProgressDialog(this);
-        progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-        progressDialog.setMessage("Getting nearby prices...");
-        progressDialog.setIndeterminate(true);
-        progressDialog.setCancelable(true);
-        _progressDialog = progressDialog;
-
         mAdaptor = new ItemResultAdapter(NearbyItemsActivity.this, R.id.item_row_name, mCachedItems);
         setListAdapter(mAdaptor);
 
         if (mCachedItems.size() == 0) {
-            _progressDialog.show();
             new GetLocationTask().execute(_currentLocation);
         }
     }
@@ -135,8 +126,8 @@ public class NearbyItemsActivity extends ListActivity {
                 startActivity(mapIntent);
                 return true;
             case R.id.menu_item_refresh:
-                _progressDialog.show();
                 new GetLocationTask().execute(_currentLocation);
+                return true;
             case R.id.menu_item_settings:
                 i = new Intent().setClass(this, SettingsActivity.class);
                 startActivity(i);
@@ -178,6 +169,18 @@ public class NearbyItemsActivity extends ListActivity {
     }
 
     private class GetLocationTask extends AsyncTask<Location, Void, Collection<Item>> {
+        ProgressDialog _progressDialog;
+
+        GetLocationTask()
+        {
+            _progressDialog = Utils.createProgressDialog(NearbyItemsActivity.this,"Getting nearby prices...");
+        }
+
+        @Override
+        protected void onPreExecute() {
+            _progressDialog.show();
+        }
+
         @Override
         protected Collection<Item> doInBackground(Location... params) {
             Location loc = params[0];

@@ -145,4 +145,8 @@ public class Item implements Parcelable {
         } else
             return "";
     }
+
+    public User getUser() {
+        return User;
+    }
 }

@@ -16,7 +16,6 @@ import org.apache.http.message.BasicNameValuePair;
 import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Type;
 import java.security.NoSuchAlgorithmException;
-import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
@@ -137,8 +136,7 @@ public class MapItPricesServer {
         }
     }
 
-    public static Gson createGson()
-    {
+    private static Gson createGson() {
         GsonBuilder builder = new GsonBuilder();
         builder.registerTypeAdapter(Date.class, new DotNetGsonDateTimeDeserializer());
         Gson gson = builder.create();
@@ -224,9 +222,7 @@ public class MapItPricesServer {
 
     public static Collection<Store> getAllNearbyStoresFromServer(Location loc) {
         List<NameValuePair> nameValuePairs = Utils.locationToNameValuePair(loc);
-
         String result = RestClient.ExecuteCommand(SERVER_URL + "GetNearbyStores", nameValuePairs);
-
         return jsonResultToStoreCollection(result);
     }
 }

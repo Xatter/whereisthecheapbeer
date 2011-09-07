@@ -31,14 +31,13 @@ import java.util.Collection;
  */
 public class NearbyStoresActivity extends ListActivity {
     private Location mCurrentLocation;
-    private ProgressDialog mProgressDialog;
     private ArrayList<Store> mStoresCache = new ArrayList<Store>();
     private ArrayAdapter<Store> mAdapter;
 
     private final LocationListener mCurrentListener = new LocationListener() {
 
         public void onLocationChanged(Location location) {
-            mProgressDialog.show();
+
             new GetLocationTask().execute(location);
         }
 
@@ -57,19 +56,11 @@ public class NearbyStoresActivity extends ListActivity {
 
         setContentView(R.layout.stores_layout);
 
-        ProgressDialog progressDialog = new ProgressDialog(this);
-        progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-        progressDialog.setMessage("Getting nearby stores...");
-        progressDialog.setIndeterminate(true);
-        progressDialog.setCancelable(true);
-        mProgressDialog = progressDialog;
-
         mAdapter = new StoreResultAdapter(NearbyStoresActivity.this, R.id.item_row_name, mStoresCache);
         setListAdapter(mAdapter);
 
         if(mStoresCache.size() == 0)
         {
-            mProgressDialog.show();
             new GetLocationTask().execute(mCurrentLocation);
             mAdapter.notifyDataSetChanged();
         }
@@ -90,7 +81,6 @@ public class NearbyStoresActivity extends ListActivity {
                 startActivityForResult(i, 0);
                 return true;
             case R.id.menu_store_refresh:
-                mProgressDialog.show();
                 new GetLocationTask().execute(mCurrentLocation);
                 return true;
             case R.id.menu_item_settings:
@@ -159,6 +149,16 @@ public class NearbyStoresActivity extends ListActivity {
 
 
     private class GetLocationTask extends AsyncTask<Location, Void, Collection<Store>> {
+        ProgressDialog mProgressDialog;
+        GetLocationTask()
+        {
+            mProgressDialog = Utils.createProgressDialog(NearbyStoresActivity.this, "Getting nearby stores...");
+        }
+        @Override
+        protected void onPreExecute() {
+            mProgressDialog.show();
+        }
+
         @Override
         protected Collection<Store> doInBackground(Location... params) {
             Location loc = params[0];

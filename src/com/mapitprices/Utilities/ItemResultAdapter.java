@@ -70,6 +70,9 @@ public class ItemResultAdapter extends ArrayAdapter<Item> {
         TextView tvLastUpdated = (TextView) v.findViewById(R.id.item_row_lastupdated);
         tvLastUpdated.setText(i.getLastUpdated());
 
+        TextView tvFoundBy = (TextView) v.findViewById(R.id.item_row_found_by);
+        tvFoundBy.setText(i.getUser().getUsername());
+
         return v;
     }
 }
