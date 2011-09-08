@@ -57,6 +57,11 @@ public class Utils {
     }
 
     public static GeoPoint LocationToGeoPoint(Location loc) {
+        if(loc == null)
+        {
+            return Utils.LocationToGeoPoint(40.75, -73.98); // NYC by default
+        }
+
         return Utils.LocationToGeoPoint(loc.getLatitude(), loc.getLongitude());
     }
 

@@ -1,4 +1,4 @@
-package com.mapitprices.WhereIsTheCheapBeer;
+package com.mapitprices.WheresTheCheapBeer.Editors;
 
 import android.app.Activity;
 import android.content.Intent;

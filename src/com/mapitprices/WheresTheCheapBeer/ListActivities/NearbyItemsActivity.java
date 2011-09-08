@@ -1,4 +1,4 @@
-package com.mapitprices.WhereIsTheCheapBeer;
+package com.mapitprices.WheresTheCheapBeer.ListActivities;
 
 import android.app.ListActivity;
 import android.app.ProgressDialog;
@@ -20,6 +20,11 @@ import com.mapitprices.Utilities.ItemResultAdapter;
 import com.mapitprices.Utilities.MapItPricesServer;
 import com.mapitprices.Utilities.Utils;
 import com.mapitprices.WheresTheCheapBeer.R;
+import com.mapitprices.WheresTheCheapBeer.Editors.ReportPriceActivity;
+import com.mapitprices.WheresTheCheapBeer.BarCodeScanItemActivity;
+import com.mapitprices.WheresTheCheapBeer.MapActivities.BeerMapActivity;
+import com.mapitprices.WheresTheCheapBeer.SearchActivity;
+import com.mapitprices.WheresTheCheapBeer.SettingsActivity;
 
 import java.util.ArrayList;
 import java.util.Collection;

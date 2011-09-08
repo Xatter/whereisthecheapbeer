@@ -1,4 +1,4 @@
-package com.mapitprices.WhereIsTheCheapBeer;
+package com.mapitprices.WheresTheCheapBeer.LoginActivities;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
@@ -12,6 +12,7 @@ import android.widget.Toast;
 import com.mapitprices.Model.User;
 import com.mapitprices.Utilities.MapItPricesServer;
 import com.mapitprices.Utilities.Utils;
+import com.mapitprices.WheresTheCheapBeer.HomeScreenActivity;
 import com.mapitprices.WheresTheCheapBeer.R;
 
 /**
@@ -60,10 +61,15 @@ public class LoginActivity extends Activity {
 
         @Override
         protected void onPostExecute(User user) {
-            mProgressDialog.dismiss();
+            try {
+                mProgressDialog.dismiss();
+            } catch (Exception e) {
+               e.printStackTrace();
+            }
+
 
             Intent i;
-            if (user.getSessionToken() != null) {
+            if ( user != null && user.getSessionToken() != null) {
                 User.getInstance().setUsername(user.getUsername());
                 User.getInstance().setEmail(user.getEmail());
                 User.getInstance().setSessionToken(user.getSessionToken());

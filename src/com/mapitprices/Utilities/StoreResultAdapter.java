@@ -6,9 +6,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
-import com.mapitprices.Model.Item;
 import com.mapitprices.Model.Store;
 import com.mapitprices.WheresTheCheapBeer.R;
+
 
 import java.text.DecimalFormat;
 import java.util.List;

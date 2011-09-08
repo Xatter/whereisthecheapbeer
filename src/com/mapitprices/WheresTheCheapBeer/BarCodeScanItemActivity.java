@@ -1,19 +1,17 @@
-package com.mapitprices.WhereIsTheCheapBeer;
+package com.mapitprices.WheresTheCheapBeer;
 
-import android.app.Activity;
 import android.app.ListActivity;
 import android.app.ProgressDialog;
 import android.content.Intent;
-import android.location.Location;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import com.mapitprices.Model.Item;
 import com.mapitprices.Utilities.ItemResultAdapter;
 import com.mapitprices.Utilities.MapItPricesServer;
+import com.mapitprices.WheresTheCheapBeer.MapActivities.BeerMapActivity;
 import com.mapitprices.WheresTheCheapBeer.R;
+
 
 import java.util.ArrayList;
 import java.util.Collection;

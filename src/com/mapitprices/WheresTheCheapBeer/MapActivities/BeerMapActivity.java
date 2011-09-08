@@ -1,6 +1,5 @@
-package com.mapitprices.WhereIsTheCheapBeer;
+package com.mapitprices.WheresTheCheapBeer.MapActivities;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
@@ -9,17 +8,14 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.animation.LayoutAnimationController;
 import com.google.android.maps.*;
-import com.google.gson.Gson;
 import com.mapitprices.Model.Item;
 import com.mapitprices.Model.Store;
 import com.mapitprices.Utilities.MapItPricesServer;
-import com.mapitprices.Utilities.RestClient;
 import com.mapitprices.Utilities.Utils;
+import com.mapitprices.WheresTheCheapBeer.Editors.ReportPriceActivity;
 import com.mapitprices.WheresTheCheapBeer.R;
-import org.apache.http.NameValuePair;
-import org.apache.http.message.BasicNameValuePair;
+import com.mapitprices.WheresTheCheapBeer.SettingsActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -35,7 +31,7 @@ public class BeerMapActivity extends MapActivity {
     MapView mapView;
     List<Overlay> mapOverlays;
     Drawable drawable;
-    HelloItemizedOverlay itemizedOverlay;
+    StoreItemizedOverlay itemizedOverlay;
     private Item _item;
     private Store _store;
 
@@ -48,7 +44,7 @@ public class BeerMapActivity extends MapActivity {
 
         mapOverlays = mapView.getOverlays();
         drawable = this.getResources().getDrawable(R.drawable.mapmarker);
-        itemizedOverlay = new HelloItemizedOverlay(drawable, this);
+        itemizedOverlay = new StoreItemizedOverlay(drawable, this);
 
         Intent intent = getIntent();
         if(intent != null)
@@ -112,11 +108,11 @@ public class BeerMapActivity extends MapActivity {
     }
 
 
-    private class HelloItemizedOverlay extends ItemizedOverlay<OverlayItem> {
+    private class StoreItemizedOverlay extends ItemizedOverlay<OverlayItem> {
         private ArrayList<OverlayItem> mOverlays = new ArrayList<OverlayItem>();
         private Context mContext;
 
-        public HelloItemizedOverlay(Drawable drawable, Context context) {
+        public StoreItemizedOverlay(Drawable drawable, Context context) {
             super(boundCenterBottom(drawable));
             mContext = context;
         }

@@ -1,4 +1,4 @@
-package com.mapitprices.WhereIsTheCheapBeer;
+package com.mapitprices.WheresTheCheapBeer.LoginActivities;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -9,6 +9,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 import com.mapitprices.Model.User;
 import com.mapitprices.Utilities.MapItPricesServer;
+import com.mapitprices.WheresTheCheapBeer.HomeScreenActivity;
 import com.mapitprices.WheresTheCheapBeer.R;
 
 /**

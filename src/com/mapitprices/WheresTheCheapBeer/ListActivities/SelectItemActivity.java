@@ -1,11 +1,9 @@
-package com.mapitprices.WhereIsTheCheapBeer;
+package com.mapitprices.WheresTheCheapBeer.ListActivities;
 
 import android.app.ListActivity;
 import android.app.ProgressDialog;
-import android.app.SearchManager;
 import android.content.Intent;
 import android.os.Bundle;
-import android.text.AndroidCharacter;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -18,11 +16,13 @@ import com.mapitprices.Model.Item;
 import com.mapitprices.Utilities.ItemResultAdapter;
 import com.mapitprices.Utilities.MapItPricesServer;
 import com.mapitprices.Utilities.Utils;
+import com.mapitprices.WheresTheCheapBeer.Editors.NewItemActivity;
 import com.mapitprices.WheresTheCheapBeer.R;
+import com.mapitprices.WheresTheCheapBeer.SearchActivity;
+import com.mapitprices.WheresTheCheapBeer.SettingsActivity;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
 
 /**
  * Created by IntelliJ IDEA.

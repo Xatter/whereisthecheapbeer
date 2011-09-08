@@ -1,10 +1,12 @@
-package com.mapitprices.WhereIsTheCheapBeer;
+package com.mapitprices.WheresTheCheapBeer;
 
 import android.app.TabActivity;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.os.Bundle;
 import android.widget.TabHost;
+import com.mapitprices.WheresTheCheapBeer.ListActivities.NearbyItemsActivity;
+import com.mapitprices.WheresTheCheapBeer.MapActivities.StoreMapActivity;
 import com.mapitprices.WheresTheCheapBeer.R;
 
 /**
@@ -32,12 +34,18 @@ public class HomeScreenActivity extends TabActivity {
 //                res.getDrawable(android.R.drawable.ic_menu_mylocation))
 //                .setContent(intent);
 
-        spec = tabHost.newTabSpec("items").setIndicator("Beers")
+        spec = tabHost.newTabSpec("items").setIndicator("Cheapest")
                     .setContent(intent);
         tabHost.addTab(spec);
 
-        intent = new Intent().setClass(this, NearbyStoresActivity.class);
-        spec = tabHost.newTabSpec("stores").setIndicator("Stores")
+        intent = new Intent().setClass(this, StoreMapActivity.class);
+
+//        spec = tabHost.newTabSpec("blah").setIndicator(
+//                "Nearby",
+//                res.getDrawable(android.R.drawable.ic_menu_mylocation))
+//                .setContent(intent);
+
+        spec = tabHost.newTabSpec("stores").setIndicator("Nearby")
                 .setContent(intent);
         tabHost.addTab(spec);
 

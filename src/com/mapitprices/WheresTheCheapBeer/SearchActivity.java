@@ -1,4 +1,4 @@
-package com.mapitprices.WhereIsTheCheapBeer;
+package com.mapitprices.WheresTheCheapBeer;
 
 import android.app.ListActivity;
 import android.app.SearchManager;
@@ -11,6 +11,8 @@ import com.mapitprices.Model.Item;
 import com.mapitprices.Model.Store;
 import com.mapitprices.Utilities.ItemResultAdapter;
 import com.mapitprices.Utilities.StoreResultAdapter;
+import com.mapitprices.WheresTheCheapBeer.ListActivities.StoreItemsActivity;
+import com.mapitprices.WheresTheCheapBeer.MapActivities.BeerMapActivity;
 import com.mapitprices.WheresTheCheapBeer.R;
 
 import java.util.ArrayList;

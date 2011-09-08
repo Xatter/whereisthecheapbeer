@@ -1,4 +1,4 @@
-package com.mapitprices.WhereIsTheCheapBeer;
+package com.mapitprices.WheresTheCheapBeer.ListActivities;
 
 import android.app.ListActivity;
 import android.app.ProgressDialog;
@@ -6,12 +6,15 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.widget.ArrayAdapter;
+import android.widget.TextView;
 import com.mapitprices.Model.Item;
 import com.mapitprices.Model.Store;
 import com.mapitprices.Utilities.ItemResultAdapter;
 import com.mapitprices.Utilities.MapItPricesServer;
+import com.mapitprices.Utilities.Utils;
 import com.mapitprices.WheresTheCheapBeer.R;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -25,31 +28,47 @@ import java.util.List;
  */
 public class StoreItemsActivity extends ListActivity {
     Store _store;
-    private ProgressDialog _progressDialog;
+
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.store_items_layout);
 
         Intent triggerIntent = getIntent();
         if (triggerIntent != null) {
             Bundle b = triggerIntent.getExtras();
-            _store = b.getParcelable("store");
+            Store store = b.getParcelable("store");
 
-            setContentView(R.layout.items_layout);
+            // Populate item info
+            TextView tvName = (TextView) findViewById(R.id.store_row_name);
+            tvName.setText(store.getName());
 
-            ProgressDialog progressDialog = new ProgressDialog(this);
-            progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-            progressDialog.setMessage("Getting items at that store...");
-            progressDialog.setIndeterminate(true);
-            progressDialog.setCancelable(true);
-            _progressDialog = progressDialog;
-            _progressDialog.show();
+            TextView tvDistance = (TextView) findViewById(R.id.store_row_distance);
+            DecimalFormat formatter = new DecimalFormat("#.## mi");
+            String distanceString = formatter.format(store.getDistance());
+            tvDistance.setText(distanceString);
+
+            TextView tvAddress = (TextView) findViewById(R.id.store_address);
+            tvAddress.setText(store.getAddress().getStreet());
+
+            _store = store;
 
             new GetItemsTask().execute();
         }
     }
 
     private class GetItemsTask extends AsyncTask<String, Void, Collection<Item>> {
+        private ProgressDialog _progressDialog;
+
+        GetItemsTask() {
+            _progressDialog = Utils.createProgressDialog(StoreItemsActivity.this, "Getting items at that store...");
+        }
+
+        @Override
+        protected void onPreExecute() {
+            _progressDialog.show();
+        }
+
         @Override
         protected Collection<Item> doInBackground(String... strings) {
             return MapItPricesServer.getItemsFromServer(_store.getID());
