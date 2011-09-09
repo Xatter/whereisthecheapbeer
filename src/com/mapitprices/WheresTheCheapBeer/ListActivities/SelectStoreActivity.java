@@ -13,6 +13,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import com.google.android.apps.analytics.GoogleAnalyticsTracker;
 import com.mapitprices.Model.Store;
 import com.mapitprices.Utilities.MapItPricesServer;
 import com.mapitprices.Utilities.StoreResultAdapter;
@@ -35,6 +36,7 @@ public class SelectStoreActivity extends ListActivity {
     public static final int ADD_STORE_REQUEST = 0;
     List<Store> _stores = new ArrayList<Store>();
 
+    GoogleAnalyticsTracker tracker;
 
     private final LocationListener currentListener = new LocationListener() {
 
@@ -56,6 +58,8 @@ public class SelectStoreActivity extends ListActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.select_store_layout);
+
+        tracker = GoogleAnalyticsTracker.getInstance();
 
         new GetLocationTask().execute(_currentLocation);
     }
@@ -154,7 +158,7 @@ public class SelectStoreActivity extends ListActivity {
         protected Collection<Store> doInBackground(Location... params) {
             Location loc = params[0];
             _currentLocation = loc;
-            return MapItPricesServer.getAllNearbyStoresFromServer(loc);
+            return MapItPricesServer.getAllNearbyStoresFromServer(loc, tracker);
         }
 
         @Override

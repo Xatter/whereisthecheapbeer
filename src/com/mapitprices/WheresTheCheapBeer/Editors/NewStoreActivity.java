@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
+import com.google.android.apps.analytics.GoogleAnalyticsTracker;
 import com.mapitprices.Model.Store;
 import com.mapitprices.Utilities.MapItPricesServer;
 import com.mapitprices.Utilities.Utils;
@@ -26,6 +27,7 @@ import java.util.List;
 public class NewStoreActivity extends Activity {
     private List<Store> _stores = new ArrayList<Store>();
     private Location _currentLocation;
+    GoogleAnalyticsTracker tracker;
 
     private final LocationListener currentListener = new LocationListener() {
 
@@ -47,6 +49,7 @@ public class NewStoreActivity extends Activity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.store_editor);
+        tracker = GoogleAnalyticsTracker.getInstance();
     }
 
     public void saveStore(View v)
@@ -65,7 +68,7 @@ public class NewStoreActivity extends Activity {
                     .show();
         }
 
-        Store returnedStore = MapItPricesServer.createNewStore(s);
+        Store returnedStore = MapItPricesServer.createNewStore(s, tracker);
         if(returnedStore != null)
         {
             Intent data = new Intent();

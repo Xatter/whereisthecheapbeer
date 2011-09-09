@@ -10,6 +10,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import com.google.android.apps.analytics.GoogleAnalyticsTracker;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 import com.mapitprices.Model.Item;
@@ -33,9 +34,11 @@ import java.util.Collection;
  */
 public class SelectItemActivity extends ListActivity {
     ArrayList<Item> _items = new ArrayList<Item>();
+    GoogleAnalyticsTracker tracker;
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        tracker = GoogleAnalyticsTracker.getInstance();
         setContentView(R.layout.select_item_layout);
 
         ProgressDialog progressDialog = new ProgressDialog(this);
@@ -45,7 +48,7 @@ public class SelectItemActivity extends ListActivity {
         progressDialog.setCancelable(true);
 
         progressDialog.show();
-        Collection<Item> result = MapItPricesServer.getAllItems();
+        Collection<Item> result = MapItPricesServer.getAllItems(tracker);
         progressDialog.cancel();
 
         if (result != null) {

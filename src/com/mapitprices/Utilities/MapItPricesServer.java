@@ -1,6 +1,7 @@
 package com.mapitprices.Utilities;
 
 import android.location.Location;
+import com.google.android.apps.analytics.GoogleAnalyticsTracker;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonIOException;
@@ -37,27 +38,30 @@ public class MapItPricesServer {
     public static final int MIN_DISTANCE = 200; // in meters
     public static final int MIN_TIME = 300000; // 5 minutes in ms
 
-    public static Collection<Item> getItemsFromServer(int storeid) {
+
+    public static Collection<Item> getItemsFromServer(int storeid, GoogleAnalyticsTracker tracker) {
+        tracker.trackEvent("ServerCall", "getItemsFromServer", "StoreID", storeid);
         List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(1);
         nameValuePairs.add(new BasicNameValuePair("StoreID", Integer.toString((storeid))));
 
-        String result = RestClient.ExecuteCommand(SERVER_URL + "GetAllItemsAtStore", nameValuePairs);
+        String result = RestClient.ExecuteCommand(SERVER_URL + "GetAllItemsAtStore", nameValuePairs, tracker);
 
         return jsonResultToItemCollection(result);
     }
 
-    public static Collection<Item> getNearbyPrices(Location loc) {
+    public static Collection<Item> getNearbyPrices(Location loc, GoogleAnalyticsTracker tracker) {
+        tracker.trackEvent("ServerCall", "getNearbyPrices", "", 0);
         List<NameValuePair> nameValuePairs = Utils.locationToNameValuePair(loc);
-
-        String result = RestClient.ExecuteCommand(SERVER_URL + "GetItemPrices", nameValuePairs);
+        String result = RestClient.ExecuteCommand(SERVER_URL + "GetItemPrices", nameValuePairs, tracker);
 
         return jsonResultToItemCollection(result);
     }
 
-    public static Collection<Store> getNearbyStoresWithPricesFromServer(Location loc) {
+    public static Collection<Store> getNearbyStoresWithPricesFromServer(Location loc, GoogleAnalyticsTracker tracker) {
+        tracker.trackEvent("ServerCall", "getNearbyStoresWithPricesFromServer", "", 0);
         List<NameValuePair> nameValuePairs = Utils.locationToNameValuePair(loc);
 
-        String result = RestClient.ExecuteCommand(SERVER_URL + "GetStores", nameValuePairs);
+        String result = RestClient.ExecuteCommand(SERVER_URL + "GetStores", nameValuePairs, tracker);
 
         return jsonResultToStoreCollection(result);
     }
@@ -88,32 +92,36 @@ public class MapItPricesServer {
         return null;
     }
 
-    public static Collection<Item> getItemsByBarCode(String barcode) {
+    public static Collection<Item> getItemsByBarCode(String barcode, GoogleAnalyticsTracker tracker) {
+        tracker.trackEvent("ServerCall", "GetItemsByBarCode", barcode, 0);
         List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(1);
         nameValuePairs.add(new BasicNameValuePair("upc", barcode));
 
-        String result = RestClient.ExecuteCommand(SERVER_URL + "GetItemPricesByUPC", nameValuePairs);
+        String result = RestClient.ExecuteCommand(SERVER_URL + "GetItemPricesByUPC", nameValuePairs, tracker);
         return jsonResultToItemCollection(result);
     }
 
-    public static Collection<Item> getAllItems() {
-        String result = RestClient.ExecuteCommand(SERVER_URL + "GetAllItems");
+    public static Collection<Item> getAllItems(GoogleAnalyticsTracker tracker) {
+        tracker.trackEvent("ServerCall", "GetAllItems", "", 0);
+        String result = RestClient.ExecuteCommand(SERVER_URL + "GetAllItems", tracker);
         return jsonResultToItemCollection(result);
     }
 
-    public static boolean ReportPrice(Item item, Store store, Double newPrice) {
+    public static boolean ReportPrice(Item item, Store store, Double newPrice, GoogleAnalyticsTracker tracker) {
+        tracker.trackEvent("ServerCall", "ReportPrice", "Started", 0);
         List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(3);
         nameValuePairs.add(new BasicNameValuePair("itemid", Integer.toString(item.getID())));
         nameValuePairs.add(new BasicNameValuePair("storeid", Integer.toString(store.getID())));
         nameValuePairs.add(new BasicNameValuePair("price", Double.toString(newPrice)));
         nameValuePairs.add(new BasicNameValuePair("quantity", Integer.toString(item.getQuantity())));
 
-        String result = RestClient.ExecuteCommand(SERVER_URL + "ReportPrice", nameValuePairs);
+        String result = RestClient.ExecuteCommand(SERVER_URL + "ReportPrice", nameValuePairs, tracker);
         return true;
     }
 
-    public static Item createNewItem(Item item) {
-        String result = RestClient.ExecuteCommand(SERVER_URL + "CreateItem", item.toNameValuePairs());
+    public static Item createNewItem(Item item, GoogleAnalyticsTracker tracker) {
+        tracker.trackEvent("ServerCall", "NewItem", item.getName(), 0);
+        String result = RestClient.ExecuteCommand(SERVER_URL + "CreateItem", item.toNameValuePairs(), tracker);
         try {
             Gson gson = createGson();
             return gson.fromJson(result, Item.class);
@@ -124,8 +132,9 @@ public class MapItPricesServer {
 
     }
 
-    public static Store createNewStore(Store s) {
-        String result = RestClient.ExecuteCommand(SERVER_URL + "CreateStore", s.toNameValuePairs());
+    public static Store createNewStore(Store s, GoogleAnalyticsTracker tracker) {
+        tracker.trackEvent("ServerCall", "NewStore", s.getName(), 0);
+        String result = RestClient.ExecuteCommand(SERVER_URL + "CreateStore", s.toNameValuePairs(), tracker);
 
         try {
             Gson gson = createGson();
@@ -143,10 +152,11 @@ public class MapItPricesServer {
         return gson;
     }
 
-    public static Store getStore(Item i) {
+    public static Store getStore(Item i, GoogleAnalyticsTracker tracker) {
+        tracker.trackEvent("ServerCall", "GetStore", "StoreID", i.getStoreID());
         List<NameValuePair> values = new ArrayList<NameValuePair>(1);
         values.add(new BasicNameValuePair("storeid", Integer.toString(i.getStoreID())));
-        String result = RestClient.ExecuteCommand(SERVER_URL + "GetStore", values);
+        String result = RestClient.ExecuteCommand(SERVER_URL + "GetStore", values, tracker);
 
         GsonBuilder builder = new GsonBuilder();
         builder.registerTypeAdapter(Date.class, new DotNetGsonDateTimeDeserializer());
@@ -161,14 +171,15 @@ public class MapItPricesServer {
         }
     }
 
-    public static User createNewUser(User i, String password) {
+    public static User createNewUser(User i, String password, GoogleAnalyticsTracker tracker) {
+        tracker.trackEvent("ServerCall", "CreateUser", "newuser",0);
         List<NameValuePair> values = new ArrayList<NameValuePair>(2);
         values.add(new BasicNameValuePair("email", i.getEmail()));
         values.add(new BasicNameValuePair("username", i.getUsername()));
         try {
             String hashedPassword = Base64.encodeToString(Utils.getHash(password), Base64.DEFAULT);
             values.add(new BasicNameValuePair("password", hashedPassword));
-            String result = RestClient.ExecuteCommand(SERVER_URL + "CreateUser", values);
+            String result = RestClient.ExecuteCommand(SERVER_URL + "CreateUser", values, tracker);
             Gson gson = createGson();
             return gson.fromJson(result, User.class);
         } catch (NoSuchAlgorithmException e) {
@@ -182,14 +193,15 @@ public class MapItPricesServer {
         return null;
     }
 
-    public static User login(String username, String password) {
+    public static User login(String username, String password, GoogleAnalyticsTracker tracker) {
+        tracker.trackEvent("ServerCall", "Login", "Email/Password", 0);
         List<NameValuePair> values = new ArrayList<NameValuePair>(2);
         values.add(new BasicNameValuePair("email", username));
 
         try {
             String hashedPassword = Base64.encodeToString(Utils.getHash(password), Base64.DEFAULT);
             values.add(new BasicNameValuePair("password", hashedPassword));
-            String result = RestClient.ExecuteCommand(SERVER_URL + "Login", values);
+            String result = RestClient.ExecuteCommand(SERVER_URL + "Login", values, tracker);
 
             Gson gson = createGson();
             User returnedUser = gson.fromJson(result, User.class);
@@ -206,10 +218,13 @@ public class MapItPricesServer {
         return null;
     }
 
-    public static User login(String sessionToken) {
+    public static User login(String sessionToken, GoogleAnalyticsTracker tracker) {
+
+        tracker.trackEvent("ServerCall", "Login", sessionToken, 0);
+
         List<NameValuePair> values = new ArrayList<NameValuePair>();
         values.add(new BasicNameValuePair("SessionToken", sessionToken));
-        String result = RestClient.ExecuteCommand(SERVER_URL + "Login", values);
+        String result = RestClient.ExecuteCommand(SERVER_URL + "Login", values, tracker);
 
         try {
             Gson gson = createGson();
@@ -220,9 +235,10 @@ public class MapItPricesServer {
         }
     }
 
-    public static Collection<Store> getAllNearbyStoresFromServer(Location loc) {
+    public static Collection<Store> getAllNearbyStoresFromServer(Location loc, GoogleAnalyticsTracker tracker) {
+        tracker.trackEvent("ServerCall", "getAllNearbyStoresFromServer","", 0);
         List<NameValuePair> nameValuePairs = Utils.locationToNameValuePair(loc);
-        String result = RestClient.ExecuteCommand(SERVER_URL + "GetNearbyStores", nameValuePairs);
+        String result = RestClient.ExecuteCommand(SERVER_URL + "GetNearbyStores", nameValuePairs, tracker);
         return jsonResultToStoreCollection(result);
     }
 }

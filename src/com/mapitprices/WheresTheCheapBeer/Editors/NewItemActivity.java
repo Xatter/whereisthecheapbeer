@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.*;
+import com.google.android.apps.analytics.GoogleAnalyticsTracker;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 import com.mapitprices.Model.Item;
@@ -21,9 +22,12 @@ import com.mapitprices.WheresTheCheapBeer.R;
  */
 public class NewItemActivity extends Activity {
     Item _item;
+    GoogleAnalyticsTracker tracker;
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        tracker = GoogleAnalyticsTracker.getInstance();
+        tracker.trackEvent("NewItem","NewItem","Started",0);
         setContentView(R.layout.item_editor);
         _item = new Item();
 
@@ -58,7 +62,7 @@ public class NewItemActivity extends Activity {
         et = (EditText) findViewById(R.id.new_item_upc);
         _item.setUPC(et.getText().toString());
 
-        Item returned = MapItPricesServer.createNewItem(_item);
+        Item returned = MapItPricesServer.createNewItem(_item, tracker);
 
         if (returned != null) {
             Intent i = new Intent();

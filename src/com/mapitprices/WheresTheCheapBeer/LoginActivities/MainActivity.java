@@ -7,6 +7,7 @@ import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
+import com.google.android.apps.analytics.GoogleAnalyticsTracker;
 import com.mapitprices.Model.User;
 import com.mapitprices.Utilities.MapItPricesServer;
 import com.mapitprices.Utilities.Utils;
@@ -16,6 +17,7 @@ import com.mapitprices.WheresTheCheapBeer.R;
 
 public class MainActivity extends Activity {
     private ProgressDialog _progressDialog;
+    GoogleAnalyticsTracker tracker;
 
     /**
      * Called when the activity is first created.
@@ -23,6 +25,8 @@ public class MainActivity extends Activity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        tracker = GoogleAnalyticsTracker.getInstance();
 
         SharedPreferences settings = getSharedPreferences("BeerPreferences", 0);
         String token = settings.getString("SessionToken", "");
@@ -63,7 +67,7 @@ public class MainActivity extends Activity {
 
         @Override
         protected User doInBackground(String... strings) {
-            return MapItPricesServer.login(strings[0]);
+            return MapItPricesServer.login(strings[0], tracker);
         }
 
         @Override

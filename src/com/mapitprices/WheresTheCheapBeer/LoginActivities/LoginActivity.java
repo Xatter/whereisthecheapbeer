@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
+import com.google.android.apps.analytics.GoogleAnalyticsTracker;
 import com.mapitprices.Model.User;
 import com.mapitprices.Utilities.MapItPricesServer;
 import com.mapitprices.Utilities.Utils;
@@ -23,9 +24,14 @@ import com.mapitprices.WheresTheCheapBeer.R;
  * To change this template use File | Settings | File Templates.
  */
 public class LoginActivity extends Activity {
+
+    GoogleAnalyticsTracker tracker;
+
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.login_layout);
+
+        tracker = GoogleAnalyticsTracker.getInstance();
     }
 
     public void signin(View v) {
@@ -51,7 +57,7 @@ public class LoginActivity extends Activity {
 
         @Override
         protected User doInBackground(String... strings) {
-            return MapItPricesServer.login(strings[0], strings[1]);
+            return MapItPricesServer.login(strings[0], strings[1], tracker);
         }
 
         @Override

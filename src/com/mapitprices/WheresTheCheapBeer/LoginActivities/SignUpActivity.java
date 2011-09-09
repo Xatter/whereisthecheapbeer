@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
+import com.google.android.apps.analytics.GoogleAnalyticsTracker;
 import com.mapitprices.Model.User;
 import com.mapitprices.Utilities.MapItPricesServer;
 import com.mapitprices.WheresTheCheapBeer.HomeScreenActivity;
@@ -20,9 +21,11 @@ import com.mapitprices.WheresTheCheapBeer.R;
  * To change this template use File | Settings | File Templates.
  */
 public class SignUpActivity extends Activity {
+    GoogleAnalyticsTracker tracker;
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.sign_up_layout);
+        tracker = GoogleAnalyticsTracker.getInstance();
     }
 
     public void createUser(View v)
@@ -41,7 +44,7 @@ public class SignUpActivity extends Activity {
         {
             User.getInstance().setEmail(email);
             User.getInstance().setUsername(username);
-            User returned = MapItPricesServer.createNewUser(User.getInstance(), password);
+            User returned = MapItPricesServer.createNewUser(User.getInstance(), password, tracker);
 
             if(returned != null)
             {

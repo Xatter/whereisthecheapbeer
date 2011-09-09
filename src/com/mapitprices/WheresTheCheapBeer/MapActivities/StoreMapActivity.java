@@ -7,6 +7,7 @@ import android.graphics.drawable.Drawable;
 import android.location.Location;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import com.google.android.apps.analytics.GoogleAnalyticsTracker;
 import com.google.android.maps.*;
 import com.mapitprices.Model.Store;
 import com.mapitprices.Utilities.MapItPricesServer;
@@ -32,12 +33,16 @@ public class StoreMapActivity extends MapActivity {
     Drawable drawable;
     StoreItemizedOverlay itemizedOverlay;
     MyLocationOverlay myLocationOverlay;
+    GoogleAnalyticsTracker tracker;
 
     private ArrayList<Store> mStoresCache = new ArrayList<Store>();
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.map_layout);
+
+        tracker = GoogleAnalyticsTracker.getInstance();
+
         mapView = (MapView) findViewById(R.id.mapview);
         mapOverlays = mapView.getOverlays();
 
@@ -144,7 +149,7 @@ public class StoreMapActivity extends MapActivity {
         @Override
         protected Collection<Store> doInBackground(Location... params) {
             Location loc = params[0];
-            return MapItPricesServer.getNearbyStoresWithPricesFromServer(loc);
+            return MapItPricesServer.getNearbyStoresWithPricesFromServer(loc, tracker);
         }
 
         @Override

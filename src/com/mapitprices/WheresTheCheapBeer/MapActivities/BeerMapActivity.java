@@ -8,6 +8,8 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.widget.Toast;
+import com.google.android.apps.analytics.GoogleAnalyticsTracker;
 import com.google.android.maps.*;
 import com.mapitprices.Model.Item;
 import com.mapitprices.Model.Store;
@@ -35,9 +37,13 @@ public class BeerMapActivity extends MapActivity {
     private Item _item;
     private Store _store;
 
+    GoogleAnalyticsTracker tracker;
+
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.map_layout);
+
+        tracker = GoogleAnalyticsTracker.getInstance();
 
         mapView = (MapView) findViewById(R.id.mapview);
         mapView.setBuiltInZoomControls(true);
@@ -47,33 +53,32 @@ public class BeerMapActivity extends MapActivity {
         itemizedOverlay = new StoreItemizedOverlay(drawable, this);
 
         Intent intent = getIntent();
-        if(intent != null)
-        {
+        if (intent != null) {
             _item = intent.getParcelableExtra("item");
-            _store = MapItPricesServer.getStore(_item);
+            if (_item != null) {
+                _store = MapItPricesServer.getStore(_item, tracker);
+                if (_store != null) {
+                    GeoPoint point;
+                    OverlayItem overlayitem;
 
-            GeoPoint point;// = Utils.LocationToGeoPoint(_currentLocation);
-            OverlayItem overlayitem;// = new OverlayItem(point, "You are here");
-            //itemizedOverlay.addOverlay(overlayitem);
-            //mapOverlays.add(itemizedOverlay);
+                    point = Utils.LocationToGeoPoint(_store.getLatitude(), _store.getLongitude());
 
-            point = Utils.LocationToGeoPoint(_store.getLatitude(), _store.getLongitude());
+                    String snippet = _item.getName() + ", " + _item.getSize() + " - " + _item.getPrice();
+                    overlayitem = new OverlayItem(point, _store.getName(), snippet);
+                    itemizedOverlay.addOverlay(overlayitem);
 
-            String snippet = _item.getName() + ", " + _item.getSize() + " - " + _item.getPrice();
-            overlayitem = new OverlayItem(point, _store.getName(), snippet);
-            itemizedOverlay.addOverlay(overlayitem);
+                    mapOverlays.add(itemizedOverlay);
+                    MapController controller = mapView.getController();
 
-            mapOverlays.add(itemizedOverlay);
-            MapController controller = mapView.getController();
-
-            controller.setCenter(point);
-            controller.setZoom(18);
-            mapView.setBuiltInZoomControls(true);
-
-
+                    controller.setCenter(point);
+                    controller.setZoom(18);
+                    mapView.setBuiltInZoomControls(true);
+                }
+            } else {
+                finish();
+            }
         }
     }
-
 
 
     @Override
@@ -85,12 +90,11 @@ public class BeerMapActivity extends MapActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch(item.getItemId())
-        {
+        switch (item.getItemId()) {
             case R.id.map_update_price:
                 Intent i = new Intent().setClass(this, ReportPriceActivity.class);
-                i.putExtra("item",_item);
-                i.putExtra("store",_store);
+                i.putExtra("item", _item);
+                i.putExtra("store", _store);
                 startActivity(i);
                 break;
             case R.id.menu_item_settings:
@@ -138,8 +142,7 @@ public class BeerMapActivity extends MapActivity {
             return mOverlays.size();
         }
 
-        public void addOverlay(OverlayItem overlay)
-        {
+        public void addOverlay(OverlayItem overlay) {
             mOverlays.add(overlay);
             populate();
         }

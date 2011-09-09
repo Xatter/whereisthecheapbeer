@@ -7,6 +7,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
+import com.google.android.apps.analytics.GoogleAnalyticsTracker;
 import com.mapitprices.Model.Item;
 import com.mapitprices.Model.Store;
 import com.mapitprices.Utilities.ItemResultAdapter;
@@ -29,10 +30,13 @@ import java.util.List;
 public class StoreItemsActivity extends ListActivity {
     Store _store;
 
+    GoogleAnalyticsTracker tracker;
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.store_items_layout);
+
+        tracker = GoogleAnalyticsTracker.getInstance();
 
         Intent triggerIntent = getIntent();
         if (triggerIntent != null) {
@@ -71,7 +75,7 @@ public class StoreItemsActivity extends ListActivity {
 
         @Override
         protected Collection<Item> doInBackground(String... strings) {
-            return MapItPricesServer.getItemsFromServer(_store.getID());
+            return MapItPricesServer.getItemsFromServer(_store.getID(), tracker);
         }
 
         @Override

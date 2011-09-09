@@ -13,6 +13,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import com.google.android.apps.analytics.GoogleAnalyticsTracker;
 import com.mapitprices.Model.Store;
 import com.mapitprices.Utilities.MapItPricesServer;
 import com.mapitprices.Utilities.StoreResultAdapter;
@@ -54,10 +55,13 @@ public class NearbyStoresActivity extends ListActivity {
         }
     };
 
+    GoogleAnalyticsTracker tracker;
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.stores_layout);
+
+        tracker = GoogleAnalyticsTracker.getInstance();
 
         mAdapter = new StoreResultAdapter(NearbyStoresActivity.this, R.id.item_row_name, mStoresCache);
         setListAdapter(mAdapter);
@@ -166,7 +170,7 @@ public class NearbyStoresActivity extends ListActivity {
         protected Collection<Store> doInBackground(Location... params) {
             Location loc = params[0];
             mCurrentLocation = loc;
-            return MapItPricesServer.getNearbyStoresWithPricesFromServer(loc);
+            return MapItPricesServer.getNearbyStoresWithPricesFromServer(loc, tracker);
         }
 
         @Override

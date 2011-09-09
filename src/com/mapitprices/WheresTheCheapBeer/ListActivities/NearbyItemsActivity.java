@@ -13,6 +13,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import com.google.android.apps.analytics.GoogleAnalyticsTracker;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 import com.mapitprices.Model.Item;
@@ -40,6 +41,7 @@ public class NearbyItemsActivity extends ListActivity {
     private Location _currentLocation;
     ArrayList<Item> mCachedItems = new ArrayList<Item>();
 
+                                    GoogleAnalyticsTracker tracker;
 
     private final LocationListener currentListener = new LocationListener() {
 
@@ -62,6 +64,8 @@ public class NearbyItemsActivity extends ListActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.items_layout);
+
+        tracker = GoogleAnalyticsTracker.getInstance();
 
         mAdaptor = new ItemResultAdapter(NearbyItemsActivity.this, R.id.item_row_name, mCachedItems);
         setListAdapter(mAdaptor);
@@ -190,7 +194,7 @@ public class NearbyItemsActivity extends ListActivity {
         protected Collection<Item> doInBackground(Location... params) {
             Location loc = params[0];
             _currentLocation = loc;
-            return MapItPricesServer.getNearbyPrices(loc);
+            return MapItPricesServer.getNearbyPrices(loc, tracker);
         }
 
         @Override

@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import com.google.android.apps.analytics.GoogleAnalyticsTracker;
 import com.mapitprices.Model.Item;
 import com.mapitprices.Model.Store;
 import com.mapitprices.Utilities.ItemResultAdapter;
@@ -35,14 +36,16 @@ public class SearchActivity extends ListActivity {
     private ArrayList<Store> mStoreResult;
     private boolean isStoreSearch = false;
     private boolean isItemSelectSearch;
+    private GoogleAnalyticsTracker tracker;
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        tracker = GoogleAnalyticsTracker.getInstance();
+
         Intent intent = getIntent();
         if (intent != null) {
             if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
                 String query = intent.getStringExtra(SearchManager.QUERY);
-
                 Bundle appData = intent.getBundleExtra(SearchManager.APP_DATA);
                 if (appData != null) {
                     isItemSearch = appData.getBoolean(ITEM_SEARCH);
@@ -99,6 +102,12 @@ public class SearchActivity extends ListActivity {
             }
         }
 
+        tracker.trackEvent(
+                "Search",
+                "ItemSearch",
+                query,
+                mItemResult.size());
+
         setContentView(R.layout.items_layout);
         ArrayAdapter<Item> adapter = new ItemResultAdapter(this, R.id.add_item, mItemResult);
         setListAdapter(adapter);
@@ -116,6 +125,12 @@ public class SearchActivity extends ListActivity {
                 mStoreResult.add(store);
             }
         }
+
+        tracker.trackEvent(
+                "Search",
+                "StoreSearch",
+                query,
+                mStoreResult.size());
 
         setContentView(R.layout.stores_layout);
         ArrayAdapter<Store> adapter = new StoreResultAdapter(this, R.id.add_item, mStoreResult);

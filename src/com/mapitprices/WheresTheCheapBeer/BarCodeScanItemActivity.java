@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ListView;
+import com.google.android.apps.analytics.GoogleAnalyticsTracker;
 import com.mapitprices.Model.Item;
 import com.mapitprices.Utilities.ItemResultAdapter;
 import com.mapitprices.Utilities.MapItPricesServer;
@@ -27,10 +28,13 @@ import java.util.List;
 public class BarCodeScanItemActivity extends ListActivity {
 
     private List<Item> mCachedItems;
+    GoogleAnalyticsTracker tracker;
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.items_layout);
+
+        tracker = GoogleAnalyticsTracker.getInstance();
 
         ProgressDialog progressDialog = new ProgressDialog(this);
         progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
@@ -44,7 +48,7 @@ public class BarCodeScanItemActivity extends ListActivity {
         String barcode = b.getString("upc");
 
         progressDialog.show();
-        Collection<Item> result = MapItPricesServer.getItemsByBarCode(barcode);
+        Collection<Item> result = MapItPricesServer.getItemsByBarCode(barcode, tracker);
         progressDialog.cancel();
 
         mCachedItems = new ArrayList<Item>(result);

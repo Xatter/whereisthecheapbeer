@@ -1,6 +1,7 @@
 package com.mapitprices.Utilities;
 
 import android.util.Log;
+import com.google.android.apps.analytics.GoogleAnalyticsTracker;
 import com.mapitprices.Model.User;
 import org.apache.http.*;
 import org.apache.http.client.ClientProtocolException;
@@ -24,7 +25,7 @@ import java.util.zip.GZIPInputStream;
 
 public class RestClient {
 
-    public static String ExecuteCommand(String url, List<NameValuePair> data) {
+    public static String ExecuteCommand(String url, List<NameValuePair> data, GoogleAnalyticsTracker tracker) {
         Log.i("Http Request", url);
 
         HttpClient httpclient = new DefaultHttpClient();
@@ -45,6 +46,8 @@ public class RestClient {
             post.setHeaders(headers.toArray(new Header[0]));
 
             HttpResponse response = httpclient.execute(post);
+            tracker.dispatch();
+
             HttpEntity entity = response.getEntity();
 
             if (entity != null) {
@@ -74,8 +77,8 @@ public class RestClient {
         return null;
     }
 
-    public static String ExecuteCommand(String url) {
-        return ExecuteCommand(url, null);
+    public static String ExecuteCommand(String url, GoogleAnalyticsTracker tracker) {
+        return ExecuteCommand(url, null, tracker);
 
         //httpget.setHeader("Content-Type", "application/json");
     }
