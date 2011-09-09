@@ -1,12 +1,12 @@
 package com.mapitprices.Utilities;
 
 import android.location.Location;
-import android.util.Base64;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonIOException;
 import com.google.gson.JsonParseException;
 import com.google.gson.reflect.TypeToken;
+import com.mapitprices.Compatibility.Base64;
 import com.mapitprices.Model.Item;
 import com.mapitprices.Model.Store;
 import com.mapitprices.Model.User;
