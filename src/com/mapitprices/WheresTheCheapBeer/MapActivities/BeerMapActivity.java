@@ -8,7 +8,6 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.widget.Toast;
 import com.google.android.apps.analytics.GoogleAnalyticsTracker;
 import com.google.android.maps.*;
 import com.mapitprices.Model.Item;
@@ -56,7 +55,7 @@ public class BeerMapActivity extends MapActivity {
         if (intent != null) {
             _item = intent.getParcelableExtra("item");
             if (_item != null) {
-                _store = MapItPricesServer.getStore(_item, tracker);
+                _store = MapItPricesServer.getStore(_item);
                 if (_store != null) {
                     GeoPoint point;
                     OverlayItem overlayitem;

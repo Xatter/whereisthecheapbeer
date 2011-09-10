@@ -50,14 +50,13 @@ public class LoginActivity extends Activity {
     private class LoginTask extends AsyncTask<String, Void, User> {
         ProgressDialog mProgressDialog;
 
-        LoginTask()
-        {
+        LoginTask() {
             mProgressDialog = Utils.createProgressDialog(LoginActivity.this, "Logging in...");
         }
 
         @Override
         protected User doInBackground(String... strings) {
-            return MapItPricesServer.login(strings[0], strings[1], tracker);
+            return MapItPricesServer.login(strings[0], strings[1]);
         }
 
         @Override
@@ -70,12 +69,12 @@ public class LoginActivity extends Activity {
             try {
                 mProgressDialog.dismiss();
             } catch (Exception e) {
-               e.printStackTrace();
+                e.printStackTrace();
             }
 
 
             Intent i;
-            if ( user != null && user.getSessionToken() != null) {
+            if (user != null && user.getSessionToken() != null) {
                 User.getInstance().setUsername(user.getUsername());
                 User.getInstance().setEmail(user.getEmail());
                 User.getInstance().setSessionToken(user.getSessionToken());

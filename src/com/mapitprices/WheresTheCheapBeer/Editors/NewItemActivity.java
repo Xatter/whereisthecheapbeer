@@ -27,7 +27,7 @@ public class NewItemActivity extends Activity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         tracker = GoogleAnalyticsTracker.getInstance();
-        tracker.trackEvent("NewItem","NewItem","Started",0);
+        tracker.trackEvent("NewItem", "NewItem", "Started", 0);
         setContentView(R.layout.item_editor);
         _item = new Item();
 
@@ -62,16 +62,16 @@ public class NewItemActivity extends Activity {
         et = (EditText) findViewById(R.id.new_item_upc);
         _item.setUPC(et.getText().toString());
 
-        Item returned = MapItPricesServer.createNewItem(_item, tracker);
+        Item returned = MapItPricesServer.createNewItem(_item);
 
         if (returned != null) {
             Intent i = new Intent();
             i.putExtra("item", returned);
-            setResult(RESULT_OK,i);
+            setResult(RESULT_OK, i);
             finish();
         } else {
             // maybe do a toast message
-            Toast.makeText(this,"Adding item failed", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Adding item failed", Toast.LENGTH_SHORT).show();
             setResult(RESULT_CANCELED);
         }
     }

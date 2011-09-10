@@ -67,7 +67,7 @@ public class MainActivity extends Activity {
 
         @Override
         protected User doInBackground(String... strings) {
-            return MapItPricesServer.login(strings[0], tracker);
+            return MapItPricesServer.login(strings[0]);
         }
 
         @Override
@@ -80,7 +80,7 @@ public class MainActivity extends Activity {
             try {
                 mProgressDialog.dismiss();
             } catch (Exception e) {
-               e.printStackTrace();
+                e.printStackTrace();
             }
 
             Intent i;

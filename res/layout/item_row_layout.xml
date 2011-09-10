@@ -58,33 +58,33 @@
             />
 
     <TextView
-        android:id="@+id/item_row_lastupdated"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textColor="@color/gray"
-        android:textSize="10dp"
-        android:layout_below="@+id/item_row_price"
-        android:layout_alignParentRight="true"
-        />
+            android:id="@+id/item_row_lastupdated"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/gray"
+            android:textSize="10dp"
+            android:layout_below="@+id/item_row_price"
+            android:layout_alignParentRight="true"
+            />
 
     <TextView
-        android:id="@+id/widget"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Found By: "
-        android:textColor="@color/gray"
-        android:textSize="10dp"
-        android:layout_alignBottom="@+id/item_row_found_by"
-        android:layout_toLeftOf="@+id/item_row_found_by"/>
+            android:id="@+id/widget"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Found By: "
+            android:textColor="@color/gray"
+            android:textSize="10dp"
+            android:layout_alignBottom="@+id/item_row_found_by"
+            android:layout_toLeftOf="@+id/item_row_found_by"/>
 
     <TextView
-        android:id="@+id/item_row_found_by"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textColor="@color/black"
-        android:textSize="10dp"
-        android:layout_marginRight="20dp"
-        android:layout_alignBottom="@+id/item_row_brand"
-        android:layout_centerHorizontal="true"
+            android:id="@+id/item_row_found_by"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/black"
+            android:textSize="10dp"
+            android:layout_marginRight="20dp"
+            android:layout_alignBottom="@+id/item_row_brand"
+            android:layout_centerHorizontal="true"
             />
 </RelativeLayout>

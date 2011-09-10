@@ -9,7 +9,7 @@
               android:layout_width="fill_parent"
               android:layout_height="wrap_content"
               android:text="Store Info"
-              />
+            />
     <include layout="@layout/store_row_layout"/>
 
     <TextView android:id="@+id/item_list_seperator_text"

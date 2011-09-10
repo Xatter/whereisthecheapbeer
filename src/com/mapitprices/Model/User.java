@@ -19,18 +19,15 @@ public class User implements Parcelable {
 
     private static User ourInstance = new User();
 
-    public static User getInstance()
-    {
+    public static User getInstance() {
         return ourInstance;
     }
 
-    private User()
-    {
+    private User() {
 
     }
 
-    public User(Parcel in)
-    {
+    public User(Parcel in) {
         ID = in.readInt();
         Username = in.readString();
         Email = in.readString();
@@ -54,8 +51,7 @@ public class User implements Parcelable {
         return Email;
     }
 
-    public String getSessionToken()
-    {
+    public String getSessionToken() {
         return SessionToken;
     }
 

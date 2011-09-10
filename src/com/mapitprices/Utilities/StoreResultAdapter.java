@@ -9,7 +9,6 @@ import android.widget.TextView;
 import com.mapitprices.Model.Store;
 import com.mapitprices.WheresTheCheapBeer.R;
 
-
 import java.text.DecimalFormat;
 import java.util.List;
 

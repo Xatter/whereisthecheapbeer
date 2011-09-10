@@ -19,15 +19,12 @@ public class DotNetGsonDateTimeDeserializer implements JsonDeserializer<Date> {
 
     @Override
     public Date deserialize(JsonElement jsonElement, Type type, JsonDeserializationContext jsonDeserializationContext) throws JsonParseException {
-        try
-        {
+        try {
             String date = jsonElement.getAsString();
-            String secondsSinceEpochStr = date.substring(date.indexOf("(")+1, date.indexOf(")"));
+            String secondsSinceEpochStr = date.substring(date.indexOf("(") + 1, date.indexOf(")"));
             long secondsSinceEpoch = Long.parseLong(secondsSinceEpochStr);
             return new Date(secondsSinceEpoch);
-        }
-        catch(IllegalArgumentException e)
-        {
+        } catch (IllegalArgumentException e) {
             return null;
         }
     }

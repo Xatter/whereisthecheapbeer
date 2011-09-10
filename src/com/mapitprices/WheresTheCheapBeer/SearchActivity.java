@@ -14,7 +14,6 @@ import com.mapitprices.Utilities.ItemResultAdapter;
 import com.mapitprices.Utilities.StoreResultAdapter;
 import com.mapitprices.WheresTheCheapBeer.ListActivities.StoreItemsActivity;
 import com.mapitprices.WheresTheCheapBeer.MapActivities.BeerMapActivity;
-import com.mapitprices.WheresTheCheapBeer.R;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -55,9 +54,7 @@ public class SearchActivity extends ListActivity {
                     if (isItemSearch || isItemSelectSearch) {
                         ArrayList<Item> items = appData.getParcelableArrayList("items");
                         doItemSearch(items, query);
-                    }
-                    else if (isStoreSearch)
-                    {
+                    } else if (isStoreSearch) {
                         ArrayList<Store> stores = appData.getParcelableArrayList("stores");
                         doStoreSearch(stores, query);
                     }
@@ -72,16 +69,12 @@ public class SearchActivity extends ListActivity {
             Intent i = new Intent().setClass(this, BeerMapActivity.class);
             i.putExtra("item", mItemResult.get(position));
             startActivity(i);
-        }
-        else if (isItemSelectSearch)
-        {
+        } else if (isItemSelectSearch) {
             Intent i = new Intent();
             i.putExtra("item", mItemResult.get(position));
             setResult(RESULT_OK, i);
             finish();
-        }
-        else if (isStoreSearch)
-        {
+        } else if (isStoreSearch) {
             Intent i = new Intent().setClass(this, StoreItemsActivity.class);
             i.putExtra("store", mStoreResult.get(position));
             startActivity(i);
@@ -113,15 +106,12 @@ public class SearchActivity extends ListActivity {
         setListAdapter(adapter);
     }
 
-    private void doStoreSearch(List<Store> stores, String query)
-    {
+    private void doStoreSearch(List<Store> stores, String query) {
         String q = query.toUpperCase();
         mStoreResult = new ArrayList<Store>();
-        for(Store store : stores)
-        {
+        for (Store store : stores) {
             String name = store.getName().toUpperCase();
-            if(name.contains(q))
-            {
+            if (name.contains(q)) {
                 mStoreResult.add(store);
             }
         }

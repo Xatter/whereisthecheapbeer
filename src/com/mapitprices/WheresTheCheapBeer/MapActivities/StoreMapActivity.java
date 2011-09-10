@@ -111,7 +111,11 @@ public class StoreMapActivity extends MapActivity {
         @Override
         protected boolean onTap(int i) {
             Intent data = new Intent().setClass(StoreMapActivity.this, StoreItemsActivity.class);
-            data.putExtra("store", mStoresCache.get(i));
+            Store clickedStore = mStoresCache.get(i);
+
+            data.putExtra("store", clickedStore);
+            tracker.trackEvent("Click", "Store", clickedStore.getName(), clickedStore.getID());
+
             startActivity(data);
 
 //            OverlayItem overlayItem = mOverlays.get(i);
@@ -149,7 +153,7 @@ public class StoreMapActivity extends MapActivity {
         @Override
         protected Collection<Store> doInBackground(Location... params) {
             Location loc = params[0];
-            return MapItPricesServer.getNearbyStoresWithPricesFromServer(loc, tracker);
+            return MapItPricesServer.getNearbyStoresWithPricesFromServer(loc);
         }
 
         @Override

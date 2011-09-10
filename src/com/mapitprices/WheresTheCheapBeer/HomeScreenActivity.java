@@ -7,7 +7,6 @@ import android.os.Bundle;
 import android.widget.TabHost;
 import com.mapitprices.WheresTheCheapBeer.ListActivities.NearbyItemsActivity;
 import com.mapitprices.WheresTheCheapBeer.MapActivities.StoreMapActivity;
-import com.mapitprices.WheresTheCheapBeer.R;
 
 /**
  * Created by IntelliJ IDEA.
@@ -35,7 +34,7 @@ public class HomeScreenActivity extends TabActivity {
 //                .setContent(intent);
 
         spec = tabHost.newTabSpec("items").setIndicator("Cheapest")
-                    .setContent(intent);
+                .setContent(intent);
         tabHost.addTab(spec);
 
         intent = new Intent().setClass(this, StoreMapActivity.class);

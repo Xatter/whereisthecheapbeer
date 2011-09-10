@@ -18,8 +18,8 @@ import com.mapitprices.Model.Store;
 import com.mapitprices.Utilities.MapItPricesServer;
 import com.mapitprices.Utilities.StoreResultAdapter;
 import com.mapitprices.Utilities.Utils;
-import com.mapitprices.WheresTheCheapBeer.R;
 import com.mapitprices.WheresTheCheapBeer.Editors.NewStoreActivity;
+import com.mapitprices.WheresTheCheapBeer.R;
 import com.mapitprices.WheresTheCheapBeer.SearchActivity;
 import com.mapitprices.WheresTheCheapBeer.SettingsActivity;
 
@@ -56,6 +56,7 @@ public class NearbyStoresActivity extends ListActivity {
     };
 
     GoogleAnalyticsTracker tracker;
+
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
@@ -66,8 +67,7 @@ public class NearbyStoresActivity extends ListActivity {
         mAdapter = new StoreResultAdapter(NearbyStoresActivity.this, R.id.item_row_name, mStoresCache);
         setListAdapter(mAdapter);
 
-        if(mStoresCache.size() == 0)
-        {
+        if (mStoresCache.size() == 0) {
             new GetLocationTask().execute(mCurrentLocation);
             mAdapter.notifyDataSetChanged();
         }
@@ -157,10 +157,11 @@ public class NearbyStoresActivity extends ListActivity {
 
     private class GetLocationTask extends AsyncTask<Location, Void, Collection<Store>> {
         ProgressDialog mProgressDialog;
-        GetLocationTask()
-        {
+
+        GetLocationTask() {
             mProgressDialog = Utils.createProgressDialog(NearbyStoresActivity.this, "Getting nearby stores...");
         }
+
         @Override
         protected void onPreExecute() {
             mProgressDialog.show();
@@ -170,7 +171,7 @@ public class NearbyStoresActivity extends ListActivity {
         protected Collection<Store> doInBackground(Location... params) {
             Location loc = params[0];
             mCurrentLocation = loc;
-            return MapItPricesServer.getNearbyStoresWithPricesFromServer(loc, tracker);
+            return MapItPricesServer.getNearbyStoresWithPricesFromServer(loc);
         }
 
         @Override

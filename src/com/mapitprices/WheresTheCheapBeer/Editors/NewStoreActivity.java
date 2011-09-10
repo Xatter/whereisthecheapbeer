@@ -52,32 +52,25 @@ public class NewStoreActivity extends Activity {
         tracker = GoogleAnalyticsTracker.getInstance();
     }
 
-    public void saveStore(View v)
-    {
+    public void saveStore(View v) {
         Store s = new Store();
         EditText et = (EditText) findViewById(R.id.store_name);
         s.setName(et.getText().toString());
 
-        if(_currentLocation != null)
-        {
+        if (_currentLocation != null) {
             s.setLocation(_currentLocation);
-        }
-        else
-        {
+        } else {
             Toast.makeText(this, "Couldn't get location of store", Toast.LENGTH_SHORT)
                     .show();
         }
 
-        Store returnedStore = MapItPricesServer.createNewStore(s, tracker);
-        if(returnedStore != null)
-        {
+        Store returnedStore = MapItPricesServer.createNewStore(s);
+        if (returnedStore != null) {
             Intent data = new Intent();
             data.putExtra("store", returnedStore);
             setResult(RESULT_OK, data);
             finish();
-        }
-        else
-        {
+        } else {
             Toast.makeText(this, "Store didn't save for some reason", Toast.LENGTH_SHORT)
                     .show();
         }

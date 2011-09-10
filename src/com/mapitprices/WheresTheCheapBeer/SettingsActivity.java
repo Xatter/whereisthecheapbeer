@@ -7,7 +7,6 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
 import com.mapitprices.Model.User;
-import com.mapitprices.WheresTheCheapBeer.R;
 
 /**
  * Created by IntelliJ IDEA.
@@ -25,8 +24,7 @@ public class SettingsActivity extends Activity {
         tv.setText(User.getInstance().getUsername());
     }
 
-    public void logout(View v)
-    {
+    public void logout(View v) {
         SharedPreferences settings = getSharedPreferences("BeerPreferences", 0);
         SharedPreferences.Editor editor = settings.edit();
         editor.putString("SessionToken", "");

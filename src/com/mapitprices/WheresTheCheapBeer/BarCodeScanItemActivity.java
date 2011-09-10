@@ -11,8 +11,6 @@ import com.mapitprices.Model.Item;
 import com.mapitprices.Utilities.ItemResultAdapter;
 import com.mapitprices.Utilities.MapItPricesServer;
 import com.mapitprices.WheresTheCheapBeer.MapActivities.BeerMapActivity;
-import com.mapitprices.WheresTheCheapBeer.R;
-
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -48,7 +46,7 @@ public class BarCodeScanItemActivity extends ListActivity {
         String barcode = b.getString("upc");
 
         progressDialog.show();
-        Collection<Item> result = MapItPricesServer.getItemsByBarCode(barcode, tracker);
+        Collection<Item> result = MapItPricesServer.getItemsByBarCode(barcode);
         progressDialog.cancel();
 
         mCachedItems = new ArrayList<Item>(result);
@@ -63,7 +61,6 @@ public class BarCodeScanItemActivity extends ListActivity {
         i.putExtra("item", mCachedItems.get(position));
         startActivity(i);
     }
-
 
 
 }

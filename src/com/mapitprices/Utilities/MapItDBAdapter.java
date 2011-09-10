@@ -4,8 +4,6 @@ import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
-import java.lang.ref.WeakReference;
-import java.nio.DoubleBuffer;
 import java.sql.SQLException;
 
 /**
@@ -44,8 +42,7 @@ public class MapItDBAdapter {
     private SQLiteDatabase mDB;
     private final Context mContext;
 
-    MapItDBAdapter(Context context)
-    {
+    MapItDBAdapter(Context context) {
         mContext = context;
     }
 

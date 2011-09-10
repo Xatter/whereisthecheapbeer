@@ -73,13 +73,10 @@ public class SelectStoreActivity extends ListActivity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if(requestCode == ADD_STORE_REQUEST && resultCode == RESULT_OK)
-        {
-            if(data != null)
-            {
+        if (requestCode == ADD_STORE_REQUEST && resultCode == RESULT_OK) {
+            if (data != null) {
                 Store store = data.getParcelableExtra("store");
-                if(store!=null)
-                {
+                if (store != null) {
                     Intent returnData = new Intent();
                     returnData.putExtra("store", store);
                     setResult(RESULT_OK, data);
@@ -91,8 +88,7 @@ public class SelectStoreActivity extends ListActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch(item.getItemId())
-        {
+        switch (item.getItemId()) {
             case R.id.menu_add_store:
                 Intent i = new Intent().setClass(this, NewStoreActivity.class);
                 startActivityForResult(i, ADD_STORE_REQUEST);
@@ -158,7 +154,7 @@ public class SelectStoreActivity extends ListActivity {
         protected Collection<Store> doInBackground(Location... params) {
             Location loc = params[0];
             _currentLocation = loc;
-            return MapItPricesServer.getAllNearbyStoresFromServer(loc, tracker);
+            return MapItPricesServer.getAllNearbyStoresFromServer(loc);
         }
 
         @Override

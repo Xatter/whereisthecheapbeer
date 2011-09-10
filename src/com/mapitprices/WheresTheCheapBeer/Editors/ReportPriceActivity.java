@@ -90,7 +90,7 @@ public class ReportPriceActivity extends Activity {
         try {
             newPrice = Double.parseDouble(priceText);
         } catch (NumberFormatException e) {
-            Toast.makeText(this, "I don't understand what you typed in the price field.",Toast.LENGTH_LONG).show();
+            Toast.makeText(this, "I don't understand what you typed in the price field.", Toast.LENGTH_LONG).show();
             abort = true;
             tracker.trackEvent(
                     "ReportPrice",
@@ -122,7 +122,7 @@ public class ReportPriceActivity extends Activity {
             }
 
             if (!abort) {
-                boolean success = MapItPricesServer.ReportPrice(_item, _store, newPrice, tracker);
+                boolean success = MapItPricesServer.ReportPrice(_item, _store, newPrice);
                 if (success) {
                     tracker.trackEvent(
                             "ReportPrice",
@@ -134,9 +134,7 @@ public class ReportPriceActivity extends Activity {
                     data.putExtra("item", _item);
                     setResult(RESULT_OK, data);
                     finish();
-                }
-                else
-                {
+                } else {
                     tracker.trackEvent(
                             "ReportPrice",
                             "ReportedToServer",

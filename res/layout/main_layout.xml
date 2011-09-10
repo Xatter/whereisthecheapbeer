@@ -34,7 +34,7 @@
             android:text="Already have an account?"
             android:textColor="@color/text_color"
             >
-    </TextView>  
+    </TextView>
     <Button
             android:id="@+id/widget36"
             android:layout_width="fill_parent"
@@ -44,5 +44,5 @@
             android:onClick="signin"
             >
     </Button>
-    
+
 </LinearLayout>

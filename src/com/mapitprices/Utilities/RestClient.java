@@ -3,17 +3,16 @@ package com.mapitprices.Utilities;
 import android.util.Log;
 import com.google.android.apps.analytics.GoogleAnalyticsTracker;
 import com.mapitprices.Model.User;
-import org.apache.http.*;
+import org.apache.http.Header;
+import org.apache.http.HttpEntity;
+import org.apache.http.HttpResponse;
+import org.apache.http.NameValuePair;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
-import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicHeader;
-import org.apache.http.message.HeaderGroup;
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -25,7 +24,7 @@ import java.util.zip.GZIPInputStream;
 
 public class RestClient {
 
-    public static String ExecuteCommand(String url, List<NameValuePair> data, GoogleAnalyticsTracker tracker) {
+    public static String ExecuteCommand(String url, List<NameValuePair> data) {
         Log.i("Http Request", url);
 
         HttpClient httpclient = new DefaultHttpClient();
@@ -46,15 +45,14 @@ public class RestClient {
             post.setHeaders(headers.toArray(new Header[0]));
 
             HttpResponse response = httpclient.execute(post);
-            tracker.dispatch();
+            GoogleAnalyticsTracker.getInstance().dispatch();
 
             HttpEntity entity = response.getEntity();
 
             if (entity != null) {
                 InputStream instream = entity.getContent();
                 Header contentEncoding = response.getFirstHeader("Content-Encoding");
-                if(contentEncoding != null && contentEncoding.getValue().equalsIgnoreCase("gzip"))
-                {
+                if (contentEncoding != null && contentEncoding.getValue().equalsIgnoreCase("gzip")) {
                     instream = new GZIPInputStream(instream);
                 }
 
@@ -77,8 +75,8 @@ public class RestClient {
         return null;
     }
 
-    public static String ExecuteCommand(String url, GoogleAnalyticsTracker tracker) {
-        return ExecuteCommand(url, null, tracker);
+    public static String ExecuteCommand(String url) {
+        return ExecuteCommand(url, null);
 
         //httpget.setHeader("Content-Type", "application/json");
     }

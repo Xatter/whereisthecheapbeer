@@ -20,10 +20,10 @@ import com.mapitprices.Model.Item;
 import com.mapitprices.Utilities.ItemResultAdapter;
 import com.mapitprices.Utilities.MapItPricesServer;
 import com.mapitprices.Utilities.Utils;
-import com.mapitprices.WheresTheCheapBeer.R;
-import com.mapitprices.WheresTheCheapBeer.Editors.ReportPriceActivity;
 import com.mapitprices.WheresTheCheapBeer.BarCodeScanItemActivity;
+import com.mapitprices.WheresTheCheapBeer.Editors.ReportPriceActivity;
 import com.mapitprices.WheresTheCheapBeer.MapActivities.BeerMapActivity;
+import com.mapitprices.WheresTheCheapBeer.R;
 import com.mapitprices.WheresTheCheapBeer.SearchActivity;
 import com.mapitprices.WheresTheCheapBeer.SettingsActivity;
 
@@ -41,7 +41,7 @@ public class NearbyItemsActivity extends ListActivity {
     private Location _currentLocation;
     ArrayList<Item> mCachedItems = new ArrayList<Item>();
 
-                                    GoogleAnalyticsTracker tracker;
+    GoogleAnalyticsTracker tracker;
 
     private final LocationListener currentListener = new LocationListener() {
 
@@ -78,7 +78,9 @@ public class NearbyItemsActivity extends ListActivity {
     @Override
     protected void onListItemClick(ListView l, View v, int position, long id) {
         Intent i = new Intent().setClass(this, BeerMapActivity.class);
-        i.putExtra("item", mCachedItems.get(position));
+        Item clickedItem = mCachedItems.get(position);
+        i.putExtra("item", clickedItem);
+        tracker.trackEvent("Click", "Item", clickedItem.getName(), clickedItem.getID());
         startActivity(i);
     }
 
@@ -180,9 +182,8 @@ public class NearbyItemsActivity extends ListActivity {
     private class GetLocationTask extends AsyncTask<Location, Void, Collection<Item>> {
         ProgressDialog _progressDialog;
 
-        GetLocationTask()
-        {
-            _progressDialog = Utils.createProgressDialog(NearbyItemsActivity.this,"Getting nearby prices...");
+        GetLocationTask() {
+            _progressDialog = Utils.createProgressDialog(NearbyItemsActivity.this, "Getting nearby prices...");
         }
 
         @Override
@@ -194,7 +195,7 @@ public class NearbyItemsActivity extends ListActivity {
         protected Collection<Item> doInBackground(Location... params) {
             Location loc = params[0];
             _currentLocation = loc;
-            return MapItPricesServer.getNearbyPrices(loc, tracker);
+            return MapItPricesServer.getNearbyPrices(loc);
         }
 
         @Override

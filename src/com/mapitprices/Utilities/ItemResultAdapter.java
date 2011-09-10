@@ -9,9 +9,7 @@ import android.widget.TextView;
 import com.mapitprices.Model.Item;
 import com.mapitprices.WheresTheCheapBeer.R;
 
-import java.text.DateFormat;
 import java.text.NumberFormat;
-import java.util.IllegalFormatCodePointException;
 import java.util.List;
 
 /**
@@ -45,8 +43,7 @@ public class ItemResultAdapter extends ArrayAdapter<Item> {
         TextView tvPrice = (TextView) v.findViewById(R.id.item_row_price);
         tvPrice.setText(" ");
 
-        if(i.getPrice() > 0)
-        {
+        if (i.getPrice() > 0) {
             NumberFormat currencyFormatter;
             currencyFormatter = NumberFormat.getCurrencyInstance();
             String formattedPrice = currencyFormatter.format(i.getPrice());
@@ -56,8 +53,7 @@ public class ItemResultAdapter extends ArrayAdapter<Item> {
         TextView tvQuantity = (TextView) v.findViewById(R.id.item_row_quantity);
         tvQuantity.setText("");
         int quantity = i.getQuantity();
-        if(quantity > 1)
-        {
+        if (quantity > 1) {
             tvQuantity.setText(Integer.toString(quantity) + " pack");
         }
 

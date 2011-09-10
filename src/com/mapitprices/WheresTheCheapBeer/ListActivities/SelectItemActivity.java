@@ -72,7 +72,7 @@ public class SelectItemActivity extends ListActivity {
         Intent i;
         switch (item.getItemId()) {
             case R.id.add_item:
-                 i = new Intent().setClass(this, NewItemActivity.class);
+                i = new Intent().setClass(this, NewItemActivity.class);
                 startActivityForResult(i, 7);
                 return true;
             case R.id.scan_barcode:

@@ -75,7 +75,7 @@ public class StoreItemsActivity extends ListActivity {
 
         @Override
         protected Collection<Item> doInBackground(String... strings) {
-            return MapItPricesServer.getItemsFromServer(_store.getID(), tracker);
+            return MapItPricesServer.getItemsFromServer(_store.getID());
         }
 
         @Override
