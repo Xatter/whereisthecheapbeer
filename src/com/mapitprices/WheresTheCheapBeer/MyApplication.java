@@ -18,10 +18,7 @@ public class MyApplication extends Application {
 
     @Override
     public void onCreate() {
-        if (!"google_sdk".equals(Build.PRODUCT)) {
-            ACRA.init(this);
-        }
-
+        ACRA.init(this);
         GoogleAnalyticsTracker tracker = GoogleAnalyticsTracker.getInstance();
         tracker.startNewSession("UA-22338335-2", getApplicationContext());
         tracker.trackEvent(
@@ -30,6 +27,7 @@ public class MyApplication extends Application {
                 "started",     //Label
                 0              // Value
         );
+
         super.onCreate();    //To change body of overridden methods use File | Settings | File Templates.
     }
 
