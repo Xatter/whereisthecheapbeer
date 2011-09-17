@@ -31,9 +31,10 @@ import java.util.List;
  */
 public class MapItPricesServer {
 
-    public static final String SERVER_URL = "http://www.mapitprices.com/Beer/";
+    //public static final String SERVER_URL = "http://www.mapitprices.com/Beer/";
     //public static final String SERVER_URL = "http://10.0.2.2:61418/Beer/"; //Emulator localhost
     //public static final String SERVER_URL = "http://10.0.1.8:61418/Beer"; //Device local computer
+    public static final String SERVER_URL = "http://192.168.201.144/Beer/"; //Mac Laptop windows IP
 
     public static final int MIN_DISTANCE = 200; // in meters
     public static final int MIN_TIME = 300000; // 5 minutes in ms
@@ -116,7 +117,7 @@ public class MapItPricesServer {
         nameValuePairs.add(new BasicNameValuePair("quantity", Integer.toString(item.getQuantity())));
 
         String result = RestClient.ExecuteCommand(SERVER_URL + "ReportPrice", nameValuePairs);
-        return true;
+        return !result.equals("{}\n");
     }
 
     public static Item createNewItem(Item item) {
@@ -135,6 +136,9 @@ public class MapItPricesServer {
     public static Store createNewStore(Store s) {
         GoogleAnalyticsTracker.getInstance().trackEvent("ServerCall", "NewStore", s.getName(), 0);
         String result = RestClient.ExecuteCommand(SERVER_URL + "CreateStore", s.toNameValuePairs());
+
+        if (result.equals("{}\n"))
+            return null;
 
         try {
             Gson gson = createGson();

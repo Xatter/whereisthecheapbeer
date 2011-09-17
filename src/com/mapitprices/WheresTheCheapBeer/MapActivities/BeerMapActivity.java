@@ -1,6 +1,5 @@
 package com.mapitprices.WheresTheCheapBeer.MapActivities;
 
-import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
@@ -15,6 +14,7 @@ import com.mapitprices.Model.Store;
 import com.mapitprices.Utilities.MapItPricesServer;
 import com.mapitprices.Utilities.Utils;
 import com.mapitprices.WheresTheCheapBeer.Editors.ReportPriceActivity;
+import com.mapitprices.WheresTheCheapBeer.ListActivities.StoreItemsActivity;
 import com.mapitprices.WheresTheCheapBeer.R;
 import com.mapitprices.WheresTheCheapBeer.SettingsActivity;
 
@@ -127,12 +127,13 @@ public class BeerMapActivity extends MapActivity {
 
         @Override
         protected boolean onTap(int i) {
-            OverlayItem item = mOverlays.get(i);
-            AlertDialog.Builder dialog = new AlertDialog.Builder(mContext);
-            dialog.setTitle(item.getTitle());
-            dialog.setMessage(item.getSnippet());
-            dialog.show();
+            Intent data = new Intent().setClass(BeerMapActivity.this, StoreItemsActivity.class);
+            Store clickedStore = _store;
 
+            data.putExtra("store", clickedStore);
+            tracker.trackEvent("Click", "Store", clickedStore.getName(), clickedStore.getID());
+
+            startActivity(data);
             return true;
         }
 

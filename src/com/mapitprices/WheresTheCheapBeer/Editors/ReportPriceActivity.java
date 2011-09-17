@@ -3,9 +3,9 @@ package com.mapitprices.WheresTheCheapBeer.Editors;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.EditText;
-import android.widget.TextView;
 import android.widget.Toast;
 import com.google.android.apps.analytics.GoogleAnalyticsTracker;
 import com.mapitprices.Model.Item;
@@ -23,6 +23,9 @@ import com.mapitprices.WheresTheCheapBeer.R;
  * To change this template use File | Settings | File Templates.
  */
 public class ReportPriceActivity extends Activity {
+    public static final int RC_SELECT_ITEM = 0;
+    public static final int RC_SELECT_STORE = 1;
+
     Store _store;
     Item _item;
 
@@ -38,40 +41,75 @@ public class ReportPriceActivity extends Activity {
                 "ReportPrice",
                 "Started",
                 "started",
-                0);
+                RC_SELECT_ITEM);
+
+        EditText selectItemControl = (EditText) findViewById(R.id.report_price_item);
+        selectItemControl.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+                selectItem();
+                return true;
+            }
+        });
+
+        EditText selectStoreControl = (EditText) findViewById(R.id.report_price_store);
+        selectStoreControl.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+                selectStore();
+                return true;
+            }
+        });
 
         Intent i = getIntent();
         if (i != null) {
-            _item = i.getParcelableExtra("item");
+            setItem((Item) i.getParcelableExtra("item"));
             if (_item == null) {
                 selectItem();
             } else {
-                _store = i.getParcelableExtra("store");
+                setStore((Store) i.getParcelableExtra("store"));
+                if (_store == null) {
+                    setStore(MapItPricesServer.getStore(_item));
+                }
             }
         }
+    }
 
+    private void setItem(Item item) {
+        _item = item;
+        EditText tv = (EditText) findViewById(R.id.report_price_item);
+        EditText quantity = (EditText) findViewById(R.id.report_price_quantity);
+
+        if (item != null) {
+            tv.setText(item.getName());
+
+            if (item.getQuantity() > RC_SELECT_ITEM) {
+                quantity.setText(Integer.toString(item.getQuantity()));
+            }
+        } else {
+            tv.setText("");
+            quantity.setText("");
+        }
+    }
+
+    private void setStore(Store store) {
+        _store = store;
+        EditText tv = (EditText) findViewById(R.id.report_price_store);
+        if (store != null) {
+            tv.setText(_store.getName());
+        } else {
+            tv.setText("");
+        }
     }
 
     private void selectItem() {
-        tracker.trackEvent(
-                "ReportPrice",
-                "ItemSelection",
-                "started",
-                0);
-
         Intent i = new Intent().setClass(this, SelectItemActivity.class);
-        startActivityForResult(i, 0);
+        startActivityForResult(i, RC_SELECT_ITEM);
     }
 
     private void selectStore() {
-        tracker.trackEvent(
-                "ReportPrice",
-                "StoreSelection",
-                "started",
-                0);
-        Intent i;
-        i = new Intent().setClass(this, SelectStoreActivity.class);
-        startActivityForResult(i, 1);
+        Intent i = new Intent().setClass(this, SelectStoreActivity.class);
+        startActivityForResult(i, RC_SELECT_STORE);
     }
 
 
@@ -85,7 +123,7 @@ public class ReportPriceActivity extends Activity {
                 "ReportPrice",
                 "SharePrice",
                 "clicked",
-                0);
+                RC_SELECT_ITEM);
 
         try {
             newPrice = Double.parseDouble(priceText);
@@ -96,24 +134,24 @@ public class ReportPriceActivity extends Activity {
                     "ReportPrice",
                     "PriceFailed",
                     priceText,
-                    0);
+                    RC_SELECT_ITEM);
         }
 
         if (!abort) {
             EditText quantity = (EditText) findViewById(R.id.report_price_quantity);
 
-            if (quantity.getText().toString().length() != 0) {
+            if (quantity.getText().toString().length() != RC_SELECT_ITEM) {
                 Integer q = 1;
                 try {
                     q = Integer.parseInt(quantity.getText().toString());
-                    abort = true;
                 } catch (NumberFormatException e) {
                     Toast.makeText(this, "I don't understand what you typed in the quantity field.", Toast.LENGTH_LONG).show();
+                    abort = true;
                     tracker.trackEvent(
                             "ReportPrice",
                             "QuantityFailed",
                             quantity.getText().toString(),
-                            0);
+                            RC_SELECT_ITEM);
                 }
 
                 _item.setQuantity(q);
@@ -124,11 +162,13 @@ public class ReportPriceActivity extends Activity {
             if (!abort) {
                 boolean success = MapItPricesServer.ReportPrice(_item, _store, newPrice);
                 if (success) {
+                    _item.setPrice(newPrice);
+
                     tracker.trackEvent(
                             "ReportPrice",
                             "ReportedToServer",
                             "Success",
-                            0);
+                            RC_SELECT_ITEM);
 
                     Intent data = new Intent();
                     data.putExtra("item", _item);
@@ -139,7 +179,7 @@ public class ReportPriceActivity extends Activity {
                             "ReportPrice",
                             "ReportedToServer",
                             "Failed",
-                            0);
+                            RC_SELECT_ITEM);
                 }
             }
         }
@@ -148,34 +188,32 @@ public class ReportPriceActivity extends Activity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         switch (requestCode) {
-            case 0:
+            case RC_SELECT_ITEM:
                 if (resultCode == RESULT_OK) {
                     Bundle b = data.getExtras();
-                    _item = b.getParcelable("item");
+                    setItem((Item) b.getParcelable("item"));
 
                     tracker.trackEvent(
                             "ReportPrice",
-                            "ItemSelection",
                             "ItemSelected",
+                            _item.getName(),
                             _item.getID());
 
-
-                    setItemText();
-                    selectStore();
+                    if (_store == null) {
+                        selectStore();
+                    }
                 }
                 break;
             case 1:
                 if (resultCode == RESULT_OK) {
                     Bundle b = data.getExtras();
-                    _store = b.getParcelable("store");
+                    setStore((Store) b.getParcelable("store"));
 
                     tracker.trackEvent(
                             "ReportPrice",
-                            "StoreSelection",
                             "StoreSelected",
+                            _store.getName(),
                             _store.getID());
-
-                    setStoreText();
                 }
                 break;
             default:
@@ -183,18 +221,4 @@ public class ReportPriceActivity extends Activity {
         }
     }
 
-    private void setStoreText() {
-        TextView tv = (TextView) findViewById(R.id.report_price_store);
-        tv.setText(_store.getName());
-    }
-
-    private void setItemText() {
-        TextView tv = (TextView) findViewById(R.id.report_price_item);
-        tv.setText(_item.getName());
-
-        if (_item.getQuantity() > 0) {
-            EditText quantity = (EditText) findViewById(R.id.report_price_quantity);
-            quantity.setText(Integer.toString(_item.getQuantity()));
-        }
-    }
 }

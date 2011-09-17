@@ -21,6 +21,7 @@
             android:layout_height="wrap_content"
             android:hint="Email"
             android:textSize="18sp"
+            android:inputType="textEmailAddress"
             >
     </EditText>
     <EditText

@@ -86,6 +86,7 @@
                   android:configChanges="orientation|keyboardHidden"/>
         <activity android:name="com.mapitprices.WheresTheCheapBeer.MapActivities.StoreMapActivity"
                   android:configChanges="orientation|keyboardHidden"/>
+        <activity android:name=".ActivityWebView"/>
 
     </application>
 </manifest>

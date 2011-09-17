@@ -7,16 +7,15 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
-import android.view.View;
+import android.view.*;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import com.google.android.apps.analytics.GoogleAnalyticsTracker;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 import com.mapitprices.Model.Item;
+import com.mapitprices.Model.User;
 import com.mapitprices.Utilities.ItemResultAdapter;
 import com.mapitprices.Utilities.MapItPricesServer;
 import com.mapitprices.Utilities.Utils;
@@ -40,6 +39,9 @@ import java.util.Collection;
 public class NearbyItemsActivity extends ListActivity {
     private Location _currentLocation;
     ArrayList<Item> mCachedItems = new ArrayList<Item>();
+
+    private static final int RC_NEW_PRICE = 0;
+    private static final int RC_UPDATE_ITEM_PRICE = 1;
 
     GoogleAnalyticsTracker tracker;
 
@@ -73,6 +75,8 @@ public class NearbyItemsActivity extends ListActivity {
         if (mCachedItems.size() == 0) {
             new GetLocationTask().execute(_currentLocation);
         }
+
+        registerForContextMenu(getListView());
     }
 
     @Override
@@ -91,27 +95,9 @@ public class NearbyItemsActivity extends ListActivity {
     }
 
     @Override
-    protected void onRestart() {
-        super.onRestart();
-        _currentLocation = Utils.registerListener(this, currentListener);
-    }
-
-    @Override
     protected void onResume() {
         super.onResume();
         _currentLocation = Utils.registerListener(this, currentListener);
-    }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-        _currentLocation = Utils.registerListener(this, currentListener);
-    }
-
-    @Override
-    protected void onStop() {
-        Utils.unregisterListener(this, currentListener);
-        super.onStop();
     }
 
     @Override
@@ -127,14 +113,10 @@ public class NearbyItemsActivity extends ListActivity {
         switch (item.getItemId()) {
             case R.id.menu_new_price:
                 i = new Intent().setClass(this, ReportPriceActivity.class);
-                startActivityForResult(i, 0);
+                startActivityForResult(i, RC_NEW_PRICE);
                 return true;
             case R.id.menu_scan_barcode:
                 IntentIntegrator.initiateScan(this);
-                return true;
-            case R.id.menu_map_items:
-                Intent mapIntent = new Intent().setClass(this, BeerMapActivity.class);
-                startActivity(mapIntent);
                 return true;
             case R.id.menu_item_refresh:
                 new GetLocationTask().execute(_currentLocation);
@@ -146,6 +128,29 @@ public class NearbyItemsActivity extends ListActivity {
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    @Override
+    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
+        super.onCreateContextMenu(menu, v, menuInfo);
+
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.item_context_menu, menu);
+    }
+
+    @Override
+    public boolean onContextItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.update_selected_item_price:
+                AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
+                Item storeItem = mCachedItems.get(info.position);
+
+                Intent i = new Intent().setClass(this, ReportPriceActivity.class);
+                i.putExtra("item", storeItem);
+                startActivityForResult(i, RC_UPDATE_ITEM_PRICE);
+                break;
+        }
+        return true;
     }
 
     @Override
@@ -163,10 +168,21 @@ public class NearbyItemsActivity extends ListActivity {
                     startActivity(searchResults);
                 }
             }
-        } else if (requestCode == 0 && resultCode == RESULT_OK) {
+        } else if (requestCode == RC_NEW_PRICE && resultCode == RESULT_OK) {
             Item i = data.getParcelableExtra("item");
             mCachedItems.add(i);
             mAdaptor.notifyDataSetChanged();
+        } else if (requestCode == RC_UPDATE_ITEM_PRICE && resultCode == RESULT_OK) {
+            Item updatedItem = data.getParcelableExtra("item");
+
+            for (Item item : mCachedItems) {
+                if (item.getID() == updatedItem.getID()) {
+                    item.setPrice(updatedItem.getPrice());
+                    item.setUser(User.getInstance());
+                    mAdaptor.notifyDataSetChanged();
+                    break;
+                }
+            }
         }
     }
 

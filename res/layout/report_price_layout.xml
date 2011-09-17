@@ -1,84 +1,89 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-        android:id="@+id/widget0"
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:orientation="vertical"
-        android:background="@color/lightgray"
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        >
-    <TextView
-            android:id="@+id/widget52"
+<ScrollView>
+
+    <LinearLayout
+            android:id="@+id/widget0"
             android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:layout_marginBottom="20dp"
-            android:layout_marginLeft="5px"
-            android:layout_marginRight="5px"
-            android:text="Share a new price with everyone!"
-            android:typeface="monospace"
-            android:textColor="@color/black"
-            android:textSize="20sp"
+            android:layout_height="fill_parent"
+            android:orientation="vertical"
+            android:background="@color/lightgray"
+            xmlns:android="http://schemas.android.com/apk/res/android"
             >
-    </TextView>
-    <TextView
-            android:id="@+id/report_price_store"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10px"
-            android:layout_marginBottom="10px"
-            android:layout_marginLeft="10px"
-            android:layout_marginRight="10px"
-            android:hint="Press to select Store"
-            android:textColor="@color/black"
-            android:textSize="18dp"
-            >
-    </TextView>
-    <TextView
-            android:id="@+id/report_price_item"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10px"
-            android:layout_marginBottom="10px"
-            android:layout_marginLeft="10px"
-            android:layout_marginRight="10px"
-            android:hint="Press to select Item"
-            android:textColor="@color/black"
-            android:textSize="18dp"
-            >
-    </TextView>
-    <EditText
-            android:id="@+id/report_price_quantity"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10px"
-            android:layout_marginBottom="10px"
-            android:layout_marginLeft="5px"
-            android:layout_marginRight="5px"
-            android:hint="Quantity (6 for 6-pack)"
-            android:numeric="integer"
-            android:textSize="18sp"
-            >
-    </EditText>
-    <EditText
-            android:id="@+id/report_price_price"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="5px"
-            android:layout_marginBottom="10px"
-            android:layout_marginLeft="5px"
-            android:layout_marginRight="5px"
-            android:hint="Price"
-            android:textSize="18sp"
-            android:numeric="decimal"
-            >
-    </EditText>
-    <Button
-            android:id="@+id/report_price_save"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:text="Share Price!"
-            android:onClick="sharePrice"
-            >
-    </Button>
-</LinearLayout>
+        <TextView
+                android:id="@+id/widget52"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:layout_marginBottom="20dp"
+                android:layout_marginLeft="5px"
+                android:layout_marginRight="5px"
+                android:text="Share a new price with everyone!"
+                android:typeface="monospace"
+                android:textColor="@color/black"
+                android:textSize="20sp"
+                >
+        </TextView>
+        <EditText android:id="@+id/report_price_item"
+                  android:layout_width="fill_parent"
+                  android:layout_height="wrap_content"
+                  android:layout_marginTop="10px"
+                  android:layout_marginBottom="10px"
+                  android:layout_marginLeft="5px"
+                  android:layout_marginRight="5px"
+                  android:hint="Press to select Beer"
+                  android:editable="false"
+                  android:focusable="false"
+                  android:textSize="18dp"
+                  android:textColor="@color/black"
+                />
+        <EditText
+                android:id="@+id/report_price_store"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10px"
+                android:layout_marginBottom="10px"
+                android:layout_marginLeft="5px"
+                android:layout_marginRight="5px"
+                android:hint="Press to select Store"
+                android:focusable="false"
+                android:textColor="@color/black"
+                android:textSize="18dp"
+                >
+        </EditText>
+        <EditText
+                android:id="@+id/report_price_price"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5px"
+                android:layout_marginBottom="10px"
+                android:layout_marginLeft="5px"
+                android:layout_marginRight="5px"
+                android:hint="Price"
+                android:textSize="18sp"
+                android:numeric="decimal"
+                >
+        </EditText>
+        <EditText
+                android:id="@+id/report_price_quantity"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10px"
+                android:layout_marginBottom="10px"
+                android:layout_marginLeft="5px"
+                android:layout_marginRight="5px"
+                android:hint="Quantity (6 for 6-pack) (default: 1)"
+                android:numeric="integer"
+                android:textSize="18sp"
+                >
+        </EditText>
+        <Button
+                android:id="@+id/report_price_save"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:text="Share Price!"
+                android:onClick="sharePrice"
+                >
+        </Button>
+    </LinearLayout>
+</ScrollView>
+

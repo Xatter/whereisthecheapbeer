@@ -149,4 +149,12 @@ public class Item implements Parcelable {
     public User getUser() {
         return User;
     }
+
+    public void setPrice(Double newPrice) {
+        Price = newPrice;
+    }
+
+    public void setUser(User user) {
+        User = user;
+    }
 }

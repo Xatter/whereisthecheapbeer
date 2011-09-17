@@ -65,6 +65,7 @@ public class NewStoreActivity extends Activity {
         }
 
         Store returnedStore = MapItPricesServer.createNewStore(s);
+
         if (returnedStore != null) {
             Intent data = new Intent();
             data.putExtra("store", returnedStore);

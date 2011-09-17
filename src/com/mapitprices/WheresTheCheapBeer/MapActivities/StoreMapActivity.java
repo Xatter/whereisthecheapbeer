@@ -118,12 +118,6 @@ public class StoreMapActivity extends MapActivity {
 
             startActivity(data);
 
-//            OverlayItem overlayItem = mOverlays.get(i);
-//            AlertDialog.Builder dialog = new AlertDialog.Builder(mContext);
-//            dialog.setTitle(overlayItem.getTitle());
-//            dialog.setMessage(overlayItem.getSnippet());
-//            dialog.show();
-
             return true;
         }
 
