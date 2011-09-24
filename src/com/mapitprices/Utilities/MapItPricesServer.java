@@ -30,15 +30,9 @@ import java.util.List;
  * To change this template use File | Settings | File Templates.
  */
 public class MapItPricesServer {
-
-    //public static final String SERVER_URL = "http://www.mapitprices.com/Beer/";
+    public static final String SERVER_URL = "http://www.mapitprices.com/Beer/";
     //public static final String SERVER_URL = "http://10.0.2.2:61418/Beer/"; //Emulator localhost
-    //public static final String SERVER_URL = "http://10.0.1.8:61418/Beer"; //Device local computer
-    public static final String SERVER_URL = "http://192.168.201.144/Beer/"; //Mac Laptop windows IP
-
-    public static final int MIN_DISTANCE = 200; // in meters
-    public static final int MIN_TIME = 300000; // 5 minutes in ms
-
+    //public static final String SERVER_URL = "http://172.16.210.128//Beer/"; //Mac Laptop windows IP
 
     public static Collection<Item> getItemsFromServer(int storeid) {
         GoogleAnalyticsTracker.getInstance().trackEvent("ServerCall", "getItemsFromServer", "StoreID", storeid);
@@ -244,5 +238,18 @@ public class MapItPricesServer {
         List<NameValuePair> nameValuePairs = Utils.locationToNameValuePair(loc);
         String result = RestClient.ExecuteCommand(SERVER_URL + "GetNearbyStores", nameValuePairs);
         return jsonResultToStoreCollection(result);
+    }
+
+    public static boolean FoursquareLogin() {
+        User user = User.getInstance();
+        GoogleAnalyticsTracker.getInstance().trackEvent("ServerCall", "FoursquareLogin", user.getUsername(), 0);
+        List<NameValuePair> values = user.ToNameValuePairs();
+        String result = RestClient.ExecuteCommand(SERVER_URL + "FoursquareLogin", values);
+
+        Gson gson = new Gson();
+        User returnedUser = gson.fromJson(result, User.class);
+        user.setID(returnedUser.getID());
+
+        return true;
     }
 }

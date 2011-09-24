@@ -45,4 +45,11 @@
             >
     </Button>
 
+    <Button
+            android:id="@+id/foursquare_login_button"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="Sign up with Foursquare"
+            android:onClick="foursquare_signin"/>
+
 </LinearLayout>

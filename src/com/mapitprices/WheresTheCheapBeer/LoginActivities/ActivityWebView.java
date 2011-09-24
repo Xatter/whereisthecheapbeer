@@ -1,4 +1,4 @@
-package com.mapitprices.WheresTheCheapBeer;
+package com.mapitprices.WheresTheCheapBeer.LoginActivities;
 /**
  * Copyright 2011 Mark Wyszomierski
  */
@@ -9,7 +9,8 @@ import android.os.Bundle;
 import android.util.Log;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
-import android.widget.Toast;
+import com.mapitprices.Model.User;
+import com.mapitprices.WheresTheCheapBeer.R;
 
 /**
  * https://developer.foursquare.com/docs/oauth.html
@@ -56,7 +57,9 @@ public class ActivityWebView extends Activity {
 
                     Log.v(TAG, "OAuth complete, token: [" + accessToken + "].");
 
-                    Toast.makeText(ActivityWebView.this, "Token: " + accessToken, Toast.LENGTH_SHORT).show();
+                    User.getInstance().setFoursquareToken(accessToken);
+                    setResult(RESULT_OK);
+                    finish();
                 }
             }
         });

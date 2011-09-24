@@ -10,6 +10,7 @@ import android.location.LocationManager;
 import android.widget.Toast;
 import com.google.android.maps.GeoPoint;
 import com.google.zxing.integration.android.IntentIntegrator;
+import com.mapitprices.WheresTheCheapBeer.Constants;
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
 
@@ -84,8 +85,8 @@ public class Utils {
         if (provider != null) {
             Location location = mlocManager.getLastKnownLocation(provider);
 
-            mlocManager.requestLocationUpdates(provider, MapItPricesServer.MIN_TIME,
-                    MapItPricesServer.MIN_DISTANCE, listener);
+            mlocManager.requestLocationUpdates(provider, Constants.MIN_TIME,
+                    Constants.MIN_DISTANCE, listener);
 
             return location;
         }

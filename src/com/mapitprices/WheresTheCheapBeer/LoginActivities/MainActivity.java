@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.view.View;
 import com.google.android.apps.analytics.GoogleAnalyticsTracker;
 import com.mapitprices.Model.User;
+import com.mapitprices.Utilities.FoursquareServer;
 import com.mapitprices.Utilities.MapItPricesServer;
 import com.mapitprices.Utilities.Utils;
 import com.mapitprices.WheresTheCheapBeer.HomeScreenActivity;
@@ -16,6 +17,10 @@ import com.mapitprices.WheresTheCheapBeer.R;
 
 
 public class MainActivity extends Activity {
+    public static final int RC_FOURSQUARE_SIGNUP = 0;
+    public static final int RC_LOGIN = 1;
+    public static final int RC_SIGNUP = 2;
+
     private ProgressDialog _progressDialog;
     GoogleAnalyticsTracker tracker;
 
@@ -28,12 +33,10 @@ public class MainActivity extends Activity {
 
         tracker = GoogleAnalyticsTracker.getInstance();
 
-        SharedPreferences settings = getSharedPreferences("BeerPreferences", 0);
+        SharedPreferences settings = getSharedPreferences("BeerPreferences", RC_FOURSQUARE_SIGNUP);
         String token = settings.getString("SessionToken", "");
 
-        if (token != null && token.length() != 0) {
-
-
+        if (token != null && token.length() != RC_FOURSQUARE_SIGNUP) {
             new LoginTask().execute(token);
         } else {
             setContentView(R.layout.main_layout);
@@ -41,22 +44,49 @@ public class MainActivity extends Activity {
     }
 
     public void signup(View v) {
+        tracker.trackEvent("Click", "Signup", "", 0);
         Intent i = new Intent().setClass(this, SignUpActivity.class);
-        startActivity(i);
-        finish();
+        startActivityForResult(i, RC_SIGNUP);
     }
 
     public void signin(View v) {
+        tracker.trackEvent("Click", "Login", "", 0);
         Intent i = new Intent().setClass(this, LoginActivity.class);
-        startActivity(i);
-        finish();
+        startActivityForResult(i, RC_LOGIN);
     }
 
-//    public void launchReportPrice(View v) {
-//        Intent reportPriceIntent = new Intent().setClass(MainActivity.this, ReportPriceActivity.class);
-//        startActivity(reportPriceIntent);
-//    }
+    public void foursquare_signin(View v) {
+        tracker.trackEvent("Click", "Foursquare_Login", "", 0);
+        Intent i = new Intent().setClass(this, ActivityWebView.class);
+        startActivityForResult(i, RC_FOURSQUARE_SIGNUP);
+    }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == RC_FOURSQUARE_SIGNUP) {
+            if (resultCode == RESULT_OK) {
+                com.mapitprices.Model.Foursquare.User fqUser = FoursquareServer.getUserInfo();
+                User user = User.getInstance();
+
+                user.setUsername(fqUser.firstName + " " + fqUser.lastName);
+                user.setEmail(fqUser.contact.email);
+
+                MapItPricesServer.FoursquareLogin();
+
+                Intent i = new Intent().setClass(this, HomeScreenActivity.class);
+                startActivity(i);
+                finish();
+            }
+        } else if (requestCode == RC_LOGIN) {
+            if (resultCode == RESULT_OK) {
+                finish();
+            }
+        } else if (requestCode == RC_SIGNUP) {
+            if (resultCode == RESULT_OK) {
+                finish();
+            }
+        }
+    }
 
     private class LoginTask extends AsyncTask<String, Void, User> {
         ProgressDialog mProgressDialog;
@@ -67,7 +97,7 @@ public class MainActivity extends Activity {
 
         @Override
         protected User doInBackground(String... strings) {
-            return MapItPricesServer.login(strings[0]);
+            return MapItPricesServer.login(strings[RC_FOURSQUARE_SIGNUP]);
         }
 
         @Override
@@ -89,7 +119,7 @@ public class MainActivity extends Activity {
                 User.getInstance().setEmail(user.getEmail());
                 User.getInstance().setSessionToken(user.getSessionToken());
 
-                SharedPreferences settings = getSharedPreferences("BeerPreferences", 0);
+                SharedPreferences settings = getSharedPreferences("BeerPreferences", RC_FOURSQUARE_SIGNUP);
                 SharedPreferences.Editor editor = settings.edit();
                 editor.putString("SessionToken", User.getInstance().getSessionToken());
                 editor.commit();

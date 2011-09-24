@@ -41,4 +41,17 @@
             android:onClick="signin"
             >
     </Button>
+    <TextView android:id="@+id/widget212"
+              android:layout_width="fill_parent"
+              android:layout_height="wrap_content"
+              android:layout_gravity="center_horizontal"
+              android:text="- OR -"
+              android:textSize="18dp"
+              android:textColor="@color/black"/>
+    <Button
+            android:id="@+id/foursquare_login_button"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="Login with Foursquare"
+            android:onClick="foursquare_signin"/>
 </LinearLayout>

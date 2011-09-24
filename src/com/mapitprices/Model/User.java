@@ -2,6 +2,11 @@ package com.mapitprices.Model;
 
 import android.os.Parcel;
 import android.os.Parcelable;
+import org.apache.http.NameValuePair;
+import org.apache.http.message.BasicNameValuePair;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by IntelliJ IDEA.
@@ -16,6 +21,7 @@ public class User implements Parcelable {
     String Username;
     String Email;
     String SessionToken;
+    String FoursquareToken;
 
     private static User ourInstance = new User();
 
@@ -69,5 +75,31 @@ public class User implements Parcelable {
 
     public String getUsername() {
         return Username;
+    }
+
+    public void setFoursquareToken(String token) {
+        FoursquareToken = token;
+    }
+
+    public String getFoursquareToken() {
+        return FoursquareToken;
+    }
+
+    public List<NameValuePair> ToNameValuePairs() {
+        List<NameValuePair> pairs = new ArrayList<NameValuePair>();
+        pairs.add(new BasicNameValuePair("username", Username));
+        pairs.add(new BasicNameValuePair("email", Email));
+        pairs.add(new BasicNameValuePair("foursquaretoken", FoursquareToken));
+        pairs.add(new BasicNameValuePair("sessiontoken", SessionToken));
+
+        return pairs;
+    }
+
+    public void setID(int id) {
+        ID = id;
+    }
+
+    public int getID() {
+        return ID;
     }
 }

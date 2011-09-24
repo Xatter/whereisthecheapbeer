@@ -72,7 +72,6 @@ public class LoginActivity extends Activity {
                 e.printStackTrace();
             }
 
-
             Intent i;
             if (user != null && user.getSessionToken() != null) {
                 User.getInstance().setUsername(user.getUsername());
@@ -88,9 +87,11 @@ public class LoginActivity extends Activity {
 
                 i = new Intent().setClass(LoginActivity.this, HomeScreenActivity.class);
                 startActivity(i);
+                setResult(RESULT_OK);
                 finish();
             } else {
-                setContentView(R.layout.main_layout);
+                setResult(RESULT_CANCELED);
+                finish();
             }
         }
 

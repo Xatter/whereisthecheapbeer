@@ -15,15 +15,14 @@ import org.acra.annotation.ReportsCrashes;
 @ReportsCrashes(formKey = "dHRnSnU0WWFlc1JHT0k2OW1YS0ZTNHc6MQ")
 public class MyApplication extends Application {
 
-    public static final boolean IsDebug = true;
-
     @Override
     public void onCreate() {
         GoogleAnalyticsTracker tracker = GoogleAnalyticsTracker.getInstance();
 
-        if (!MyApplication.IsDebug) {
+        if (!Constants.IsDebug) {
             ACRA.init(this);
             tracker.startNewSession("UA-22338335-2", getApplicationContext());
+
             tracker.trackEvent(
                     "Application", //Category
                     "Start",       //Action

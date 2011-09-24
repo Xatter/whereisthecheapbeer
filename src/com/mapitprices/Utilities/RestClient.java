@@ -10,6 +10,7 @@ import org.apache.http.NameValuePair;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
+import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicHeader;
@@ -74,6 +75,54 @@ public class RestClient {
 
         return null;
     }
+
+    public static String ExecuteGetCommand(String url) {
+        Log.i("Http Request", url);
+
+        HttpClient httpclient = new DefaultHttpClient();
+        HttpGet post = new HttpGet(url);
+
+        try {
+            List<Header> headers = new ArrayList<Header>();
+            headers.add(new BasicHeader("Accept-Encoding", "gzip"));
+
+            String sessionToken = User.getInstance().getSessionToken();
+            headers.add(new BasicHeader("SessionToken", sessionToken));
+
+            //headers.add(new BasicHeader("Content-Type", "application/json"));
+            post.setHeaders(headers.toArray(new Header[0]));
+
+            HttpResponse response = httpclient.execute(post);
+            GoogleAnalyticsTracker.getInstance().dispatch();
+
+            HttpEntity entity = response.getEntity();
+
+            if (entity != null) {
+                InputStream instream = entity.getContent();
+                Header contentEncoding = response.getFirstHeader("Content-Encoding");
+                if (contentEncoding != null && contentEncoding.getValue().equalsIgnoreCase("gzip")) {
+                    instream = new GZIPInputStream(instream);
+                }
+
+                String result = convertStreamToString(instream);
+
+                Log.i("Http Response", result);
+                instream.close();
+
+                return result;
+            }
+
+        } catch (ClientProtocolException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+
+        return null;
+    }
+
 
     public static String ExecuteCommand(String url) {
         return ExecuteCommand(url, null);

@@ -59,6 +59,7 @@ public class SignUpActivity extends Activity {
 
                 Intent i = new Intent().setClass(this, HomeScreenActivity.class);
                 startActivity(i);
+                setResult(RESULT_OK);
                 finish();
             } else {
                 Toast.makeText(this, "Something went wrong :(", Toast.LENGTH_SHORT).show();
