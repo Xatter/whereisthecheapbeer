@@ -4,7 +4,6 @@ import android.app.ListActivity;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.location.Location;
-import android.location.LocationListener;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.Menu;
@@ -14,15 +13,14 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import com.google.android.apps.analytics.GoogleAnalyticsTracker;
+import com.mapitprices.Model.Foursquare.Venue;
 import com.mapitprices.Model.Store;
-import com.mapitprices.Utilities.MapItPricesServer;
-import com.mapitprices.Utilities.StoreResultAdapter;
-import com.mapitprices.Utilities.Utils;
+import com.mapitprices.Utilities.*;
 import com.mapitprices.WheresTheCheapBeer.Editors.NewStoreActivity;
 import com.mapitprices.WheresTheCheapBeer.R;
 
 import java.util.ArrayList;
-import java.util.Collection;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -34,34 +32,24 @@ import java.util.List;
  */
 public class SelectStoreActivity extends ListActivity {
     public static final int ADD_STORE_REQUEST = 0;
-    List<Store> _stores = new ArrayList<Store>();
-
+    List<Venue> _stores = new ArrayList<Venue>();
     GoogleAnalyticsTracker tracker;
-
-    private final LocationListener currentListener = new LocationListener() {
-
-        public void onLocationChanged(Location location) {
-            new GetLocationTask().execute(location);
-        }
-
-        public void onProviderDisabled(String provider) {
-        }
-
-        public void onProviderEnabled(String provider) {
-        }
-
-        public void onStatusChanged(String provider, int status, Bundle extras) {
-        }
-    };
-    private Location _currentLocation;
+    private MyLocationThing mLocationThing;
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.select_store_layout);
 
         tracker = GoogleAnalyticsTracker.getInstance();
+        mLocationThing = new MyLocationThing(this);
 
-        new GetLocationTask().execute(_currentLocation);
+        mLocationThing.runOnFirstFix(new Runnable() {
+            public void run() {
+                new GetLocationTask().execute(mLocationThing.getLastFix());
+            }
+        });
+
+        mLocationThing.enableMyLocation();
     }
 
     @Override
@@ -94,7 +82,7 @@ public class SelectStoreActivity extends ListActivity {
                 startActivityForResult(i, ADD_STORE_REQUEST);
                 break;
             case R.id.menu_store_refresh:
-                new GetLocationTask().execute(_currentLocation);
+                new GetLocationTask().execute(mLocationThing.getLastFix());
                 break;
         }
         return true;
@@ -102,32 +90,14 @@ public class SelectStoreActivity extends ListActivity {
 
     @Override
     protected void onPause() {
-        Utils.unregisterListener(this, currentListener);
+        mLocationThing.disableMyLocation();
         super.onPause();
-    }
-
-    @Override
-    protected void onRestart() {
-        super.onRestart();
-        _currentLocation = Utils.registerListener(this, currentListener);
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        _currentLocation = Utils.registerListener(this, currentListener);
-    }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-        _currentLocation = Utils.registerListener(this, currentListener);
-    }
-
-    @Override
-    protected void onStop() {
-        Utils.unregisterListener(this, currentListener);
-        super.onStop();
+        mLocationThing.enableMyLocation();
     }
 
     @Override
@@ -138,7 +108,7 @@ public class SelectStoreActivity extends ListActivity {
         finish();
     }
 
-    private class GetLocationTask extends AsyncTask<Location, Void, Collection<Store>> {
+    private class GetLocationTask extends AsyncTask<Location, Void, Venue[]> {
         private ProgressDialog _progressDialog;
 
         GetLocationTask() {
@@ -151,21 +121,27 @@ public class SelectStoreActivity extends ListActivity {
         }
 
         @Override
-        protected Collection<Store> doInBackground(Location... params) {
+        protected Venue[] doInBackground(Location... params) {
             Location loc = params[0];
-            _currentLocation = loc;
-            return MapItPricesServer.getAllNearbyStoresFromServer(loc);
+            if(loc != null)
+            {
+                return FoursquareServer.getVenues(loc.getLatitude(), loc.getLongitude());
+            }
+            else
+            {
+                return FoursquareServer.getVenues(40.75, -73.98);
+            }
         }
 
         @Override
-        protected void onPostExecute(Collection<Store> result) {
+        protected void onPostExecute(Venue[] result) {
             _progressDialog.dismiss();
 
             if (result != null) {
                 _stores.clear();
-                _stores.addAll(result);
+                _stores.addAll(Arrays.asList(result));
 
-                ArrayAdapter<Store> adaptor = new StoreResultAdapter(SelectStoreActivity.this, R.id.item_row_name, _stores);
+                ArrayAdapter<Venue> adaptor = new VenueResultAdapter(SelectStoreActivity.this, R.id.item_row_name, _stores);
                 setListAdapter(adaptor);
             }
         }

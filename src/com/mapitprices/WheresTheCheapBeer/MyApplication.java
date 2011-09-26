@@ -19,7 +19,7 @@ public class MyApplication extends Application {
     public void onCreate() {
         GoogleAnalyticsTracker tracker = GoogleAnalyticsTracker.getInstance();
 
-        if (!Constants.IsDebug) {
+        if (!Constants.DEBUGMODE) {
             ACRA.init(this);
             tracker.startNewSession("UA-22338335-2", getApplicationContext());
 

@@ -66,16 +66,22 @@ public class MainActivity extends Activity {
         if (requestCode == RC_FOURSQUARE_SIGNUP) {
             if (resultCode == RESULT_OK) {
                 com.mapitprices.Model.Foursquare.User fqUser = FoursquareServer.getUserInfo();
-                User user = User.getInstance();
+                if (fqUser != null) {
+                    User user = User.getInstance();
 
-                user.setUsername(fqUser.firstName + " " + fqUser.lastName);
-                user.setEmail(fqUser.contact.email);
+                    user.setUsername(fqUser.firstName + " " + fqUser.lastName);
+                    user.setEmail(fqUser.contact.email);
 
-                MapItPricesServer.FoursquareLogin();
+                    User returnedUser = MapItPricesServer.FoursquareLogin();
+                    user.setID(returnedUser.getID());
+                    user.setUsername(returnedUser.getUsername());
 
-                Intent i = new Intent().setClass(this, HomeScreenActivity.class);
-                startActivity(i);
-                finish();
+                    Intent i = new Intent().setClass(this, HomeScreenActivity.class);
+                    startActivity(i);
+                    finish();
+                } else {
+                    // not authenticated
+                }
             }
         } else if (requestCode == RC_LOGIN) {
             if (resultCode == RESULT_OK) {
@@ -97,7 +103,7 @@ public class MainActivity extends Activity {
 
         @Override
         protected User doInBackground(String... strings) {
-            return MapItPricesServer.login(strings[RC_FOURSQUARE_SIGNUP]);
+            return MapItPricesServer.login(strings[0]);
         }
 
         @Override
@@ -122,6 +128,7 @@ public class MainActivity extends Activity {
                 SharedPreferences settings = getSharedPreferences("BeerPreferences", RC_FOURSQUARE_SIGNUP);
                 SharedPreferences.Editor editor = settings.edit();
                 editor.putString("SessionToken", User.getInstance().getSessionToken());
+                editor.putString("User.Email", User.getInstance().getEmail());
                 editor.commit();
 
                 i = new Intent().setClass(MainActivity.this, HomeScreenActivity.class);

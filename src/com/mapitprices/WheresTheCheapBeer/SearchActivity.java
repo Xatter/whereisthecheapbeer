@@ -8,10 +8,12 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import com.google.android.apps.analytics.GoogleAnalyticsTracker;
+import com.mapitprices.Model.Foursquare.Venue;
 import com.mapitprices.Model.Item;
 import com.mapitprices.Model.Store;
 import com.mapitprices.Utilities.ItemResultAdapter;
 import com.mapitprices.Utilities.StoreResultAdapter;
+import com.mapitprices.Utilities.VenueResultAdapter;
 import com.mapitprices.WheresTheCheapBeer.ListActivities.StoreItemsActivity;
 import com.mapitprices.WheresTheCheapBeer.MapActivities.BeerMapActivity;
 

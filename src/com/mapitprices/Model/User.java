@@ -2,6 +2,7 @@ package com.mapitprices.Model;
 
 import android.os.Parcel;
 import android.os.Parcelable;
+import com.mapitprices.Model.Foursquare.Location;
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
 
@@ -40,12 +41,10 @@ public class User implements Parcelable {
         SessionToken = in.readString();
     }
 
-    @Override
     public int describeContents() {
         return 0;  //To change body of implemented methods use File | Settings | File Templates.
     }
 
-    @Override
     public void writeToParcel(Parcel parcel, int i) {
         parcel.writeInt(ID);
         parcel.writeString(Username);
@@ -89,8 +88,8 @@ public class User implements Parcelable {
         List<NameValuePair> pairs = new ArrayList<NameValuePair>();
         pairs.add(new BasicNameValuePair("username", Username));
         pairs.add(new BasicNameValuePair("email", Email));
-        pairs.add(new BasicNameValuePair("foursquaretoken", FoursquareToken));
         pairs.add(new BasicNameValuePair("sessiontoken", SessionToken));
+        pairs.add(new BasicNameValuePair("foursquaretoken", FoursquareToken));
 
         return pairs;
     }

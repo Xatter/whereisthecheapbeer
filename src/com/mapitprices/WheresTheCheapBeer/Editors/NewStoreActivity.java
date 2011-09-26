@@ -11,6 +11,7 @@ import android.widget.Toast;
 import com.google.android.apps.analytics.GoogleAnalyticsTracker;
 import com.mapitprices.Model.Store;
 import com.mapitprices.Utilities.MapItPricesServer;
+import com.mapitprices.Utilities.MyLocationThing;
 import com.mapitprices.Utilities.Utils;
 import com.mapitprices.WheresTheCheapBeer.R;
 
@@ -26,30 +27,15 @@ import java.util.List;
  */
 public class NewStoreActivity extends Activity {
     private List<Store> _stores = new ArrayList<Store>();
-    private Location _currentLocation;
-    GoogleAnalyticsTracker tracker;
-
-    private final LocationListener currentListener = new LocationListener() {
-
-        public void onLocationChanged(Location location) {
-            _currentLocation = location;
-        }
-
-        public void onProviderDisabled(String provider) {
-        }
-
-        public void onProviderEnabled(String provider) {
-        }
-
-        public void onStatusChanged(String provider, int status, Bundle extras) {
-        }
-    };
-
+    private GoogleAnalyticsTracker tracker;
+    private MyLocationThing mLocationThing;
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.store_editor);
         tracker = GoogleAnalyticsTracker.getInstance();
+        mLocationThing = new MyLocationThing(this);
+        mLocationThing.enableMyLocation();
     }
 
     public void saveStore(View v) {
@@ -57,8 +43,8 @@ public class NewStoreActivity extends Activity {
         EditText et = (EditText) findViewById(R.id.store_name);
         s.setName(et.getText().toString());
 
-        if (_currentLocation != null) {
-            s.setLocation(_currentLocation);
+        if (mLocationThing.getLastFix() != null) {
+            s.setLocation(mLocationThing.getLastFix());
         } else {
             Toast.makeText(this, "Couldn't get location of store", Toast.LENGTH_SHORT)
                     .show();
@@ -80,31 +66,13 @@ public class NewStoreActivity extends Activity {
 
     @Override
     protected void onPause() {
-        Utils.unregisterListener(this, currentListener);
+        mLocationThing.disableMyLocation();
         super.onPause();
-    }
-
-    @Override
-    protected void onRestart() {
-        super.onRestart();
-        _currentLocation = Utils.registerListener(this, currentListener);
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        _currentLocation = Utils.registerListener(this, currentListener);
-    }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-        _currentLocation = Utils.registerListener(this, currentListener);
-    }
-
-    @Override
-    protected void onStop() {
-        Utils.unregisterListener(this, currentListener);
-        super.onStop();
+        mLocationThing.enableMyLocation();
     }
 }

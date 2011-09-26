@@ -8,8 +8,8 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 import com.google.android.apps.analytics.GoogleAnalyticsTracker;
+import com.mapitprices.Model.Foursquare.Venue;
 import com.mapitprices.Model.Item;
-import com.mapitprices.Model.Store;
 import com.mapitprices.Utilities.MapItPricesServer;
 import com.mapitprices.WheresTheCheapBeer.ListActivities.SelectItemActivity;
 import com.mapitprices.WheresTheCheapBeer.ListActivities.SelectStoreActivity;
@@ -26,7 +26,7 @@ public class ReportPriceActivity extends Activity {
     public static final int RC_SELECT_ITEM = 0;
     public static final int RC_SELECT_STORE = 1;
 
-    Store _store;
+    Venue _store;
     Item _item;
 
     GoogleAnalyticsTracker tracker;
@@ -45,7 +45,6 @@ public class ReportPriceActivity extends Activity {
 
         EditText selectItemControl = (EditText) findViewById(R.id.report_price_item);
         selectItemControl.setOnTouchListener(new View.OnTouchListener() {
-            @Override
             public boolean onTouch(View view, MotionEvent motionEvent) {
                 selectItem();
                 return true;
@@ -54,7 +53,6 @@ public class ReportPriceActivity extends Activity {
 
         EditText selectStoreControl = (EditText) findViewById(R.id.report_price_store);
         selectStoreControl.setOnTouchListener(new View.OnTouchListener() {
-            @Override
             public boolean onTouch(View view, MotionEvent motionEvent) {
                 selectStore();
                 return true;
@@ -67,9 +65,9 @@ public class ReportPriceActivity extends Activity {
             if (_item == null) {
                 selectItem();
             } else {
-                setStore((Store) i.getParcelableExtra("store"));
+                setStore((Venue) i.getParcelableExtra("store"));
                 if (_store == null) {
-                    setStore(MapItPricesServer.getStore(_item));
+                    //setStore(MapItPricesServer.getStore(_item));
                 }
             }
         }
@@ -92,11 +90,11 @@ public class ReportPriceActivity extends Activity {
         }
     }
 
-    private void setStore(Store store) {
+    private void setStore(Venue store) {
         _store = store;
         EditText tv = (EditText) findViewById(R.id.report_price_store);
         if (store != null) {
-            tv.setText(_store.getName());
+            tv.setText(_store.name);
         } else {
             tv.setText("");
         }
@@ -207,13 +205,13 @@ public class ReportPriceActivity extends Activity {
             case 1:
                 if (resultCode == RESULT_OK) {
                     Bundle b = data.getExtras();
-                    setStore((Store) b.getParcelable("store"));
+                    setStore((Venue) b.getParcelable("store"));
 
                     tracker.trackEvent(
                             "ReportPrice",
                             "StoreSelected",
-                            _store.getName(),
-                            _store.getID());
+                            _store.name,
+                            0);
                 }
                 break;
             default:

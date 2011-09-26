@@ -21,11 +21,11 @@ import java.util.List;
  * To change this template use File | Settings | File Templates.
  */
 
-public class StoreResultAdapter extends ArrayAdapter<Store> {
-    public List<Store> _stores;
+public class VenueResultAdapter extends ArrayAdapter<Venue> {
+    public List<Venue> _stores;
     private Context _context;
 
-    public StoreResultAdapter(Context context, int textViewResourceId, List<Store> objects) {
+    public VenueResultAdapter(Context context, int textViewResourceId, List<Venue> objects) {
         super(context, textViewResourceId, objects);
         _stores = objects;
         _context = context;
@@ -39,17 +39,17 @@ public class StoreResultAdapter extends ArrayAdapter<Store> {
             v = vi.inflate(R.layout.store_row_layout, null);
         }
 
-        Store i = _stores.get(position);
+        Venue i = _stores.get(position);
         TextView tvName = (TextView) v.findViewById(R.id.store_row_name);
-        tvName.setText(i.getName());
+        tvName.setText(i.name);
 
         TextView tvDistance = (TextView) v.findViewById(R.id.store_row_distance);
         DecimalFormat formatter = new DecimalFormat("#.## mi");
-        String distanceString = formatter.format(i.getDistance());
+        String distanceString = formatter.format(i.location.distance);
         tvDistance.setText(distanceString);
 
         TextView tvAddress = (TextView) v.findViewById(R.id.store_address);
-        tvAddress.setText(i.getAddress().getStreet());
+        tvAddress.setText(i.location.address);
 
         return v;
     }

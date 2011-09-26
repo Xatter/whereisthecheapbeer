@@ -1,15 +1,18 @@
 package com.mapitprices.WheresTheCheapBeer.LoginActivities;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 import com.google.android.apps.analytics.GoogleAnalyticsTracker;
 import com.mapitprices.Model.User;
 import com.mapitprices.Utilities.MapItPricesServer;
+import com.mapitprices.Utilities.Utils;
 import com.mapitprices.WheresTheCheapBeer.HomeScreenActivity;
 import com.mapitprices.WheresTheCheapBeer.R;
 
@@ -43,7 +46,11 @@ public class SignUpActivity extends Activity {
                 && password != null && password.length() != 0) {
             User.getInstance().setEmail(email);
             User.getInstance().setUsername(username);
+
+            ProgressDialog pd = Utils.createProgressDialog(this, "Creating your account...");
+            pd.show();
             User returned = MapItPricesServer.createNewUser(User.getInstance(), password);
+            pd.dismiss();
 
             if (returned != null) {
                 User.getInstance().setSessionToken(returned.getSessionToken());
@@ -51,8 +58,7 @@ public class SignUpActivity extends Activity {
                 SharedPreferences settings = getSharedPreferences("BeerPreferences", 0);
                 SharedPreferences.Editor editor = settings.edit();
                 editor.putString("SessionToken", User.getInstance().getSessionToken());
-
-                // Commit the edits!
+                editor.putString("User.Email", User.getInstance().getEmail());
                 editor.commit();
 
                 Toast.makeText(this, "Success!", Toast.LENGTH_SHORT).show();

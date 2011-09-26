@@ -7,6 +7,7 @@ import android.graphics.drawable.Drawable;
 import android.location.Location;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.AttributeSet;
 import com.google.android.apps.analytics.GoogleAnalyticsTracker;
 import com.google.android.maps.*;
 import com.mapitprices.Model.Store;
@@ -44,13 +45,13 @@ public class StoreMapActivity extends MapActivity {
         tracker = GoogleAnalyticsTracker.getInstance();
 
         mapView = (MapView) findViewById(R.id.mapview);
+
         mapOverlays = mapView.getOverlays();
 
         myLocationOverlay = new MyLocationOverlay(this, mapView);
         myLocationOverlay.enableMyLocation();
 
         myLocationOverlay.runOnFirstFix(new Runnable() {
-            @Override
             public void run() {
                 new GetLocationTask().execute(myLocationOverlay.getLastFix());
             }

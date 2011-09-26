@@ -1,6 +1,7 @@
 package com.mapitprices.Utilities;
 
 import android.location.Location;
+import android.os.Build;
 import com.google.android.apps.analytics.GoogleAnalyticsTracker;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -11,6 +12,7 @@ import com.mapitprices.Compatibility.Base64;
 import com.mapitprices.Model.Item;
 import com.mapitprices.Model.Store;
 import com.mapitprices.Model.User;
+import com.mapitprices.WheresTheCheapBeer.Constants;
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
 
@@ -30,9 +32,21 @@ import java.util.List;
  * To change this template use File | Settings | File Templates.
  */
 public class MapItPricesServer {
-    public static final String SERVER_URL = "http://www.mapitprices.com/Beer/";
-    //public static final String SERVER_URL = "http://10.0.2.2:61418/Beer/"; //Emulator localhost
+    //public static String SERVER_URL = "http://10.0.2.2:61418/Beer/"; //Emulator localhost
     //public static final String SERVER_URL = "http://172.16.210.128//Beer/"; //Mac Laptop windows IP
+
+    public static String SERVER_URL = "http://www.mapitprices.com/Beer/";
+
+    static {
+        if(Constants.DEBUGMODE && "google_sdk".equals(Build.PRODUCT)) {
+            SERVER_URL = "http://10.0.2.2:61418/Beer/"; //Emulator localhost
+        }else
+        {
+            SERVER_URL = "http://www.mapitprices.com/Beer/";
+        }
+    }
+
+
 
     public static Collection<Item> getItemsFromServer(int storeid) {
         GoogleAnalyticsTracker.getInstance().trackEvent("ServerCall", "getItemsFromServer", "StoreID", storeid);
@@ -240,7 +254,7 @@ public class MapItPricesServer {
         return jsonResultToStoreCollection(result);
     }
 
-    public static boolean FoursquareLogin() {
+    public static User FoursquareLogin() {
         User user = User.getInstance();
         GoogleAnalyticsTracker.getInstance().trackEvent("ServerCall", "FoursquareLogin", user.getUsername(), 0);
         List<NameValuePair> values = user.ToNameValuePairs();
@@ -248,8 +262,7 @@ public class MapItPricesServer {
 
         Gson gson = new Gson();
         User returnedUser = gson.fromJson(result, User.class);
-        user.setID(returnedUser.getID());
 
-        return true;
+        return returnedUser;
     }
 }

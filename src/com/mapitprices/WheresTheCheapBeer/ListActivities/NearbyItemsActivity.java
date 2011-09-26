@@ -18,6 +18,7 @@ import com.mapitprices.Model.Item;
 import com.mapitprices.Model.User;
 import com.mapitprices.Utilities.ItemResultAdapter;
 import com.mapitprices.Utilities.MapItPricesServer;
+import com.mapitprices.Utilities.MyLocationThing;
 import com.mapitprices.Utilities.Utils;
 import com.mapitprices.WheresTheCheapBeer.BarCodeScanItemActivity;
 import com.mapitprices.WheresTheCheapBeer.Editors.ReportPriceActivity;
@@ -37,30 +38,15 @@ import java.util.Collection;
  * To change this template use File | Settings | File Templates.
  */
 public class NearbyItemsActivity extends ListActivity {
-    private Location _currentLocation;
+
     ArrayList<Item> mCachedItems = new ArrayList<Item>();
 
     private static final int RC_NEW_PRICE = 0;
     private static final int RC_UPDATE_ITEM_PRICE = 1;
 
-    GoogleAnalyticsTracker tracker;
+    private GoogleAnalyticsTracker tracker;
 
-    private final LocationListener currentListener = new LocationListener() {
-
-        public void onLocationChanged(Location location) {
-
-            new GetLocationTask().execute(location);
-        }
-
-        public void onProviderDisabled(String provider) {
-        }
-
-        public void onProviderEnabled(String provider) {
-        }
-
-        public void onStatusChanged(String provider, int status, Bundle extras) {
-        }
-    };
+    private MyLocationThing mLocationThing;
     private ArrayAdapter<Item> mAdaptor;
 
     public void onCreate(Bundle savedInstanceState) {
@@ -68,12 +54,14 @@ public class NearbyItemsActivity extends ListActivity {
         setContentView(R.layout.items_layout);
 
         tracker = GoogleAnalyticsTracker.getInstance();
+        mLocationThing = new MyLocationThing(this);
+        mLocationThing.enableMyLocation();
 
         mAdaptor = new ItemResultAdapter(NearbyItemsActivity.this, R.id.item_row_name, mCachedItems);
         setListAdapter(mAdaptor);
 
         if (mCachedItems.size() == 0) {
-            new GetLocationTask().execute(_currentLocation);
+            new GetLocationTask().execute(mLocationThing.getLastFix());
         }
 
         registerForContextMenu(getListView());
@@ -90,14 +78,14 @@ public class NearbyItemsActivity extends ListActivity {
 
     @Override
     protected void onPause() {
-        Utils.unregisterListener(this, currentListener);
+        mLocationThing.disableMyLocation();
         super.onPause();
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        _currentLocation = Utils.registerListener(this, currentListener);
+        mLocationThing.enableMyLocation();
     }
 
     @Override
@@ -119,7 +107,7 @@ public class NearbyItemsActivity extends ListActivity {
                 IntentIntegrator.initiateScan(this);
                 return true;
             case R.id.menu_item_refresh:
-                new GetLocationTask().execute(_currentLocation);
+                new GetLocationTask().execute(mLocationThing.getLastFix());
                 return true;
             case R.id.menu_item_settings:
                 i = new Intent().setClass(this, SettingsActivity.class);
@@ -210,7 +198,6 @@ public class NearbyItemsActivity extends ListActivity {
         @Override
         protected Collection<Item> doInBackground(Location... params) {
             Location loc = params[0];
-            _currentLocation = loc;
             return MapItPricesServer.getNearbyPrices(loc);
         }
 
@@ -221,11 +208,8 @@ public class NearbyItemsActivity extends ListActivity {
             if (result != null) {
                 mCachedItems.clear();
                 mCachedItems.addAll(result);
-
                 mAdaptor.notifyDataSetChanged();
             }
         }
     }
-
-
 }

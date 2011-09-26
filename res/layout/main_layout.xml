@@ -1,55 +1,61 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-        android:id="@+id/widget0"
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:orientation="vertical"
-        android:background="@color/green_base"
-        xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            xmlns:android="http://schemas.android.com/apk/res/android"
         >
-    <TextView
-            android:id="@+id/widget40"
+    <LinearLayout
+            android:id="@+id/widget0"
             android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:text="Where is the Cheap Beer?"
-            android:textSize="50sp"
-            android:typeface="monospace"
-            android:textColor="@color/text_color"
-            android:layout_margin="10dp"
-            >
-    </TextView>
-    <Button
-            android:id="@+id/widget42"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:text="Sign up with Email"
-            android:layout_margin="10dp"
-            android:onClick="signup"
-            >
-    </Button>
-    <TextView
-            android:id="@+id/widget39"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:text="Already have an account?"
-            android:textColor="@color/text_color"
-            >
-    </TextView>
-    <Button
-            android:id="@+id/widget36"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:text="Log In"
-            android:layout_margin="10dp"
-            android:onClick="signin"
-            >
-    </Button>
+            android:layout_height="fill_parent"
+            android:orientation="vertical"
+            android:background="@color/green_base"
 
-    <Button
-            android:id="@+id/foursquare_login_button"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:text="Sign up with Foursquare"
-            android:onClick="foursquare_signin"/>
+            >
+        <TextView
+                android:id="@+id/widget40"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:text="Where is the Cheap Beer?"
+                android:textSize="50sp"
+                android:typeface="monospace"
+                android:textColor="@color/text_color"
+                android:layout_margin="10dp"
+                >
+        </TextView>
+        <Button
+                android:id="@+id/widget42"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:text="Sign up with Email"
+                android:layout_margin="10dp"
+                android:onClick="signup"
+                >
+        </Button>
+        <TextView
+                android:id="@+id/widget39"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:text="Already have an account?"
+                android:textColor="@color/text_color"
+                >
+        </TextView>
+        <Button
+                android:id="@+id/widget36"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:text="Log In"
+                android:layout_margin="10dp"
+                android:onClick="signin"
+                >
+        </Button>
 
-</LinearLayout>
+        <Button
+                android:id="@+id/foursquare_login_button"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:text="Sign in with Foursquare"
+                android:onClick="foursquare_signin"/>
+
+    </LinearLayout>
+</ScrollView>

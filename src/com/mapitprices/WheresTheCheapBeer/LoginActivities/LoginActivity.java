@@ -81,6 +81,7 @@ public class LoginActivity extends Activity {
                 SharedPreferences settings = getSharedPreferences("BeerPreferences", 0);
                 SharedPreferences.Editor editor = settings.edit();
                 editor.putString("SessionToken", User.getInstance().getSessionToken());
+                editor.putString("User.Email", User.getInstance().getEmail());
                 editor.commit();
 
                 Toast.makeText(LoginActivity.this, "Success!", Toast.LENGTH_SHORT).show();
