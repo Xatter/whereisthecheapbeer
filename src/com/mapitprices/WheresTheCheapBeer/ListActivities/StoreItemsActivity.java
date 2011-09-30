@@ -48,7 +48,7 @@ public class StoreItemsActivity extends ListActivity {
             tvName.setText(store.getName());
 
             TextView tvDistance = (TextView) findViewById(R.id.store_row_distance);
-            DecimalFormat formatter = new DecimalFormat("#.## mi");
+            DecimalFormat formatter = new DecimalFormat("#.## meters");
             String distanceString = formatter.format(store.getDistance());
             tvDistance.setText(distanceString);
 

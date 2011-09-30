@@ -10,6 +10,7 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 import com.google.android.apps.analytics.GoogleAnalyticsTracker;
+import com.mapitprices.Model.Responses.MapItResponse;
 import com.mapitprices.Model.User;
 import com.mapitprices.Utilities.MapItPricesServer;
 import com.mapitprices.Utilities.Utils;
@@ -47,7 +48,7 @@ public class LoginActivity extends Activity {
         }
     }
 
-    private class LoginTask extends AsyncTask<String, Void, User> {
+    private class LoginTask extends AsyncTask<String, Void, MapItResponse> {
         ProgressDialog mProgressDialog;
 
         LoginTask() {
@@ -55,7 +56,7 @@ public class LoginActivity extends Activity {
         }
 
         @Override
-        protected User doInBackground(String... strings) {
+        protected MapItResponse doInBackground(String... strings) {
             return MapItPricesServer.login(strings[0], strings[1]);
         }
 
@@ -65,34 +66,47 @@ public class LoginActivity extends Activity {
         }
 
         @Override
-        protected void onPostExecute(User user) {
+        protected void onPostExecute(MapItResponse response) {
             try {
                 mProgressDialog.dismiss();
             } catch (Exception e) {
                 e.printStackTrace();
             }
 
-            Intent i;
-            if (user != null && user.getSessionToken() != null) {
-                User.getInstance().setUsername(user.getUsername());
-                User.getInstance().setEmail(user.getEmail());
-                User.getInstance().setSessionToken(user.getSessionToken());
+            if(response.Meta.Code.equals("200"))
+            {
+                User user = response.Response.user;
+                Intent i;
+                if (user != null && user.getSessionToken() != null) {
+                    User.getInstance().setUsername(user.getUsername());
+                    User.getInstance().setEmail(user.getEmail());
+                    User.getInstance().setSessionToken(user.getSessionToken());
 
-                SharedPreferences settings = getSharedPreferences("BeerPreferences", 0);
-                SharedPreferences.Editor editor = settings.edit();
-                editor.putString("SessionToken", User.getInstance().getSessionToken());
-                editor.putString("User.Email", User.getInstance().getEmail());
-                editor.commit();
+                    SharedPreferences settings = getSharedPreferences("BeerPreferences", 0);
+                    SharedPreferences.Editor editor = settings.edit();
+                    editor.putString("SessionToken", User.getInstance().getSessionToken());
+                    editor.putString("User.Email", User.getInstance().getEmail());
+                    editor.commit();
 
-                Toast.makeText(LoginActivity.this, "Success!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(LoginActivity.this, "Success!", Toast.LENGTH_SHORT).show();
 
-                i = new Intent().setClass(LoginActivity.this, HomeScreenActivity.class);
-                startActivity(i);
-                setResult(RESULT_OK);
-                finish();
-            } else {
-                setResult(RESULT_CANCELED);
-                finish();
+                    i = new Intent().setClass(LoginActivity.this, HomeScreenActivity.class);
+                    startActivity(i);
+                    setResult(RESULT_OK);
+                    finish();
+                } else {
+                    setResult(RESULT_CANCELED);
+                    finish();
+                }
+            }
+            else
+            {
+                Toast.makeText(LoginActivity.this, response.Meta.ErrorMessage, Toast.LENGTH_LONG).show();
+
+                // Invalid login, clear password field.
+                EditText et = (EditText) findViewById(R.id.password);
+                et.setText("");
+                et.requestFocus();
             }
         }
 

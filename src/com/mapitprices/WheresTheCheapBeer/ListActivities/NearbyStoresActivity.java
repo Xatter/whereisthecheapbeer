@@ -65,15 +65,11 @@ public class NearbyStoresActivity extends ListActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.menu_add_store:
-                Intent i = new Intent().setClass(this, NewStoreActivity.class);
-                startActivityForResult(i, 0);
-                return true;
             case R.id.menu_store_refresh:
                 new GetLocationTask().execute(mLocationThing.getLastFix());
                 return true;
             case R.id.menu_item_settings:
-                i = new Intent().setClass(this, SettingsActivity.class);
+                Intent i = new Intent().setClass(this, SettingsActivity.class);
                 startActivity(i);
                 return true;
         }

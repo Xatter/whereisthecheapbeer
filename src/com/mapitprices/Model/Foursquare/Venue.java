@@ -17,6 +17,19 @@ public class Venue implements Parcelable {
     public VenueCategory[] categories;
     public boolean verified;
 
+    public Venue()
+    {
+
+    }
+
+    public Venue(Parcel in)
+    {
+        id = in.readString();
+        name = in.readString();
+        location = in.readParcelable(Location.class.getClassLoader());
+        categories = in.createTypedArray(VenueCategory.CREATOR);
+    }
+
     public int describeContents() {
         return 0;  //To change body of implemented methods use File | Settings | File Templates.
     }
@@ -27,4 +40,14 @@ public class Venue implements Parcelable {
         parcel.writeParcelable(location, 0);
         parcel.writeParcelableArray(categories, 0);
     }
+
+    public static final Creator<Venue> CREATOR = new Creator<Venue>(){
+        public Venue createFromParcel(Parcel in) {
+            return new Venue(in);
+        }
+
+        public Venue[] newArray(int size){
+            return new Venue[size];
+        }
+    };
 }

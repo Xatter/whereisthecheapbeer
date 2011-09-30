@@ -5,6 +5,8 @@ import android.os.Parcelable;
 import com.mapitprices.Model.Foursquare.Location;
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -92,6 +94,25 @@ public class User implements Parcelable {
         pairs.add(new BasicNameValuePair("foursquaretoken", FoursquareToken));
 
         return pairs;
+    }
+
+    public JSONObject ToJSON()
+    {
+        JSONObject holder = new JSONObject();
+        try
+        {
+            holder.put("username", Username);
+            holder.put("email", Email);
+            holder.put("sessiontoken", SessionToken);
+            holder.put("foursquaretoken", FoursquareToken);
+            return holder;
+        }
+        catch(JSONException e)
+        {
+
+        }
+
+        return null;
     }
 
     public void setID(int id) {

@@ -1,6 +1,4 @@
-package com.mapitprices.Model;
-
-import com.mapitprices.Model.Foursquare.Meta;
+package com.mapitprices.Model.Responses;
 
 /**
  * Created by IntelliJ IDEA.
@@ -10,6 +8,6 @@ import com.mapitprices.Model.Foursquare.Meta;
  * To change this template use File | Settings | File Templates.
  */
 public class MapItResponse {
-    Meta meta;
-    Response response;
+    public Meta Meta;
+    public Response Response;
 }

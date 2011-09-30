@@ -14,7 +14,7 @@ import java.util.List;
 // Currently this object is overloaded as both the representation of an Item AND a StoreItem
 // from the database's perspective.
 public class Item implements Parcelable {
-    int ID;
+    int ItemID;
     String Name;
     String UPC;
     String Size;
@@ -30,7 +30,7 @@ public class Item implements Parcelable {
     }
 
     public Item(Parcel in) {
-        ID = in.readInt();
+        ItemID = in.readInt();
         Name = in.readString();
         UPC = in.readString();
         Size = in.readString();
@@ -40,8 +40,8 @@ public class Item implements Parcelable {
         StoreID = in.readInt();
     }
 
-    public int getID() {
-        return ID;
+    public int getItemID() {
+        return ItemID;
     }
 
     public String getName() {
@@ -70,7 +70,7 @@ public class Item implements Parcelable {
     }
 
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeInt(ID);
+        dest.writeInt(ItemID);
         dest.writeString(Name);
         dest.writeString(UPC);
         dest.writeString(Size);
@@ -82,7 +82,7 @@ public class Item implements Parcelable {
 
     public List<NameValuePair> toNameValuePairs() {
         List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(8);
-        nameValuePairs.add(new BasicNameValuePair("ID", Integer.toString(ID)));
+        nameValuePairs.add(new BasicNameValuePair("ItemID", Integer.toString(ItemID)));
         nameValuePairs.add(new BasicNameValuePair("Name", Name));
         nameValuePairs.add(new BasicNameValuePair("UPC", UPC));
         nameValuePairs.add(new BasicNameValuePair("Size", Size));

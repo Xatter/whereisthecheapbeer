@@ -43,11 +43,15 @@ public class SelectStoreActivity extends ListActivity {
         tracker = GoogleAnalyticsTracker.getInstance();
         mLocationThing = new MyLocationThing(this);
 
-        mLocationThing.runOnFirstFix(new Runnable() {
-            public void run() {
-                new GetLocationTask().execute(mLocationThing.getLastFix());
-            }
-        });
+        if (mLocationThing.getLastFix() == null) {
+            mLocationThing.runOnFirstFix(new Runnable() {
+                public void run() {
+                    new GetLocationTask().execute(mLocationThing.getLastFix());
+                }
+            });
+        } else {
+            new GetLocationTask().execute(mLocationThing.getLastFix());
+        }
 
         mLocationThing.enableMyLocation();
     }
@@ -77,10 +81,6 @@ public class SelectStoreActivity extends ListActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.menu_add_store:
-                Intent i = new Intent().setClass(this, NewStoreActivity.class);
-                startActivityForResult(i, ADD_STORE_REQUEST);
-                break;
             case R.id.menu_store_refresh:
                 new GetLocationTask().execute(mLocationThing.getLastFix());
                 break;
@@ -103,7 +103,7 @@ public class SelectStoreActivity extends ListActivity {
     @Override
     protected void onListItemClick(ListView l, View v, int position, long id) {
         Intent data = new Intent();
-        data.putExtra("store", _stores.get(position));
+        data.putExtra("venue", _stores.get(position));
         setResult(RESULT_OK, data);
         finish();
     }
@@ -123,12 +123,9 @@ public class SelectStoreActivity extends ListActivity {
         @Override
         protected Venue[] doInBackground(Location... params) {
             Location loc = params[0];
-            if(loc != null)
-            {
+            if (loc != null) {
                 return FoursquareServer.getVenues(loc.getLatitude(), loc.getLongitude());
-            }
-            else
-            {
+            } else {
                 return FoursquareServer.getVenues(40.75, -73.98);
             }
         }

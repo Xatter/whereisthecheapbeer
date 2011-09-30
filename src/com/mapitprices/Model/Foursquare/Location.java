@@ -20,13 +20,35 @@ public class Location  implements Parcelable{
     public String city;
     public String state;
 
+    public Location()
+    {
+
+    }
+
+    public Location(Parcel in) {
+        address = in.readString();
+        crossStreet = in.readString();
+        lat = in.readDouble();
+        lng = in.readDouble();
+        distance = in.readDouble();
+        postalCode = in.readString();
+        city = in.readString();
+        state = in.readString();
+    }
+
     public int describeContents() {
         return 0;  //To change body of implemented methods use File | Settings | File Templates.
     }
 
     public void writeToParcel(Parcel parcel, int i) {
         parcel.writeString(address);
-        parcel.writeString(crossStreet);
+
+        if(crossStreet != null){
+            parcel.writeString(crossStreet);
+        }else{
+            parcel.writeString("");
+        }
+
         parcel.writeDouble(lat);
         parcel.writeDouble(lng);
         parcel.writeDouble(distance);
@@ -34,4 +56,14 @@ public class Location  implements Parcelable{
         parcel.writeString(city);
         parcel.writeString(state);
     }
+
+    public static final Creator<Location> CREATOR = new Creator<Location>() {
+        public Location createFromParcel(Parcel in) {
+            return new Location(in);
+        }
+
+        public Location[] newArray(int size) {
+            return new Location[size];
+        }
+    };
 }

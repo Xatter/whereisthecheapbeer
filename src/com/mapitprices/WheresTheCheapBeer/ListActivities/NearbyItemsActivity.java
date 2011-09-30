@@ -4,7 +4,6 @@ import android.app.ListActivity;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.location.Location;
-import android.location.LocationListener;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.*;
@@ -72,7 +71,7 @@ public class NearbyItemsActivity extends ListActivity {
         Intent i = new Intent().setClass(this, BeerMapActivity.class);
         Item clickedItem = mCachedItems.get(position);
         i.putExtra("item", clickedItem);
-        tracker.trackEvent("Click", "Item", clickedItem.getName(), clickedItem.getID());
+        tracker.trackEvent("Click", "Item", clickedItem.getName(), clickedItem.getItemID());
         startActivity(i);
     }
 
@@ -164,7 +163,7 @@ public class NearbyItemsActivity extends ListActivity {
             Item updatedItem = data.getParcelableExtra("item");
 
             for (Item item : mCachedItems) {
-                if (item.getID() == updatedItem.getID()) {
+                if (item.getItemID() == updatedItem.getItemID()) {
                     item.setPrice(updatedItem.getPrice());
                     item.setUser(User.getInstance());
                     mAdaptor.notifyDataSetChanged();

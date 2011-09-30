@@ -3,26 +3,25 @@ package com.mapitprices.Utilities;
 import android.location.Location;
 import android.os.Build;
 import com.google.android.apps.analytics.GoogleAnalyticsTracker;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.gson.JsonIOException;
-import com.google.gson.JsonParseException;
+import com.google.gson.*;
 import com.google.gson.reflect.TypeToken;
 import com.mapitprices.Compatibility.Base64;
+import com.mapitprices.Model.Foursquare.Venue;
 import com.mapitprices.Model.Item;
+import com.mapitprices.Model.Requests.ReportPriceRequest;
+import com.mapitprices.Model.Responses.MapItResponse;
 import com.mapitprices.Model.Store;
 import com.mapitprices.Model.User;
 import com.mapitprices.WheresTheCheapBeer.Constants;
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Type;
 import java.security.NoSuchAlgorithmException;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 /**
  * Created by IntelliJ IDEA.
@@ -38,14 +37,12 @@ public class MapItPricesServer {
     public static String SERVER_URL = "http://www.mapitprices.com/Beer/";
 
     static {
-        if(Constants.DEBUGMODE && "google_sdk".equals(Build.PRODUCT)) {
+        if (Constants.DEBUGMODE && "google_sdk".equals(Build.PRODUCT)) {
             SERVER_URL = "http://10.0.2.2:61418/Beer/"; //Emulator localhost
-        }else
-        {
+        } else {
             SERVER_URL = "http://www.mapitprices.com/Beer/";
         }
     }
-
 
 
     public static Collection<Item> getItemsFromServer(int storeid) {
@@ -119,7 +116,7 @@ public class MapItPricesServer {
     public static boolean ReportPrice(Item item, Store store, Double newPrice) {
         GoogleAnalyticsTracker.getInstance().trackEvent("ServerCall", "ReportPrice", "Started", 0);
         List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(3);
-        nameValuePairs.add(new BasicNameValuePair("itemid", Integer.toString(item.getID())));
+        nameValuePairs.add(new BasicNameValuePair("itemid", Integer.toString(item.getItemID())));
         nameValuePairs.add(new BasicNameValuePair("storeid", Integer.toString(store.getID())));
         nameValuePairs.add(new BasicNameValuePair("price", Double.toString(newPrice)));
         nameValuePairs.add(new BasicNameValuePair("quantity", Integer.toString(item.getQuantity())));
@@ -205,46 +202,55 @@ public class MapItPricesServer {
         return null;
     }
 
-    public static User login(String username, String password) {
+    public static MapItResponse login(String username, String password) {
         GoogleAnalyticsTracker.getInstance().trackEvent("ServerCall", "Login", "Email/Password", 0);
-        List<NameValuePair> values = new ArrayList<NameValuePair>(2);
-        values.add(new BasicNameValuePair("email", username));
+
+        JSONObject values = new JSONObject();
 
         try {
+            values.put("APIVersion", Constants.APIVERSION);
+            values.put("email", username);
+
             String hashedPassword = Base64.encodeToString(Utils.getHash(password), Base64.DEFAULT);
-            values.add(new BasicNameValuePair("password", hashedPassword));
-            String result = RestClient.ExecuteCommand(SERVER_URL + "Login", values);
+            values.put("password", hashedPassword);
+            String result = RestClient.ExecuteJSONCommand(SERVER_URL + "Login2", values);
 
             Gson gson = createGson();
-            User returnedUser = gson.fromJson(result, User.class);
+            MapItResponse response = gson.fromJson(result, MapItResponse.class);
 
-            return returnedUser;
+            return response;
         } catch (NoSuchAlgorithmException e) {
             e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
         } catch (JsonIOException e) {
             e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+        } catch (JSONException e) {
+            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
         }
 
         return null;
     }
 
-    public static User login(String sessionToken) {
-
+    public static MapItResponse login(String sessionToken) {
         GoogleAnalyticsTracker.getInstance().trackEvent("ServerCall", "Login", sessionToken, 0);
-
-        List<NameValuePair> values = new ArrayList<NameValuePair>();
-        values.add(new BasicNameValuePair("SessionToken", sessionToken));
-        String result = RestClient.ExecuteCommand(SERVER_URL + "Login", values);
+        JSONObject values = new JSONObject();
 
         try {
+            values.put("APIVersion", Constants.APIVERSION);
+            values.put("SessionToken", sessionToken);
+
+            String result = RestClient.ExecuteJSONCommand(SERVER_URL + "Login2", values);
             Gson gson = createGson();
-            User returnedUser = gson.fromJson(result, User.class);
-            return returnedUser;
+            MapItResponse response = gson.fromJson(result, MapItResponse.class);
+            return response;
         } catch (JsonParseException e) {
-            return null;
+            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+        } catch (JSONException e) {
+            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
         }
+
+        return null;
     }
 
     public static Collection<Store> getAllNearbyStoresFromServer(Location loc) {
@@ -254,15 +260,46 @@ public class MapItPricesServer {
         return jsonResultToStoreCollection(result);
     }
 
-    public static User FoursquareLogin() {
+    public static MapItResponse FoursquareLogin() {
         User user = User.getInstance();
         GoogleAnalyticsTracker.getInstance().trackEvent("ServerCall", "FoursquareLogin", user.getUsername(), 0);
-        List<NameValuePair> values = user.ToNameValuePairs();
-        String result = RestClient.ExecuteCommand(SERVER_URL + "FoursquareLogin", values);
+        JSONObject values = new JSONObject();
 
-        Gson gson = new Gson();
-        User returnedUser = gson.fromJson(result, User.class);
+        try {
+            values = user.ToJSON();
+            values.put("APIVersion", Constants.APIVERSION);
+            String result = RestClient.ExecuteJSONCommand(SERVER_URL + "FoursquareLogin", values);
 
-        return returnedUser;
+            Gson gson = createGson();
+            MapItResponse response = gson.fromJson(result, MapItResponse.class);
+
+            return response;
+        } catch (JSONException e) {
+            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+        }
+
+        return null;
+    }
+
+    public static MapItResponse ReportPrice2(Item item, Venue store, Double newPrice) {
+        GoogleAnalyticsTracker.getInstance().trackEvent("ServerCall", "ReportPrice2", "[" + item.getName() + "][" + store.name + "]", 0);
+
+        ReportPriceRequest request = new ReportPriceRequest();
+        request.item = item;
+        request.store = store;
+        request.newprice = newPrice;
+
+        try {
+            Gson gson = createGson();
+            String jsonString = gson.toJson(request);
+            JSONObject data = new JSONObject(jsonString);
+            String result = RestClient.ExecuteJSONCommand(SERVER_URL + "ReportPrice2", data);
+            MapItResponse response = gson.fromJson(result, MapItResponse.class);
+            return response;
+        } catch (JSONException e) {
+            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+        }
+
+        return null;
     }
 }
