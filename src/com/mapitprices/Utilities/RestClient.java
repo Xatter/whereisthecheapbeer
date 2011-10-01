@@ -3,6 +3,7 @@ package com.mapitprices.Utilities;
 import android.util.Log;
 import com.google.android.apps.analytics.GoogleAnalyticsTracker;
 import com.mapitprices.Model.User;
+import com.mapitprices.WheresTheCheapBeer.Constants;
 import org.apache.http.Header;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
@@ -43,7 +44,10 @@ public class RestClient {
 
 //            ResponseHandler responseHandler = new BasicResponseHandler();
             HttpResponse response = httpclient.execute(httppost);
-            GoogleAnalyticsTracker.getInstance().dispatch();
+
+            if (!Constants.DEBUGMODE) {
+                GoogleAnalyticsTracker.getInstance().dispatch();
+            }
 
             HttpEntity entity = response.getEntity();
 
@@ -92,7 +96,10 @@ public class RestClient {
             post.setHeaders(headers.toArray(new Header[0]));
 
             HttpResponse response = httpclient.execute(post);
-            GoogleAnalyticsTracker.getInstance().dispatch();
+            if (!Constants.DEBUGMODE) {
+                GoogleAnalyticsTracker.getInstance().dispatch();
+            }
+
 
             HttpEntity entity = response.getEntity();
 
@@ -167,6 +174,11 @@ public class RestClient {
         }
 
         return null;
+    }
+
+
+    public static String ExecuteCommand(String url) {
+        return ExecuteCommand(url, null);
     }
 
     private static String convertStreamToString(InputStream in) {

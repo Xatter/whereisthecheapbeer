@@ -50,7 +50,7 @@ public class MapItPricesServer {
         List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(1);
         nameValuePairs.add(new BasicNameValuePair("StoreID", Integer.toString((storeid))));
 
-        String result = RestClient.ExecuteCommand(SERVER_URL + "GetAllItemsAtStore", nameValuePairs);
+        String result = RestClient.ExecuteCommand(SERVER_URL + "GetAllItemsAtStore2", nameValuePairs);
 
         return jsonResultToItemCollection(result);
     }
@@ -109,14 +109,14 @@ public class MapItPricesServer {
 
     public static Collection<Item> getAllItems(GoogleAnalyticsTracker tracker) {
         GoogleAnalyticsTracker.getInstance().trackEvent("ServerCall", "GetAllItems", "", 0);
-        String result = RestClient.ExecuteCommand(SERVER_URL + "GetAllItems");
+        String result = RestClient.ExecuteCommand(SERVER_URL + "GetAllItems2");
         return jsonResultToItemCollection(result);
     }
 
     public static boolean ReportPrice(Item item, Store store, Double newPrice) {
         GoogleAnalyticsTracker.getInstance().trackEvent("ServerCall", "ReportPrice", "Started", 0);
         List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(3);
-        nameValuePairs.add(new BasicNameValuePair("itemid", Integer.toString(item.getItemID())));
+        nameValuePairs.add(new BasicNameValuePair("itemid", Integer.toString(item.getItemId())));
         nameValuePairs.add(new BasicNameValuePair("storeid", Integer.toString(store.getID())));
         nameValuePairs.add(new BasicNameValuePair("price", Double.toString(newPrice)));
         nameValuePairs.add(new BasicNameValuePair("quantity", Integer.toString(item.getQuantity())));
@@ -162,9 +162,9 @@ public class MapItPricesServer {
     }
 
     public static Store getStore(Item i) {
-        GoogleAnalyticsTracker.getInstance().trackEvent("ServerCall", "GetStore", "StoreID", i.getStoreID());
+        GoogleAnalyticsTracker.getInstance().trackEvent("ServerCall", "GetStore", "StoreID", i.getStoreId());
         List<NameValuePair> values = new ArrayList<NameValuePair>(1);
-        values.add(new BasicNameValuePair("storeid", Integer.toString(i.getStoreID())));
+        values.add(new BasicNameValuePair("storeid", Integer.toString(i.getStoreId())));
         String result = RestClient.ExecuteCommand(SERVER_URL + "GetStore", values);
 
         GsonBuilder builder = new GsonBuilder();

@@ -14,13 +14,13 @@ import java.util.List;
 // Currently this object is overloaded as both the representation of an Item AND a StoreItem
 // from the database's perspective.
 public class Item implements Parcelable {
-    int ItemID;
+    int ItemId;
     String Name;
     String UPC;
     String Size;
     String Brand;
     double Price;
-    int StoreID;
+    int StoreId;
     int Quantity;
     Date LastUpdated;
     User User;
@@ -30,18 +30,18 @@ public class Item implements Parcelable {
     }
 
     public Item(Parcel in) {
-        ItemID = in.readInt();
+        ItemId = in.readInt();
         Name = in.readString();
         UPC = in.readString();
         Size = in.readString();
         Brand = in.readString();
         Price = in.readDouble();
         Quantity = in.readInt();
-        StoreID = in.readInt();
+        StoreId = in.readInt();
     }
 
-    public int getItemID() {
-        return ItemID;
+    public int getItemId() {
+        return ItemId;
     }
 
     public String getName() {
@@ -70,19 +70,19 @@ public class Item implements Parcelable {
     }
 
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeInt(ItemID);
+        dest.writeInt(ItemId);
         dest.writeString(Name);
         dest.writeString(UPC);
         dest.writeString(Size);
         dest.writeString(Brand);
         dest.writeDouble(Price);
         dest.writeInt(Quantity);
-        dest.writeInt(StoreID);
+        dest.writeInt(StoreId);
     }
 
     public List<NameValuePair> toNameValuePairs() {
         List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(8);
-        nameValuePairs.add(new BasicNameValuePair("ItemID", Integer.toString(ItemID)));
+        nameValuePairs.add(new BasicNameValuePair("ItemId", Integer.toString(ItemId)));
         nameValuePairs.add(new BasicNameValuePair("Name", Name));
         nameValuePairs.add(new BasicNameValuePair("UPC", UPC));
         nameValuePairs.add(new BasicNameValuePair("Size", Size));
@@ -135,8 +135,8 @@ public class Item implements Parcelable {
         return Quantity;
     }
 
-    public int getStoreID() {
-        return StoreID;
+    public int getStoreId() {
+        return StoreId;
     }
 
     public String getLastUpdated() {

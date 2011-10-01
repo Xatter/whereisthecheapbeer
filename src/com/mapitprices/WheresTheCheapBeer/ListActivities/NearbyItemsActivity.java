@@ -71,7 +71,7 @@ public class NearbyItemsActivity extends ListActivity {
         Intent i = new Intent().setClass(this, BeerMapActivity.class);
         Item clickedItem = mCachedItems.get(position);
         i.putExtra("item", clickedItem);
-        tracker.trackEvent("Click", "Item", clickedItem.getName(), clickedItem.getItemID());
+        tracker.trackEvent("Click", "Item", clickedItem.getName(), clickedItem.getItemId());
         startActivity(i);
     }
 
@@ -163,7 +163,7 @@ public class NearbyItemsActivity extends ListActivity {
             Item updatedItem = data.getParcelableExtra("item");
 
             for (Item item : mCachedItems) {
-                if (item.getItemID() == updatedItem.getItemID()) {
+                if (item.getItemId() == updatedItem.getItemId()) {
                     item.setPrice(updatedItem.getPrice());
                     item.setUser(User.getInstance());
                     mAdaptor.notifyDataSetChanged();

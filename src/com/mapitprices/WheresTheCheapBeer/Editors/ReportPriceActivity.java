@@ -185,7 +185,7 @@ public class ReportPriceActivity extends Activity {
 
             if (!abort) {
                 MapItResponse response = MapItPricesServer.ReportPrice2(mItem, mVenue, newPrice);
-                if (response.Meta.Code.equals("200")) {
+                if (response.Meta.Code.startsWith("20")) {
                     mItem.setPrice(newPrice);
 
                     tracker.trackEvent(
@@ -215,13 +215,14 @@ public class ReportPriceActivity extends Activity {
             case RC_SELECT_ITEM:
                 if (resultCode == RESULT_OK) {
                     Bundle b = data.getExtras();
-                    setItem((Item) b.getParcelable("item"));
+                    mItem = b.getParcelable("item");
+                    setItem(mItem);
 
                     tracker.trackEvent(
                             "ReportPrice",
                             "ItemSelected",
                             mItem.getName(),
-                            mItem.getItemID());
+                            mItem.getItemId());
 
                     if (mVenue == null && mStore == null) {
                         selectStore();
@@ -231,7 +232,8 @@ public class ReportPriceActivity extends Activity {
             case 1:
                 if (resultCode == RESULT_OK) {
                     Bundle b = data.getExtras();
-                    setStore((Venue) b.getParcelable("store"));
+                    mVenue = b.getParcelable("venue");
+                    setStore(mVenue);
 
                     tracker.trackEvent(
                             "ReportPrice",
