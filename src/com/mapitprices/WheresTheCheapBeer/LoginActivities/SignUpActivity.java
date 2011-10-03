@@ -10,6 +10,7 @@ import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 import com.google.android.apps.analytics.GoogleAnalyticsTracker;
+import com.mapitprices.Model.Responses.MapItResponse;
 import com.mapitprices.Model.User;
 import com.mapitprices.Utilities.MapItPricesServer;
 import com.mapitprices.Utilities.Utils;
@@ -49,26 +50,31 @@ public class SignUpActivity extends Activity {
 
             ProgressDialog pd = Utils.createProgressDialog(this, "Creating your account...");
             pd.show();
-            User returned = MapItPricesServer.createNewUser(User.getInstance(), password);
+            MapItResponse returned = MapItPricesServer.createNewUser(User.getInstance(), password);
             pd.dismiss();
 
             if (returned != null) {
-                User.getInstance().setSessionToken(returned.getSessionToken());
+                if (returned.Meta.Code.startsWith("20")) {
+                    User returnedUser = returned.Response.user;
+                    User.getInstance().setSessionToken(returnedUser.getSessionToken());
 
-                SharedPreferences settings = getSharedPreferences("BeerPreferences", 0);
-                SharedPreferences.Editor editor = settings.edit();
-                editor.putString("SessionToken", User.getInstance().getSessionToken());
-                editor.putString("User.Email", User.getInstance().getEmail());
-                editor.commit();
+                    SharedPreferences settings = getSharedPreferences("BeerPreferences", 0);
+                    SharedPreferences.Editor editor = settings.edit();
+                    editor.putString("SessionToken", User.getInstance().getSessionToken());
+                    editor.putString("User.Email", User.getInstance().getEmail());
+                    editor.commit();
 
-                Toast.makeText(this, "Success!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, "Success!", Toast.LENGTH_SHORT).show();
 
-                Intent i = new Intent().setClass(this, HomeScreenActivity.class);
-                startActivity(i);
-                setResult(RESULT_OK);
-                finish();
+                    Intent i = new Intent().setClass(this, HomeScreenActivity.class);
+                    startActivity(i);
+                    setResult(RESULT_OK);
+                    finish();
+                } else {
+                    Toast.makeText(this, returned.Meta.ErrorMessage, Toast.LENGTH_LONG).show();
+                }
             } else {
-                Toast.makeText(this, "Something went wrong :(", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "I didn't understand the response from the server. I think he's been drinking. Please try again later.", Toast.LENGTH_SHORT).show();
             }
         }
     }

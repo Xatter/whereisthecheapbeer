@@ -56,7 +56,7 @@ public class FoursquareServer {
                 "ll=" + Double.toString(lat) + "," + Double.toString(lng) +
                 "&client_id=V3DOEGUQF250ZTEFXUO24TUX4XND0YY5UN0F1L23R54B22QO" +
                 "&client_secret=32D1HGRL51TBIQRNBAO35A5JPLHWYDSQXLLAYFO5M0RUPHL5" +
-                "&categoryId=4d4b7105d754a06376d81259" +
+//                "&categoryId=4d4b7105d754a06376d81259" +
                 "&v=20110925";
 
         String result = RestClient.ExecuteGetCommand(requestURL);

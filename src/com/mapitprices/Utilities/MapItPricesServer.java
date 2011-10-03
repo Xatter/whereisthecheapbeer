@@ -70,7 +70,6 @@ public class MapItPricesServer {
 
     public static MapItResponse getNearbyPrices(Location loc) {
         GoogleAnalyticsTracker.getInstance().trackEvent("ServerCall", "getNearbyPrices", "", 0);
-        List<NameValuePair> nameValuePairs = Utils.locationToNameValuePair(loc);
         JSONObject data = new JSONObject();
 
         if (loc != null) {
@@ -205,22 +204,27 @@ public class MapItPricesServer {
         return null;
     }
 
-    public static User createNewUser(User i, String password) {
+    public static MapItResponse createNewUser(User i, String password) {
         GoogleAnalyticsTracker.getInstance().trackEvent("ServerCall", "CreateUser", "newuser", 0);
-        List<NameValuePair> values = new ArrayList<NameValuePair>(2);
-        values.add(new BasicNameValuePair("email", i.getEmail()));
-        values.add(new BasicNameValuePair("username", i.getUsername()));
+
+        JSONObject values = new JSONObject();
         try {
+            values.put("email", i.getEmail());
+            values.put("username", i.getUsername());
+
             String hashedPassword = Base64.encodeToString(Utils.getHash(password), Base64.DEFAULT);
-            values.add(new BasicNameValuePair("password", hashedPassword));
-            String result = RestClient.ExecuteCommand(SERVER_URL + "CreateUser", values);
+            values.put("password", hashedPassword);
+            String result = RestClient.ExecuteJSONCommand(SERVER_URL + "CreateUser2", values);
             Gson gson = createGson();
-            return gson.fromJson(result, User.class);
+            MapItResponse response = gson.fromJson(result, MapItResponse.class);
+            return response;
         } catch (NoSuchAlgorithmException e) {
             e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
         } catch (JsonIOException e) {
+            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+        } catch (JSONException e) {
             e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
         }
 

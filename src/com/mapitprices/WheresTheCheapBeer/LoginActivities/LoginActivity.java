@@ -12,6 +12,7 @@ import android.widget.Toast;
 import com.google.android.apps.analytics.GoogleAnalyticsTracker;
 import com.mapitprices.Model.Responses.MapItResponse;
 import com.mapitprices.Model.User;
+import com.mapitprices.Utilities.FoursquareServer;
 import com.mapitprices.Utilities.MapItPricesServer;
 import com.mapitprices.Utilities.Utils;
 import com.mapitprices.WheresTheCheapBeer.HomeScreenActivity;
@@ -27,6 +28,8 @@ import com.mapitprices.WheresTheCheapBeer.R;
 public class LoginActivity extends Activity {
 
     GoogleAnalyticsTracker tracker;
+
+    private static final int RC_FOURSQUARE_SIGNUP = 2;
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -45,6 +48,41 @@ public class LoginActivity extends Activity {
         if (email != null && email.length() != 0
                 && password != null && password.length() != 0) {
             new LoginTask().execute(email, password);
+        }
+    }
+
+    public void foursquare_signin(View v) {
+        tracker.trackEvent("Click", "Foursquare_Login", "", 0);
+        Intent i = new Intent().setClass(this, ActivityWebView.class);
+        startActivityForResult(i, RC_FOURSQUARE_SIGNUP);
+    }
+
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == RC_FOURSQUARE_SIGNUP) {
+            if (resultCode == RESULT_OK) {
+                com.mapitprices.Model.Foursquare.User fqUser = FoursquareServer.getUserInfo();
+                if (fqUser != null) {
+                    User user = User.getInstance();
+
+                    user.setUsername(fqUser.firstName + " " + fqUser.lastName);
+                    user.setEmail(fqUser.contact.email);
+
+                    MapItResponse response = MapItPricesServer.FoursquareLogin();
+                    if (response.Meta.Code.equals("200")) {
+                        User returnedUser = response.Response.user;
+                        user.setID(returnedUser.getID());
+                        user.setUsername(returnedUser.getUsername());
+
+                        Intent i = new Intent().setClass(this, HomeScreenActivity.class);
+                        startActivity(i);
+                        finish();
+                    }
+                } else {
+                    // not authenticated
+                }
+            }
         }
     }
 
@@ -73,8 +111,7 @@ public class LoginActivity extends Activity {
                 e.printStackTrace();
             }
 
-            if(response.Meta.Code.equals("200"))
-            {
+            if (response.Meta.Code.equals("200")) {
                 User user = response.Response.user;
                 Intent i;
                 if (user != null && user.getSessionToken() != null) {
@@ -98,9 +135,7 @@ public class LoginActivity extends Activity {
                     setResult(RESULT_CANCELED);
                     finish();
                 }
-            }
-            else
-            {
+            } else {
                 Toast.makeText(LoginActivity.this, response.Meta.ErrorMessage, Toast.LENGTH_LONG).show();
 
                 // Invalid login, clear password field.
