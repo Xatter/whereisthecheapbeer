@@ -50,8 +50,7 @@ public class FoursquareServer {
         }
     }
 
-    public static Venue[] getVenues(double lat, double lng)
-    {
+    public static Venue[] getVenues(double lat, double lng) {
         String requestURL = FoursquareURL +
                 "/venues/search?" +
                 "ll=" + Double.toString(lat) + "," + Double.toString(lng) +
@@ -78,9 +77,8 @@ public class FoursquareServer {
                 "venueId=" + venueid +
                 "&oauth_token=" + com.mapitprices.Model.User.getInstance().getFoursquareToken();
 
-        if(location != null)
-        {
-            requestURL+="ll=" + location.getLatitude() + "," + location.getLongitude();
+        if (location != null) {
+            requestURL += "&ll=" + location.getLatitude() + "," + location.getLongitude();
         }
 
         Gson gson = new Gson();

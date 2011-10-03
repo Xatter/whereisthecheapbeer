@@ -99,8 +99,7 @@ public class ReportPriceActivity extends Activity {
                     setStore(mStore);
                 } else {
                     MapItResponse response = MapItPricesServer.getStore(mItem);
-                    if(response.Meta.Code.startsWith("20"))
-                    {
+                    if (response.Meta.Code.startsWith("20")) {
                         mStore = response.Response.store;
                     }
                     setStore(mStore);
@@ -209,8 +208,7 @@ public class ReportPriceActivity extends Activity {
             }
 
             if (!abort) {
-                if(mVenue == null)
-                {
+                if (mVenue == null) {
                     mVenue = new Venue();
                     mVenue.id = mStore.FoursquareVenueID;
                 }
@@ -238,19 +236,15 @@ public class ReportPriceActivity extends Activity {
                             RC_SELECT_ITEM);
                 }
 
-                if(ShouldCheckinWithFoursquare())
-                {
+                if (ShouldCheckinWithFoursquare()) {
                     com.mapitprices.Model.User currentUser = com.mapitprices.Model.User.getInstance();
-                    if(currentUser.getFoursquareToken() != null && !currentUser.getFoursquareToken().isEmpty())
-                    {
+                    if (currentUser.getFoursquareToken() != null && !currentUser.getFoursquareToken().isEmpty()) {
                         CheckinWithFoursquareAndTerminate();
-                    }else{
+                    } else {
                         Intent i = new Intent().setClass(this, ActivityWebView.class);
                         startActivityForResult(i, RC_AUTHENTICATE_FOURSQUARE_FOR_CHECKIN);
                     }
-                }
-                else
-                {
+                } else {
                     finish();
                 }
             }
@@ -263,14 +257,14 @@ public class ReportPriceActivity extends Activity {
     }
 
     private void CheckinWithFoursquareAndTerminate() {
-        if(mVenue != null)
-        {
+        if (mVenue != null) {
             FoursquareResponse response = FoursquareServer.Checkin(mLocationThing.getLastFix(), mVenue.id);
-            if(response.meta.code.startsWith("20"))
-            {
+            if (response.meta.code.startsWith("20")) {
                 Toast.makeText(this, response.notifications[1].item.message, Toast.LENGTH_SHORT).show();
+            } else if (response.meta.code.startsWith("40")) {
+                Toast.makeText(this, "Couldn't authenticate with Foursquare :(", Toast.LENGTH_SHORT).show();
             }
-            tracker.trackEvent("ReportPrice", "FoursquareCheckin", mVenue.name,0);
+            tracker.trackEvent("ReportPrice", "FoursquareCheckin", mVenue.name, 0);
         }
 
         finish();
