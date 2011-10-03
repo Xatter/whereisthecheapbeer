@@ -16,6 +16,7 @@ public class Store implements Parcelable {
     double Latitude;
     double Longitude;
     double Distance;
+    public String FoursquareVenueID;
 
     public Store() {
 

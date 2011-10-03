@@ -15,4 +15,5 @@ public class Response {
     public User user;
     public Item[] items;
     public Store[] stores;
+    public Store store;
 }

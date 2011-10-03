@@ -44,7 +44,7 @@ public class VenueResultAdapter extends ArrayAdapter<Venue> {
         tvName.setText(i.name);
 
         TextView tvDistance = (TextView) v.findViewById(R.id.store_row_distance);
-        DecimalFormat formatter = new DecimalFormat("#.## mi");
+        DecimalFormat formatter = new DecimalFormat("#.## meters");
         String distanceString = formatter.format(i.location.distance);
         tvDistance.setText(distanceString);
 

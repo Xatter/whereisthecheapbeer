@@ -1,5 +1,6 @@
 package com.mapitprices.Utilities;
 
+import android.location.Location;
 import com.google.gson.Gson;
 import com.mapitprices.Model.Foursquare.FoursquareResponse;
 import com.mapitprices.Model.Foursquare.User;
@@ -69,5 +70,22 @@ public class FoursquareServer {
         } else {
             return null;
         }
+    }
+
+    public static FoursquareResponse Checkin(Location location, String venueid) {
+        String requestURL = FoursquareURL +
+                "/checkins/add?" +
+                "venueId=" + venueid +
+                "&oauth_token=" + com.mapitprices.Model.User.getInstance().getFoursquareToken();
+
+        if(location != null)
+        {
+            requestURL+="ll=" + location.getLatitude() + "," + location.getLongitude();
+        }
+
+        Gson gson = new Gson();
+        String result = RestClient.ExecuteCommand(requestURL);
+        FoursquareResponse response = gson.fromJson(result, FoursquareResponse.class);
+        return response;
     }
 }

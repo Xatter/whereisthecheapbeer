@@ -44,8 +44,8 @@ public class MapItPricesServer {
 
     static {
         if (Constants.DEBUGMODE && "google_sdk".equals(Build.PRODUCT)) {
-            //SERVER_URL = "http://10.0.2.2:61418/Beer/"; //Emulator localhost
-            SERVER_URL = "http://172.16.210.128:61418//Beer/"; //Mac Laptop windows IP
+            SERVER_URL = "http://10.0.2.2:61418/Beer/"; //Emulator localhost
+            //SERVER_URL = "http://172.16.210.128:61418//Beer/"; //Mac Laptop windows IP
         } else {
             SERVER_URL = "http://www.mapitprices.com/Beer/";
         }
@@ -68,12 +68,24 @@ public class MapItPricesServer {
         return null;
     }
 
-    public static Collection<Item> getNearbyPrices(Location loc) {
+    public static MapItResponse getNearbyPrices(Location loc) {
         GoogleAnalyticsTracker.getInstance().trackEvent("ServerCall", "getNearbyPrices", "", 0);
         List<NameValuePair> nameValuePairs = Utils.locationToNameValuePair(loc);
-        String result = RestClient.ExecuteCommand(SERVER_URL + "GetItemPrices", nameValuePairs);
+        JSONObject data = new JSONObject();
 
-        return jsonResultToItemCollection(result);
+        if (loc != null) {
+            try {
+                data.put("Latitude", loc.getLatitude());
+                data.put("Longitude", loc.getLongitude());
+            } catch (JSONException e) {
+                e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+            }
+        }
+
+        String result = RestClient.ExecuteJSONCommand(SERVER_URL + "GetItemPrices2", data);
+        Gson gson = createGson();
+        MapItResponse response = gson.fromJson(result, MapItResponse.class);
+        return response;
     }
 
     public static Collection<Store> getNearbyStoresWithPricesFromServer(Location loc) {
@@ -174,23 +186,23 @@ public class MapItPricesServer {
         return gson;
     }
 
-    public static Store getStore(Item i) {
+    public static MapItResponse getStore(Item i) {
         GoogleAnalyticsTracker.getInstance().trackEvent("ServerCall", "GetStore", "StoreID", i.getStoreId());
-        List<NameValuePair> values = new ArrayList<NameValuePair>(1);
-        values.add(new BasicNameValuePair("storeid", Integer.toString(i.getStoreId())));
-        String result = RestClient.ExecuteCommand(SERVER_URL + "GetStore", values);
 
-        GsonBuilder builder = new GsonBuilder();
-        builder.registerTypeAdapter(Date.class, new DotNetGsonDateTimeDeserializer());
-
-        Gson gson = builder.create();
-
+        JSONObject values = new JSONObject();
         try {
-            return gson.fromJson(result, Store.class);
+            values.put("StoreId", i.getStoreId());
+            String result = RestClient.ExecuteJSONCommand(SERVER_URL + "GetStore2", values);
+
+            Gson gson = createGson();
+            return gson.fromJson(result, MapItResponse.class);
+        } catch (JSONException e) {
+            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
         } catch (JsonParseException e) {
             e.printStackTrace();
-            return null;
         }
+
+        return null;
     }
 
     public static User createNewUser(User i, String password) {
@@ -294,7 +306,7 @@ public class MapItPricesServer {
         return null;
     }
 
-    public static MapItResponse ReportPrice2(Item item, Venue store, Double newPrice) {
+    public static MapItResponse ReportPrice2(Item item, Venue store, Double newPrice, Location location) {
         GoogleAnalyticsTracker.getInstance().trackEvent("ServerCall", "ReportPrice2", "[" + item.getName() + "][" + store.name + "]", 0);
 
         ReportPriceRequest request = new ReportPriceRequest();
@@ -306,6 +318,10 @@ public class MapItPricesServer {
             Gson gson = createGson();
             String jsonString = gson.toJson(request);
             JSONObject data = new JSONObject(jsonString);
+            if (location != null) {
+                data.put("lat", location.getLatitude());
+                data.put("lng", location.getLongitude());
+            }
             String result = RestClient.ExecuteJSONCommand(SERVER_URL + "ReportPrice2", data);
             MapItResponse response = gson.fromJson(result, MapItResponse.class);
             return response;

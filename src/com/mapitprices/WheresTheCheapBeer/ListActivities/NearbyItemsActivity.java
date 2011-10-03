@@ -14,6 +14,7 @@ import com.google.android.apps.analytics.GoogleAnalyticsTracker;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 import com.mapitprices.Model.Item;
+import com.mapitprices.Model.Responses.MapItResponse;
 import com.mapitprices.Model.User;
 import com.mapitprices.Utilities.ItemResultAdapter;
 import com.mapitprices.Utilities.MapItPricesServer;
@@ -26,8 +27,7 @@ import com.mapitprices.WheresTheCheapBeer.R;
 import com.mapitprices.WheresTheCheapBeer.SearchActivity;
 import com.mapitprices.WheresTheCheapBeer.SettingsActivity;
 
-import java.util.ArrayList;
-import java.util.Collection;
+import java.util.*;
 
 /**
  * Created by IntelliJ IDEA.
@@ -182,7 +182,7 @@ public class NearbyItemsActivity extends ListActivity {
         return true;
     }
 
-    private class GetLocationTask extends AsyncTask<Location, Void, Collection<Item>> {
+    private class GetLocationTask extends AsyncTask<Location, Void, MapItResponse> {
         ProgressDialog _progressDialog;
 
         GetLocationTask() {
@@ -195,19 +195,23 @@ public class NearbyItemsActivity extends ListActivity {
         }
 
         @Override
-        protected Collection<Item> doInBackground(Location... params) {
+        protected MapItResponse doInBackground(Location... params) {
             Location loc = params[0];
             return MapItPricesServer.getNearbyPrices(loc);
         }
 
         @Override
-        protected void onPostExecute(Collection<Item> result) {
+        protected void onPostExecute(MapItResponse result) {
             _progressDialog.dismiss();
 
             if (result != null) {
-                mCachedItems.clear();
-                mCachedItems.addAll(result);
-                mAdaptor.notifyDataSetChanged();
+                if(result.Meta.Code.startsWith("20"))
+                {
+                    mCachedItems.clear();
+                    List<Item> items = Arrays.asList(result.Response.items);
+                    mCachedItems.addAll(items);
+                    mAdaptor.notifyDataSetChanged();
+                }
             }
         }
     }

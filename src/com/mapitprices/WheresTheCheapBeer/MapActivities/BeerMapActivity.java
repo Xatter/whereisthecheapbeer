@@ -10,6 +10,7 @@ import android.view.MenuItem;
 import com.google.android.apps.analytics.GoogleAnalyticsTracker;
 import com.google.android.maps.*;
 import com.mapitprices.Model.Item;
+import com.mapitprices.Model.Responses.MapItResponse;
 import com.mapitprices.Model.Store;
 import com.mapitprices.Utilities.MapItPricesServer;
 import com.mapitprices.Utilities.Utils;
@@ -55,7 +56,12 @@ public class BeerMapActivity extends MapActivity {
         if (intent != null) {
             _item = intent.getParcelableExtra("item");
             if (_item != null) {
-                _store = MapItPricesServer.getStore(_item);
+                MapItResponse response = MapItPricesServer.getStore(_item);
+                if(response.Meta.Code.startsWith("20"))
+                {
+                    _store = response.Response.store;
+                }
+
                 if (_store != null) {
                     GeoPoint point;
                     OverlayItem overlayitem;

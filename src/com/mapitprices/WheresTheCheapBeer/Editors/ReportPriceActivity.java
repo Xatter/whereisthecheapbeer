@@ -5,16 +5,21 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Toast;
 import com.google.android.apps.analytics.GoogleAnalyticsTracker;
+import com.mapitprices.Model.Foursquare.FoursquareResponse;
 import com.mapitprices.Model.Foursquare.Venue;
 import com.mapitprices.Model.Item;
 import com.mapitprices.Model.Responses.MapItResponse;
 import com.mapitprices.Model.Store;
+import com.mapitprices.Utilities.FoursquareServer;
 import com.mapitprices.Utilities.MapItPricesServer;
+import com.mapitprices.Utilities.MyLocationThing;
 import com.mapitprices.WheresTheCheapBeer.ListActivities.SelectItemActivity;
 import com.mapitprices.WheresTheCheapBeer.ListActivities.SelectStoreActivity;
+import com.mapitprices.WheresTheCheapBeer.LoginActivities.ActivityWebView;
 import com.mapitprices.WheresTheCheapBeer.R;
 
 /**
@@ -27,18 +32,34 @@ import com.mapitprices.WheresTheCheapBeer.R;
 public class ReportPriceActivity extends Activity {
     public static final int RC_SELECT_ITEM = 0;
     public static final int RC_SELECT_STORE = 1;
+    public static final int RC_AUTHENTICATE_FOURSQUARE_FOR_CHECKIN = 2;
 
     Venue mVenue;
     Store mStore;
     Item mItem;
 
     GoogleAnalyticsTracker tracker;
+    MyLocationThing mLocationThing;
+
+    @Override
+    protected void onResume() {
+        mLocationThing.enableMyLocation();
+        super.onResume();    //To change body of overridden methods use File | Settings | File Templates.
+    }
+
+    @Override
+    protected void onPause() {
+        mLocationThing.disableMyLocation();
+        super.onPause();    //To change body of overridden methods use File | Settings | File Templates.
+    }
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.report_price_layout);
 
         tracker = GoogleAnalyticsTracker.getInstance();
+        mLocationThing = new MyLocationThing(this);
+        mLocationThing.enableMyLocation();
 
         tracker.trackEvent(
                 "ReportPrice",
@@ -77,7 +98,11 @@ public class ReportPriceActivity extends Activity {
                 } else if (mStore != null) {
                     setStore(mStore);
                 } else {
-                    mStore = MapItPricesServer.getStore(mItem);
+                    MapItResponse response = MapItPricesServer.getStore(mItem);
+                    if(response.Meta.Code.startsWith("20"))
+                    {
+                        mStore = response.Response.store;
+                    }
                     setStore(mStore);
                 }
             }
@@ -184,7 +209,14 @@ public class ReportPriceActivity extends Activity {
             }
 
             if (!abort) {
-                MapItResponse response = MapItPricesServer.ReportPrice2(mItem, mVenue, newPrice);
+                if(mVenue == null)
+                {
+                    mVenue = new Venue();
+                    mVenue.id = mStore.FoursquareVenueID;
+                }
+
+                MapItResponse response = MapItPricesServer.ReportPrice2(mItem, mVenue, newPrice, mLocationThing.getLastFix());
+
                 if (response.Meta.Code.startsWith("20")) {
                     mItem.setPrice(newPrice);
 
@@ -197,7 +229,7 @@ public class ReportPriceActivity extends Activity {
                     Intent data = new Intent();
                     data.putExtra("item", mItem);
                     setResult(RESULT_OK, data);
-                    finish();
+
                 } else {
                     tracker.trackEvent(
                             "ReportPrice",
@@ -205,8 +237,43 @@ public class ReportPriceActivity extends Activity {
                             "Failed",
                             RC_SELECT_ITEM);
                 }
+
+                if(ShouldCheckinWithFoursquare())
+                {
+                    com.mapitprices.Model.User currentUser = com.mapitprices.Model.User.getInstance();
+                    if(currentUser.getFoursquareToken() != null && !currentUser.getFoursquareToken().isEmpty())
+                    {
+                        CheckinWithFoursquareAndTerminate();
+                    }else{
+                        Intent i = new Intent().setClass(this, ActivityWebView.class);
+                        startActivityForResult(i, RC_AUTHENTICATE_FOURSQUARE_FOR_CHECKIN);
+                    }
+                }
+                else
+                {
+                    finish();
+                }
             }
         }
+    }
+
+    private boolean ShouldCheckinWithFoursquare() {
+        CheckBox foursquare = (CheckBox) findViewById(R.id.checkin_with_foursquare);
+        return foursquare.isChecked();
+    }
+
+    private void CheckinWithFoursquareAndTerminate() {
+        if(mVenue != null)
+        {
+            FoursquareResponse response = FoursquareServer.Checkin(mLocationThing.getLastFix(), mVenue.id);
+            if(response.meta.code.startsWith("20"))
+            {
+                Toast.makeText(this, response.notifications[1].item.message, Toast.LENGTH_SHORT).show();
+            }
+            tracker.trackEvent("ReportPrice", "FoursquareCheckin", mVenue.name,0);
+        }
+
+        finish();
     }
 
     @Override
@@ -229,7 +296,7 @@ public class ReportPriceActivity extends Activity {
                     }
                 }
                 break;
-            case 1:
+            case RC_SELECT_STORE:
                 if (resultCode == RESULT_OK) {
                     Bundle b = data.getExtras();
                     mVenue = b.getParcelable("venue");
@@ -241,6 +308,9 @@ public class ReportPriceActivity extends Activity {
                             mVenue.name,
                             0);
                 }
+                break;
+            case RC_AUTHENTICATE_FOURSQUARE_FOR_CHECKIN:
+                CheckinWithFoursquareAndTerminate();
                 break;
             default:
                 break;
