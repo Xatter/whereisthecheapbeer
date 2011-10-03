@@ -7,8 +7,10 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
+import android.widget.Toast;
 import com.google.android.apps.analytics.GoogleAnalyticsTracker;
 import com.mapitprices.Model.Item;
+import com.mapitprices.Model.Responses.MapItResponse;
 import com.mapitprices.Model.Store;
 import com.mapitprices.Utilities.ItemResultAdapter;
 import com.mapitprices.Utilities.MapItPricesServer;
@@ -16,8 +18,7 @@ import com.mapitprices.Utilities.Utils;
 import com.mapitprices.WheresTheCheapBeer.R;
 
 import java.text.DecimalFormat;
-import java.util.ArrayList;
-import java.util.Collection;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -61,7 +62,7 @@ public class StoreItemsActivity extends ListActivity {
         }
     }
 
-    private class GetItemsTask extends AsyncTask<String, Void, Collection<Item>> {
+    private class GetItemsTask extends AsyncTask<String, Void, MapItResponse> {
         private ProgressDialog _progressDialog;
 
         GetItemsTask() {
@@ -74,19 +75,23 @@ public class StoreItemsActivity extends ListActivity {
         }
 
         @Override
-        protected Collection<Item> doInBackground(String... strings) {
+        protected MapItResponse doInBackground(String... strings) {
             return MapItPricesServer.getItemsFromServer(_store.getID());
         }
 
         @Override
-        protected void onPostExecute(Collection<Item> items) {
+        protected void onPostExecute(MapItResponse response) {
             _progressDialog.dismiss();
 
-            List<Item> itemList = new ArrayList<Item>(items);
+            if (response != null) {
 
-            if (items != null) {
-                ArrayAdapter<Item> adapter = new ItemResultAdapter(StoreItemsActivity.this, R.id.item_row_name, itemList);
-                setListAdapter(adapter);
+                if (response.Meta.Code.startsWith("20")) {
+                    List<Item> itemList = Arrays.asList(response.Response.items);
+                    ArrayAdapter<Item> adapter = new ItemResultAdapter(StoreItemsActivity.this, R.id.item_row_name, itemList);
+                    setListAdapter(adapter);
+                } else {
+                    Toast.makeText(StoreItemsActivity.this, response.Meta.ErrorMessage, Toast.LENGTH_LONG).show();
+                }
             }
         }
     }

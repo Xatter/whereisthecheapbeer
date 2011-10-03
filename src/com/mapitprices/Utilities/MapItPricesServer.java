@@ -3,7 +3,10 @@ package com.mapitprices.Utilities;
 import android.location.Location;
 import android.os.Build;
 import com.google.android.apps.analytics.GoogleAnalyticsTracker;
-import com.google.gson.*;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonIOException;
+import com.google.gson.JsonParseException;
 import com.google.gson.reflect.TypeToken;
 import com.mapitprices.Compatibility.Base64;
 import com.mapitprices.Model.Foursquare.Venue;
@@ -21,7 +24,10 @@ import org.json.JSONObject;
 import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Type;
 import java.security.NoSuchAlgorithmException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Date;
+import java.util.List;
 
 /**
  * Created by IntelliJ IDEA.
@@ -38,21 +44,28 @@ public class MapItPricesServer {
 
     static {
         if (Constants.DEBUGMODE && "google_sdk".equals(Build.PRODUCT)) {
-            SERVER_URL = "http://10.0.2.2:61418/Beer/"; //Emulator localhost
+            //SERVER_URL = "http://10.0.2.2:61418/Beer/"; //Emulator localhost
+            SERVER_URL = "http://172.16.210.128:61418//Beer/"; //Mac Laptop windows IP
         } else {
             SERVER_URL = "http://www.mapitprices.com/Beer/";
         }
     }
 
-
-    public static Collection<Item> getItemsFromServer(int storeid) {
+    public static MapItResponse getItemsFromServer(int storeid) {
         GoogleAnalyticsTracker.getInstance().trackEvent("ServerCall", "getItemsFromServer", "StoreID", storeid);
-        List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(1);
-        nameValuePairs.add(new BasicNameValuePair("StoreID", Integer.toString((storeid))));
 
-        String result = RestClient.ExecuteCommand(SERVER_URL + "GetAllItemsAtStore2", nameValuePairs);
+        JSONObject values = new JSONObject();
+        try {
+            values.put("StoreId", storeid);
+            String result = RestClient.ExecuteJSONCommand(SERVER_URL + "GetAllItemsAtStore2", values);
+            Gson gson = createGson();
+            MapItResponse response = gson.fromJson(result, MapItResponse.class);
+            return response;
+        } catch (JSONException e) {
+            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+        }
 
-        return jsonResultToItemCollection(result);
+        return null;
     }
 
     public static Collection<Item> getNearbyPrices(Location loc) {
