@@ -2,6 +2,7 @@ package com.mapitprices.WheresTheCheapBeer.ListActivities;
 
 import android.app.ListActivity;
 import android.app.ProgressDialog;
+import android.app.SearchManager;
 import android.content.Intent;
 import android.location.Location;
 import android.os.AsyncTask;
@@ -12,12 +13,17 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.Toast;
 import com.google.android.apps.analytics.GoogleAnalyticsTracker;
+import com.mapitprices.Model.Foursquare.FoursquareResponse;
 import com.mapitprices.Model.Foursquare.Venue;
 import com.mapitprices.Model.Store;
-import com.mapitprices.Utilities.*;
-import com.mapitprices.WheresTheCheapBeer.Editors.NewStoreActivity;
+import com.mapitprices.Utilities.FoursquareServer;
+import com.mapitprices.Utilities.MyLocationThing;
+import com.mapitprices.Utilities.Utils;
+import com.mapitprices.Utilities.VenueResultAdapter;
 import com.mapitprices.WheresTheCheapBeer.R;
+import com.mapitprices.WheresTheCheapBeer.SearchActivity;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -32,6 +38,7 @@ import java.util.List;
  */
 public class SelectStoreActivity extends ListActivity {
     public static final int ADD_STORE_REQUEST = 0;
+    public static final int STORE_SEARCH = 1;
     List<Venue> _stores = new ArrayList<Venue>();
     GoogleAnalyticsTracker tracker;
     private MyLocationThing mLocationThing;
@@ -71,10 +78,16 @@ public class SelectStoreActivity extends ListActivity {
                 if (store != null) {
                     Intent returnData = new Intent();
                     returnData.putExtra("store", store);
-                    setResult(RESULT_OK, data);
+                    setResult(RESULT_OK, returnData);
                     finish();
                 }
             }
+        } else if (requestCode == STORE_SEARCH && resultCode == RESULT_OK) {
+            Venue venue = data.getParcelableExtra("venue");
+            Intent returnData = new Intent();
+            returnData.putExtra("venue", venue);
+            setResult(RESULT_OK, returnData);
+            finish();
         }
     }
 
@@ -85,6 +98,46 @@ public class SelectStoreActivity extends ListActivity {
                 new GetLocationTask().execute(mLocationThing.getLastFix());
                 break;
         }
+        return true;
+    }
+
+    @Override
+    protected void onNewIntent(Intent intent) {
+        if (intent != null) {
+            if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
+                String query = intent.getStringExtra(SearchManager.QUERY);
+                new SearchVenuesTask().execute(query);
+            }
+        }
+
+    }
+
+    private Venue[] doVenueSearch(String query) {
+
+        android.location.Location location = mLocationThing.getLastFix();
+
+        tracker.trackEvent(
+                "Search",
+                "StoreSearch",
+                query,
+                0);
+
+        FoursquareResponse response = FoursquareServer.getVenues(location.getLatitude(), location.getLongitude(), query);
+
+        if (response.meta.code.equals("200")) {
+            return response.response.venues;
+        } else if (response.meta.code.equals("500")) {
+            Toast.makeText(this, response.meta.errorType, Toast.LENGTH_SHORT).show();
+        }
+
+        return null;
+    }
+
+    @Override
+    public boolean onSearchRequested() {
+        Bundle appData = new Bundle();
+        appData.putBoolean(SearchActivity.STORE_SELECT_SEARCH, true);
+        startSearch(null, false, appData, false);
         return true;
     }
 
@@ -106,6 +159,38 @@ public class SelectStoreActivity extends ListActivity {
         data.putExtra("venue", _stores.get(position));
         setResult(RESULT_OK, data);
         finish();
+    }
+
+    private class SearchVenuesTask extends AsyncTask<String, Void, Venue[]> {
+        private ProgressDialog mProgressDialog;
+
+        SearchVenuesTask() {
+            mProgressDialog = Utils.createProgressDialog(SelectStoreActivity.this, "Searching for venue...");
+        }
+
+        @Override
+        protected void onPreExecute() {
+            mProgressDialog.show();
+        }
+
+        @Override
+        protected Venue[] doInBackground(String... params) {
+            String query = params[0];
+            return doVenueSearch(query);
+
+        }
+
+        @Override
+        protected void onPostExecute(Venue[] results) {
+            mProgressDialog.dismiss();
+            if (results != null) {
+                _stores.clear();
+                _stores.addAll(Arrays.asList(results));
+
+                ArrayAdapter<Venue> adaptor = new VenueResultAdapter(SelectStoreActivity.this, R.id.item_row_name, _stores);
+                setListAdapter(adaptor);
+            }
+        }
     }
 
     private class GetLocationTask extends AsyncTask<Location, Void, Venue[]> {

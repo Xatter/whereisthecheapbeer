@@ -9,4 +9,5 @@ package com.mapitprices.Model.Foursquare;
  */
 public class Meta {
     public String code;
+    public String errorType;
 }

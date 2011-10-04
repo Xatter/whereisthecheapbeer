@@ -33,6 +33,7 @@ import java.util.Collection;
  * To change this template use File | Settings | File Templates.
  */
 public class SelectItemActivity extends ListActivity {
+    public static final int ADD_ITEM = 7;
     ArrayList<Item> _items = new ArrayList<Item>();
     GoogleAnalyticsTracker tracker;
 
@@ -73,7 +74,7 @@ public class SelectItemActivity extends ListActivity {
         switch (item.getItemId()) {
             case R.id.add_item:
                 i = new Intent().setClass(this, NewItemActivity.class);
-                startActivityForResult(i, 7);
+                startActivityForResult(i, ADD_ITEM);
                 return true;
             case R.id.scan_barcode:
                 IntentIntegrator.initiateScan(this);
@@ -108,7 +109,7 @@ public class SelectItemActivity extends ListActivity {
 //                    setListAdapter(adapter);
                 }
             }
-        } else if (requestCode == 7 && resultCode == RESULT_OK) {
+        } else if (requestCode == ADD_ITEM && resultCode == RESULT_OK) {
             Item i = data.getParcelableExtra("item");
             _items.add(i);
             setResult(RESULT_OK, data);

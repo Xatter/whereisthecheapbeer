@@ -111,7 +111,7 @@ public class LoginActivity extends Activity {
                 e.printStackTrace();
             }
 
-            if (response.Meta.Code.equals("200")) {
+            if (response.Meta.Code.startsWith("20")) {
                 User user = response.Response.user;
                 Intent i;
                 if (user != null && user.getSessionToken() != null) {

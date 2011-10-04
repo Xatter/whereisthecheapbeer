@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
           package="com.mapitprices.WheresTheCheapBeer"
-          android:versionCode="11"
+          android:versionCode="12"
           android:versionName="20111003"
         >
 
@@ -60,7 +60,13 @@
                   android:configChanges="orientation|keyboardHidden">
         </activity>
         <activity android:name="com.mapitprices.WheresTheCheapBeer.ListActivities.SelectStoreActivity"
-                  android:configChanges="orientation|keyboardHidden"/>
+                  android:launchMode="singleTop"
+                  android:configChanges="orientation|keyboardHidden">
+            <intent-filter>
+                <action android:name="android.intent.action.SEARCH"/>
+            </intent-filter>
+            <meta-data android:name="android.app.searchable" android:resource="@xml/searchable"/>
+        </activity>
         <activity android:name="com.mapitprices.WheresTheCheapBeer.Editors.NewItemActivity"
                   android:configChanges="orientation|keyboardHidden"/>
         <activity android:name="com.mapitprices.WheresTheCheapBeer.MapActivities.BeerMapActivity" android:label="Map"

@@ -27,7 +27,9 @@ import com.mapitprices.WheresTheCheapBeer.R;
 import com.mapitprices.WheresTheCheapBeer.SearchActivity;
 import com.mapitprices.WheresTheCheapBeer.SettingsActivity;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * Created by IntelliJ IDEA.
@@ -156,9 +158,7 @@ public class NearbyItemsActivity extends ListActivity {
                 }
             }
         } else if (requestCode == RC_NEW_PRICE && resultCode == RESULT_OK) {
-            Item i = data.getParcelableExtra("item");
-            mCachedItems.add(i);
-            mAdaptor.notifyDataSetChanged();
+            new GetLocationTask().execute(mLocationThing.getLastFix());
         } else if (requestCode == RC_UPDATE_ITEM_PRICE && resultCode == RESULT_OK) {
             Item updatedItem = data.getParcelableExtra("item");
 
@@ -205,8 +205,7 @@ public class NearbyItemsActivity extends ListActivity {
             _progressDialog.dismiss();
 
             if (result != null) {
-                if(result.Meta.Code.startsWith("20"))
-                {
+                if (result.Meta.Code.startsWith("20")) {
                     mCachedItems.clear();
                     List<Item> items = Arrays.asList(result.Response.items);
                     mCachedItems.addAll(items);

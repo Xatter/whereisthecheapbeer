@@ -7,17 +7,21 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.Toast;
 import com.google.android.apps.analytics.GoogleAnalyticsTracker;
+import com.mapitprices.Model.Foursquare.FoursquareResponse;
 import com.mapitprices.Model.Foursquare.Venue;
 import com.mapitprices.Model.Item;
-import com.mapitprices.Model.Store;
+import com.mapitprices.Utilities.FoursquareServer;
 import com.mapitprices.Utilities.ItemResultAdapter;
-import com.mapitprices.Utilities.StoreResultAdapter;
+import com.mapitprices.Utilities.MyLocationThing;
 import com.mapitprices.Utilities.VenueResultAdapter;
+import com.mapitprices.WheresTheCheapBeer.Editors.ReportPriceActivity;
 import com.mapitprices.WheresTheCheapBeer.ListActivities.StoreItemsActivity;
 import com.mapitprices.WheresTheCheapBeer.MapActivities.BeerMapActivity;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -31,13 +35,15 @@ public class SearchActivity extends ListActivity {
     public static final String ITEM_SEARCH = "itemsearch";
     public static final String STORE_SEARCH = "storesearch";
     public static final String ITEM_SELECT_SEARCH = "selecteditemsearch";
+    public static final String STORE_SELECT_SEARCH = "storeselectsearch";
 
     private ArrayList<Item> mItemResult;
     private boolean isItemSearch = false;
-    private ArrayList<Store> mStoreResult;
     private boolean isStoreSearch = false;
-    private boolean isItemSelectSearch;
+    private boolean isItemSelectSearch = false;
+    private boolean isStoreSelectSearch = false;
     private GoogleAnalyticsTracker tracker;
+    private Venue[] mVenues;
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -52,16 +58,40 @@ public class SearchActivity extends ListActivity {
                     isItemSearch = appData.getBoolean(ITEM_SEARCH);
                     isItemSelectSearch = appData.getBoolean(ITEM_SELECT_SEARCH);
                     isStoreSearch = appData.getBoolean(STORE_SEARCH);
+                    isStoreSelectSearch = appData.getBoolean(STORE_SELECT_SEARCH);
 
                     if (isItemSearch || isItemSelectSearch) {
                         ArrayList<Item> items = appData.getParcelableArrayList("items");
                         doItemSearch(items, query);
-                    } else if (isStoreSearch) {
-                        ArrayList<Store> stores = appData.getParcelableArrayList("stores");
-                        doStoreSearch(stores, query);
+                    } else if (isStoreSearch || isStoreSelectSearch) {
+                        doVenueSearch(query);
                     }
                 }
             }
+        }
+    }
+
+    private void doVenueSearch(String query) {
+        MyLocationThing myLocationThing = new MyLocationThing(this);
+
+        android.location.Location location = myLocationThing.getLastFix();
+        tracker.trackEvent(
+                "Search",
+                "StoreSearch",
+                query,
+                0);
+
+        FoursquareResponse response = FoursquareServer.getVenues(location.getLatitude(), location.getLongitude(), query);
+
+        if (response.meta.code.equals("200")) {
+            mVenues = response.response.venues;
+            List<Venue> venuesList = Arrays.asList(mVenues);
+
+            setContentView(R.layout.stores_layout);
+            ArrayAdapter<Venue> adapter = new VenueResultAdapter(this, R.id.item_list_seperator_text, venuesList);
+            setListAdapter(adapter);
+        } else if (response.meta.code.equals("500")) {
+            Toast.makeText(this, response.meta.errorType, Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -78,8 +108,13 @@ public class SearchActivity extends ListActivity {
             finish();
         } else if (isStoreSearch) {
             Intent i = new Intent().setClass(this, StoreItemsActivity.class);
-            i.putExtra("store", mStoreResult.get(position));
+            i.putExtra("venue", mVenues[position]);
             startActivity(i);
+        } else if (isStoreSelectSearch) {
+            Intent data = new Intent().setClass(this, ReportPriceActivity.class);
+            data.putExtra("venue", mVenues[position]);
+            startActivity(data);
+            finish();
         }
     }
 
@@ -105,27 +140,6 @@ public class SearchActivity extends ListActivity {
 
         setContentView(R.layout.items_layout);
         ArrayAdapter<Item> adapter = new ItemResultAdapter(this, R.id.add_item, mItemResult);
-        setListAdapter(adapter);
-    }
-
-    private void doStoreSearch(List<Store> stores, String query) {
-        String q = query.toUpperCase();
-        mStoreResult = new ArrayList<Store>();
-        for (Store store : stores) {
-            String name = store.getName().toUpperCase();
-            if (name.contains(q)) {
-                mStoreResult.add(store);
-            }
-        }
-
-        tracker.trackEvent(
-                "Search",
-                "StoreSearch",
-                query,
-                mStoreResult.size());
-
-        setContentView(R.layout.stores_layout);
-        ArrayAdapter<Store> adapter = new StoreResultAdapter(this, R.id.add_item, mStoreResult);
         setListAdapter(adapter);
     }
 }

@@ -71,6 +71,22 @@ public class FoursquareServer {
         }
     }
 
+    public static FoursquareResponse getVenues(double lat, double lng, String query) {
+        String requestURL = FoursquareURL +
+                "/venues/search?" +
+                "ll=" + Double.toString(lat) + "," + Double.toString(lng) +
+                "&client_id=V3DOEGUQF250ZTEFXUO24TUX4XND0YY5UN0F1L23R54B22QO" +
+                "&client_secret=32D1HGRL51TBIQRNBAO35A5JPLHWYDSQXLLAYFO5M0RUPHL5" +
+                "&query=" + query.trim() +
+                //"&categoryId=4d4b7105d754a06376d81259" +
+                "&v=20110925";
+
+        String result = RestClient.ExecuteGetCommand(requestURL);
+        Gson gson = new Gson();
+        FoursquareResponse response = gson.fromJson(result, FoursquareResponse.class);
+        return response;
+    }
+
     public static FoursquareResponse Checkin(Location location, String venueid) {
         String requestURL = FoursquareURL +
                 "/checkins/add?" +
