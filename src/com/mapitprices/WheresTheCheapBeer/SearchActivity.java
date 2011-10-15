@@ -124,10 +124,14 @@ public class SearchActivity extends ListActivity {
 
         for (Item item : items) {
             String name = item.getName().toUpperCase();
-            String brand = item.getBrand().toUpperCase();
-
-            if (name.startsWith(q) ||
-                    brand.startsWith(q)) {
+            String brand = item.getBrand();
+            if (brand != null) {
+                brand = brand.toUpperCase();
+                if (name.startsWith(q) ||
+                        brand.startsWith(q)) {
+                    mItemResult.add(item);
+                }
+            } else if (name.startsWith(q)) {
                 mItemResult.add(item);
             }
         }
