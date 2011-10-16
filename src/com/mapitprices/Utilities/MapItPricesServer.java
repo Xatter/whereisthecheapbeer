@@ -43,14 +43,13 @@ public class MapItPricesServer {
     public static String SERVER_URL = "http://www.mapitprices.com/Beer/";
 
     static {
-        if (Constants.DEBUGMODE && "google_sdk".equals(Build.PRODUCT)) {
-            //SERVER_URL = "http://10.0.2.2:61418/Beer/"; //Emulator localhost
-            //SERVER_URL = "http://172.16.210.128:61418//Beer/"; //Mac Laptop windows IP
-            SERVER_URL = "http://www.mapitprices.com/Beer/";
-
-        } else {
-            SERVER_URL = "http://www.mapitprices.com/Beer/";
-        }
+//        if (Constants.DEBUGMODE && "google_sdk".equals(Build.PRODUCT)) {
+//            SERVER_URL = "http://10.0.2.2:61418/Beer/"; //Emulator localhost
+//            //SERVER_URL = "http://172.16.210.128:61418//Beer/"; //Mac Laptop windows IP
+//            //SERVER_URL = "http://www.mapitprices.com/Beer/";
+//        } else {
+//            SERVER_URL = "http://www.mapitprices.com/Beer/";
+//        }
     }
 
     public static MapItResponse getItemsFromServer(int storeid) {
@@ -151,17 +150,23 @@ public class MapItPricesServer {
         return !result.equals("{}\n");
     }
 
-    public static Item createNewItem(Item item) {
+    public static MapItResponse createNewItem(Item item) {
         GoogleAnalyticsTracker.getInstance().trackEvent("ServerCall", "NewItem", item.getName(), 0);
-        String result = RestClient.ExecuteCommand(SERVER_URL + "CreateItem", item.toNameValuePairs());
+
         try {
             Gson gson = createGson();
-            return gson.fromJson(result, Item.class);
+            String jsonstring = gson.toJson(item);
+            JSONObject data = new JSONObject(jsonstring);
+            String result = RestClient.ExecuteJSONCommand(SERVER_URL + "CreateItem2", data);
+
+            return gson.fromJson(result, MapItResponse.class);
         } catch (JsonParseException e) {
             e.printStackTrace();
-            return null;
+        } catch (JSONException e) {
+            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
         }
 
+        return null;
     }
 
     public static Store createNewStore(Store s) {

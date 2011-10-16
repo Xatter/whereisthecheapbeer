@@ -20,12 +20,9 @@ import com.mapitprices.Utilities.ItemResultAdapter;
 import com.mapitprices.Utilities.MapItPricesServer;
 import com.mapitprices.Utilities.MyLocationThing;
 import com.mapitprices.Utilities.Utils;
-import com.mapitprices.WheresTheCheapBeer.BarCodeScanItemActivity;
+import com.mapitprices.WheresTheCheapBeer.*;
 import com.mapitprices.WheresTheCheapBeer.Editors.ReportPriceActivity;
 import com.mapitprices.WheresTheCheapBeer.MapActivities.BeerMapActivity;
-import com.mapitprices.WheresTheCheapBeer.R;
-import com.mapitprices.WheresTheCheapBeer.SearchActivity;
-import com.mapitprices.WheresTheCheapBeer.SettingsActivity;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -42,7 +39,6 @@ public class NearbyItemsActivity extends ListActivity {
 
     ArrayList<Item> mCachedItems = new ArrayList<Item>();
 
-    private static final int RC_NEW_PRICE = 0;
     private static final int RC_UPDATE_ITEM_PRICE = 1;
 
     private GoogleAnalyticsTracker tracker;
@@ -102,7 +98,7 @@ public class NearbyItemsActivity extends ListActivity {
         switch (item.getItemId()) {
             case R.id.menu_new_price:
                 i = new Intent().setClass(this, ReportPriceActivity.class);
-                startActivityForResult(i, RC_NEW_PRICE);
+                startActivityForResult(i, Constants.RC_NEW_PRICE);
                 return true;
             case R.id.menu_scan_barcode:
                 IntentIntegrator.initiateScan(this);
@@ -157,7 +153,7 @@ public class NearbyItemsActivity extends ListActivity {
                     startActivity(searchResults);
                 }
             }
-        } else if (requestCode == RC_NEW_PRICE && resultCode == RESULT_OK) {
+        } else if (requestCode == Constants.RC_NEW_PRICE && resultCode == RESULT_OK) {
             new GetLocationTask().execute(mLocationThing.getLastFix());
         } else if (requestCode == RC_UPDATE_ITEM_PRICE && resultCode == RESULT_OK) {
             Item updatedItem = data.getParcelableExtra("item");

@@ -10,7 +10,7 @@ import android.os.Parcelable;
  * Time: 9:00 AM
  * To change this template use File | Settings | File Templates.
  */
-public class VenueCategory implements Parcelable{
+public class VenueCategory implements Parcelable {
     public String id;
     public String name;
     public String pluralName;
@@ -19,8 +19,7 @@ public class VenueCategory implements Parcelable{
     public String[] parents;
     public boolean primary;
 
-    public VenueCategory()
-    {
+    public VenueCategory() {
 
     }
 
@@ -46,12 +45,12 @@ public class VenueCategory implements Parcelable{
         //parcel.writeStringArray(parents);
     }
 
-    public static final Creator<VenueCategory> CREATOR = new Creator<VenueCategory>(){
+    public static final Creator<VenueCategory> CREATOR = new Creator<VenueCategory>() {
         public VenueCategory createFromParcel(Parcel in) {
             return new VenueCategory(in);
         }
 
-        public VenueCategory[] newArray(int size){
+        public VenueCategory[] newArray(int size) {
             return new VenueCategory[size];
         }
     };

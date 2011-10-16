@@ -10,7 +10,7 @@ import android.os.Parcelable;
  * Time: 8:58 AM
  * To change this template use File | Settings | File Templates.
  */
-public class Location  implements Parcelable{
+public class Location implements Parcelable {
     public String address;
     public String crossStreet;
     public double lat;
@@ -20,8 +20,7 @@ public class Location  implements Parcelable{
     public String city;
     public String state;
 
-    public Location()
-    {
+    public Location() {
 
     }
 
@@ -43,9 +42,9 @@ public class Location  implements Parcelable{
     public void writeToParcel(Parcel parcel, int i) {
         parcel.writeString(address);
 
-        if(crossStreet != null){
+        if (crossStreet != null) {
             parcel.writeString(crossStreet);
-        }else{
+        } else {
             parcel.writeString("");
         }
 

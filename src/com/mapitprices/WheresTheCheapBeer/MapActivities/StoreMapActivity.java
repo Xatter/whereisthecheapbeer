@@ -7,15 +7,19 @@ import android.graphics.drawable.Drawable;
 import android.location.Location;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.util.AttributeSet;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import com.google.android.apps.analytics.GoogleAnalyticsTracker;
 import com.google.android.maps.*;
+import com.google.zxing.integration.android.IntentIntegrator;
+import com.google.zxing.integration.android.IntentResult;
 import com.mapitprices.Model.Store;
 import com.mapitprices.Utilities.MapItPricesServer;
 import com.mapitprices.Utilities.Utils;
+import com.mapitprices.WheresTheCheapBeer.*;
+import com.mapitprices.WheresTheCheapBeer.Editors.ReportPriceActivity;
 import com.mapitprices.WheresTheCheapBeer.ListActivities.StoreItemsActivity;
-import com.mapitprices.WheresTheCheapBeer.R;
-import com.mapitprices.WheresTheCheapBeer.SearchActivity;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -90,6 +94,57 @@ public class StoreMapActivity extends MapActivity {
         startSearch(null, false, appData, false);
         return true;
     }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.item_price_list_option_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        Intent i;
+        switch (item.getItemId()) {
+            case R.id.menu_new_price:
+                i = new Intent().setClass(this, ReportPriceActivity.class);
+                startActivityForResult(i, Constants.RC_NEW_PRICE);
+                return true;
+            case R.id.menu_scan_barcode:
+                IntentIntegrator.initiateScan(this);
+                return true;
+            case R.id.menu_item_refresh:
+                new GetLocationTask().execute(myLocationOverlay.getLastFix());
+                return true;
+            case R.id.menu_item_settings:
+                i = new Intent().setClass(this, SettingsActivity.class);
+                startActivity(i);
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        IntentResult scanResult = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
+        if (scanResult != null) {
+            String result = scanResult.getContents();
+            if (result != null) {
+                if (Utils.validate_or_rescan_upc(this, result)) {
+                    Bundle bundle = new Bundle();
+                    bundle.putString("upc", result);
+
+                    Intent searchResults = new Intent().setClass(this, BarCodeScanItemActivity.class);
+                    searchResults.putExtras(bundle);
+                    startActivity(searchResults);
+                }
+            }
+        } else if (requestCode == Constants.RC_NEW_PRICE && resultCode == RESULT_OK) {
+            new GetLocationTask().execute(myLocationOverlay.getLastFix());
+        }
+    }
+
 
     private class StoreItemizedOverlay extends ItemizedOverlay<OverlayItem> {
         private ArrayList<OverlayItem> mOverlays = new ArrayList<OverlayItem>();
@@ -171,7 +226,9 @@ public class StoreMapActivity extends MapActivity {
 
                 MapController controller = mapView.getController();
                 GeoPoint currentLocationPoint = myLocationOverlay.getMyLocation();
-                controller.setCenter(currentLocationPoint);
+                if (currentLocationPoint != null) {
+                    controller.setCenter(currentLocationPoint);
+                }
                 controller.setZoom(18);
                 mapView.setBuiltInZoomControls(true);
             }

@@ -24,7 +24,8 @@
             android:textColor="@color/black"
             android:hint="size"
             android:textSize="12dp"
-            android:layout_toLeftOf="@+id/item_row_name"
+            android:layout_below="@+id/item_row_name"
+            android:layout_alignParentLeft="true"
             />
     <TextView
             android:id="@+id/item_row_price"
@@ -44,18 +45,15 @@
               android:layout_marginRight="15dp"
               android:layout_toLeftOf="@+id/item_row_price"
             />
-
     <TextView
             android:id="@+id/item_row_brand"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textColor="@color/gray"
             android:textSize="10dp"
-            android:layout_below="@+id/item_row_name"
-            android:layout_toRightOf="@+id/item_row_size"
-            android:layout_marginLeft="20dp"
+            android:layout_above="@+id/found_by"
+            android:layout_alignLeft="@+id/found_by"
             />
-
     <TextView
             android:id="@+id/item_row_lastupdated"
             android:layout_width="wrap_content"
@@ -65,7 +63,6 @@
             android:layout_below="@+id/item_row_price"
             android:layout_alignParentRight="true"
             />
-
     <TextView
             android:id="@+id/found_by"
             android:layout_width="wrap_content"
@@ -74,9 +71,9 @@
             android:textColor="@color/gray"
             android:textSize="10dp"
             android:layout_below="@+id/item_row_size"
+            android:layout_alignParentBottom="true"
             android:layout_centerHorizontal="true"
             />
-
     <TextView
             android:id="@+id/item_row_found_by"
             android:layout_width="wrap_content"
@@ -85,6 +82,6 @@
             android:textSize="10dp"
             android:layout_marginRight="20dp"
             android:layout_toRightOf="@+id/found_by"
-            android:layout_alignBottom="@+id/found_by"
+            android:layout_alignParentBottom="true"/>
             />
 </RelativeLayout>

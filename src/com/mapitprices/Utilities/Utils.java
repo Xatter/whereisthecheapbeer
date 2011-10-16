@@ -3,11 +3,10 @@ package com.mapitprices.Utilities;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
-import android.location.*;
+import android.location.Location;
 import android.widget.Toast;
 import com.google.android.maps.GeoPoint;
 import com.google.zxing.integration.android.IntentIntegrator;
-import com.mapitprices.WheresTheCheapBeer.Constants;
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
 
@@ -83,7 +82,6 @@ public class Utils {
         progressDialog.setCancelable(true);
         return progressDialog;
     }
-
 
 
 }

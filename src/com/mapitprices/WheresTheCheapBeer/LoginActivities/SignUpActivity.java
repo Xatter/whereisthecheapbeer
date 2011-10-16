@@ -7,7 +7,6 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
-import android.widget.ProgressBar;
 import android.widget.Toast;
 import com.google.android.apps.analytics.GoogleAnalyticsTracker;
 import com.mapitprices.Model.Responses.MapItResponse;

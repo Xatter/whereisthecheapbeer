@@ -6,7 +6,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
-import com.mapitprices.Model.Foursquare.Venue;
 import com.mapitprices.Model.Store;
 import com.mapitprices.WheresTheCheapBeer.R;
 

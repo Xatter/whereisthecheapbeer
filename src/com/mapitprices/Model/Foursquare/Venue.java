@@ -17,13 +17,11 @@ public class Venue implements Parcelable {
     public VenueCategory[] categories;
     public boolean verified;
 
-    public Venue()
-    {
+    public Venue() {
 
     }
 
-    public Venue(Parcel in)
-    {
+    public Venue(Parcel in) {
         id = in.readString();
         name = in.readString();
         location = in.readParcelable(Location.class.getClassLoader());
@@ -41,12 +39,12 @@ public class Venue implements Parcelable {
         parcel.writeParcelableArray(categories, 0);
     }
 
-    public static final Creator<Venue> CREATOR = new Creator<Venue>(){
+    public static final Creator<Venue> CREATOR = new Creator<Venue>() {
         public Venue createFromParcel(Parcel in) {
             return new Venue(in);
         }
 
-        public Venue[] newArray(int size){
+        public Venue[] newArray(int size) {
             return new Venue[size];
         }
     };

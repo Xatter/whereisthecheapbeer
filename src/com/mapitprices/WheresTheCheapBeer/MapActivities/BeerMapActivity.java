@@ -57,8 +57,7 @@ public class BeerMapActivity extends MapActivity {
             _item = intent.getParcelableExtra("item");
             if (_item != null) {
                 MapItResponse response = MapItPricesServer.getStore(_item);
-                if(response.Meta.Code.startsWith("20"))
-                {
+                if (response != null && response.Meta.Code.startsWith("20")) {
                     _store = response.Response.store;
                 }
 

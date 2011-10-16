@@ -38,6 +38,8 @@ public class Item implements Parcelable {
         Price = in.readDouble();
         Quantity = in.readInt();
         StoreId = in.readInt();
+        User = in.readParcelable(User.class.getClassLoader());
+        LastUpdated = (Date)in.readSerializable();
     }
 
     public int getItemId() {
@@ -78,6 +80,8 @@ public class Item implements Parcelable {
         dest.writeDouble(Price);
         dest.writeInt(Quantity);
         dest.writeInt(StoreId);
+        dest.writeParcelable(User, flags);
+        dest.writeSerializable(LastUpdated);
     }
 
     public List<NameValuePair> toNameValuePairs() {

@@ -2,7 +2,6 @@ package com.mapitprices.Model;
 
 import android.os.Parcel;
 import android.os.Parcelable;
-import com.mapitprices.Model.Foursquare.Location;
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
 import org.json.JSONException;
@@ -54,6 +53,16 @@ public class User implements Parcelable {
         parcel.writeString(SessionToken);
     }
 
+    public static final Creator<User> CREATOR = new Creator<User>() {
+        public User createFromParcel(Parcel source) {
+            return new User(source);
+        }
+
+        public User[] newArray(int size) {
+            return new User[size];
+        }
+    };
+
     public String getEmail() {
         return Email;
     }
@@ -96,19 +105,15 @@ public class User implements Parcelable {
         return pairs;
     }
 
-    public JSONObject ToJSON()
-    {
+    public JSONObject ToJSON() {
         JSONObject holder = new JSONObject();
-        try
-        {
+        try {
             holder.put("username", Username);
             holder.put("email", Email);
             holder.put("sessiontoken", SessionToken);
             holder.put("foursquaretoken", FoursquareToken);
             return holder;
-        }
-        catch(JSONException e)
-        {
+        } catch (JSONException e) {
 
         }
 

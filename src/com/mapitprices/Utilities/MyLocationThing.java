@@ -7,7 +7,6 @@ import android.location.LocationManager;
 import android.location.LocationProvider;
 import android.os.Bundle;
 import com.google.android.maps.GeoPoint;
-import com.mapitprices.WheresTheCheapBeer.Constants;
 
 import java.util.LinkedList;
 

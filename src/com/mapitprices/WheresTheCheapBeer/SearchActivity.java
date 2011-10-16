@@ -4,11 +4,15 @@ import android.app.ListActivity;
 import android.app.SearchManager;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
 import com.google.android.apps.analytics.GoogleAnalyticsTracker;
+import com.google.zxing.integration.android.IntentIntegrator;
 import com.mapitprices.Model.Foursquare.FoursquareResponse;
 import com.mapitprices.Model.Foursquare.Venue;
 import com.mapitprices.Model.Item;
@@ -145,5 +149,34 @@ public class SearchActivity extends ListActivity {
         setContentView(R.layout.items_layout);
         ArrayAdapter<Item> adapter = new ItemResultAdapter(this, R.id.add_item, mItemResult);
         setListAdapter(adapter);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.item_price_list_option_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        Intent i;
+        switch (item.getItemId()) {
+            case R.id.menu_new_price:
+                i = new Intent().setClass(this, ReportPriceActivity.class);
+                startActivityForResult(i, Constants.RC_NEW_PRICE);
+                return true;
+            case R.id.menu_scan_barcode:
+                IntentIntegrator.initiateScan(this);
+                return true;
+            case R.id.menu_item_refresh:
+                return true;
+            case R.id.menu_item_settings:
+                i = new Intent().setClass(this, SettingsActivity.class);
+                startActivity(i);
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 }

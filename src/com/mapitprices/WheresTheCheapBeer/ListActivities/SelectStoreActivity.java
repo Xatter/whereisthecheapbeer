@@ -122,12 +122,16 @@ public class SelectStoreActivity extends ListActivity {
                 query,
                 0);
 
-        FoursquareResponse response = FoursquareServer.getVenues(location.getLatitude(), location.getLongitude(), query);
+        if (location != null) {
+            FoursquareResponse response = FoursquareServer.getVenues(location.getLatitude(), location.getLongitude(), query);
 
-        if (response.meta.code.equals("200")) {
-            return response.response.venues;
-        } else if (response.meta.code.equals("500")) {
-            Toast.makeText(this, response.meta.errorType, Toast.LENGTH_SHORT).show();
+            if (response.meta.code.equals("200")) {
+                return response.response.venues;
+            } else if (response.meta.code.equals("500")) {
+                Toast.makeText(this, response.meta.errorType, Toast.LENGTH_SHORT).show();
+            }
+        } else {
+            Toast.makeText(this, "Can't get locations near you without a GPS fix. Please enable GPS and try again.", Toast.LENGTH_SHORT).show();
         }
 
         return null;

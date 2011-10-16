@@ -80,11 +80,11 @@
                 >
         </EditText>
         <CheckBox
-            android:id="@+id/checkin_with_foursquare"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:text="Also checkin to Foursquare?"
-            />
+                android:id="@+id/checkin_with_foursquare"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:text="Also checkin to Foursquare?"
+                />
         <Button
                 android:id="@+id/report_price_save"
                 android:layout_width="fill_parent"

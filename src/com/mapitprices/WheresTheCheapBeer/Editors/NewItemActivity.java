@@ -9,6 +9,7 @@ import com.google.android.apps.analytics.GoogleAnalyticsTracker;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 import com.mapitprices.Model.Item;
+import com.mapitprices.Model.Responses.MapItResponse;
 import com.mapitprices.Utilities.MapItPricesServer;
 import com.mapitprices.Utilities.Utils;
 import com.mapitprices.WheresTheCheapBeer.R;
@@ -62,13 +63,17 @@ public class NewItemActivity extends Activity {
         et = (EditText) findViewById(R.id.new_item_upc);
         _item.setUPC(et.getText().toString());
 
-        Item returned = MapItPricesServer.createNewItem(_item);
+        MapItResponse returned = MapItPricesServer.createNewItem(_item);
 
         if (returned != null) {
-            Intent i = new Intent();
-            i.putExtra("item", returned);
-            setResult(RESULT_OK, i);
-            finish();
+            if (returned.Meta.Code.startsWith("20")) {
+                Intent i = new Intent();
+                i.putExtra("item", returned.Response.item);
+                setResult(RESULT_OK, i);
+                finish();
+            } else {
+                Toast.makeText(this, returned.Meta.ErrorMessage, Toast.LENGTH_SHORT).show();
+            }
         } else {
             // maybe do a toast message
             Toast.makeText(this, "Adding item failed", Toast.LENGTH_SHORT).show();

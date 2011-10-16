@@ -6,6 +6,9 @@ import com.mapitprices.Model.Foursquare.FoursquareResponse;
 import com.mapitprices.Model.Foursquare.User;
 import com.mapitprices.Model.Foursquare.Venue;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
+
 /**
  * Created by IntelliJ IDEA.
  * User: xatter
@@ -72,14 +75,19 @@ public class FoursquareServer {
     }
 
     public static FoursquareResponse getVenues(double lat, double lng, String query) {
-        String requestURL = FoursquareURL +
-                "/venues/search?" +
-                "ll=" + Double.toString(lat) + "," + Double.toString(lng) +
-                "&client_id=V3DOEGUQF250ZTEFXUO24TUX4XND0YY5UN0F1L23R54B22QO" +
-                "&client_secret=32D1HGRL51TBIQRNBAO35A5JPLHWYDSQXLLAYFO5M0RUPHL5" +
-                "&query=" + query.trim() +
-                //"&categoryId=4d4b7105d754a06376d81259" +
-                "&v=20110925";
+        String requestURL = null;
+        try {
+            requestURL = FoursquareURL +
+                    "/venues/search?" +
+                    "ll=" + Double.toString(lat) + "," + Double.toString(lng) +
+                    "&client_id=V3DOEGUQF250ZTEFXUO24TUX4XND0YY5UN0F1L23R54B22QO" +
+                    "&client_secret=32D1HGRL51TBIQRNBAO35A5JPLHWYDSQXLLAYFO5M0RUPHL5" +
+                    "&query=" + URLEncoder.encode(query.trim(), "UTF-8") +
+                    //"&categoryId=4d4b7105d754a06376d81259" +
+                    "&v=20110925";
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+        }
 
         String result = RestClient.ExecuteGetCommand(requestURL);
         Gson gson = new Gson();

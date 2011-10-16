@@ -2,6 +2,7 @@ package com.mapitprices.WheresTheCheapBeer.ListActivities;
 
 import android.app.ListActivity;
 import android.app.ProgressDialog;
+import android.app.SearchManager;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
@@ -24,6 +25,7 @@ import com.mapitprices.WheresTheCheapBeer.SettingsActivity;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 /**
  * Created by IntelliJ IDEA.
@@ -33,9 +35,13 @@ import java.util.Collection;
  * To change this template use File | Settings | File Templates.
  */
 public class SelectItemActivity extends ListActivity {
-    public static final int ADD_ITEM = 7;
+    private static final int ADD_ITEM = 7;
+    private static final int ITEM_SEARCH = 1;
+
     ArrayList<Item> _items = new ArrayList<Item>();
     GoogleAnalyticsTracker tracker;
+    ArrayAdapter<Item> mAdapter;
+
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -56,8 +62,8 @@ public class SelectItemActivity extends ListActivity {
             _items.clear();
             _items.addAll(result);
 
-            ArrayAdapter<Item> adapter = new ItemResultAdapter(this, android.R.layout.simple_list_item_1, _items);
-            setListAdapter(adapter);
+            mAdapter = new ItemResultAdapter(this, android.R.layout.simple_list_item_1, _items);
+            setListAdapter(mAdapter);
         }
     }
 
@@ -114,6 +120,9 @@ public class SelectItemActivity extends ListActivity {
             _items.add(i);
             setResult(RESULT_OK, data);
             finish();
+        } else if (requestCode == ITEM_SEARCH && resultCode == RESULT_OK) {
+            setResult(RESULT_OK, data);
+            finish();
         }
     }
 
@@ -134,4 +143,43 @@ public class SelectItemActivity extends ListActivity {
         return true;
     }
 
+    @Override
+    protected void onNewIntent(Intent intent) {
+        if (intent != null) {
+            if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
+                String query = intent.getStringExtra(SearchManager.QUERY);
+                doItemSearch(query);
+            }
+        }
+    }
+
+    private void doItemSearch(String query) {
+        String q = query.toUpperCase();
+        List<Item> filteredItems = new ArrayList<Item>();
+
+        for (Item item : _items) {
+            String name = item.getName().toUpperCase();
+            String brand = item.getBrand();
+            if (brand != null) {
+                brand = brand.toUpperCase();
+                if (name.startsWith(q) ||
+                        brand.startsWith(q)) {
+                    filteredItems.add(item);
+                }
+            } else if (name.startsWith(q)) {
+                filteredItems.add(item);
+            }
+        }
+
+        _items.clear();
+        _items.addAll(filteredItems);
+
+        tracker.trackEvent(
+                "Search",
+                "ItemSearch",
+                query,
+                0);
+
+        mAdapter.notifyDataSetChanged();
+    }
 }

@@ -2,8 +2,6 @@ package com.mapitprices.WheresTheCheapBeer.Editors;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.location.Location;
-import android.location.LocationListener;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
@@ -12,7 +10,6 @@ import com.google.android.apps.analytics.GoogleAnalyticsTracker;
 import com.mapitprices.Model.Store;
 import com.mapitprices.Utilities.MapItPricesServer;
 import com.mapitprices.Utilities.MyLocationThing;
-import com.mapitprices.Utilities.Utils;
 import com.mapitprices.WheresTheCheapBeer.R;
 
 import java.util.ArrayList;

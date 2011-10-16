@@ -1,7 +1,5 @@
 package com.mapitprices.Model.Foursquare;
 
-import com.mapitprices.Model.Item;
-
 /**
  * Created by IntelliJ IDEA.
  * User: xatter
