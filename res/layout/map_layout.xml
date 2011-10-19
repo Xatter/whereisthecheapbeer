@@ -4,24 +4,24 @@
                 android:layout_width="fill_parent"
                 android:layout_height="fill_parent">
 
-    <!--debug key-->
+    <!--windows debug key-->
     <!--android:apiKey="0AikWNNoeB3BG_s02v_qMH-SxmGm5LrPh5-Yudg"-->
 
+    <!-- osx debug key -->
+    <!--android:apiKey="0AikWNNoeB3AW8b4iKtMPfp_x5YD0m-cJOjiCBw"-->
 
     <!--pre-release key-->
     <!--android:apiKey="0AikWNNoeB3Ak4Wbs4z4Pt-kTaqQHRHH61NpbZQ"-->
 
-
     <!--release key-->
     <!--android:apiKey="0AikWNNoeB3D0Hejz5xoQrPENQCObFk9Zbk_3ew"-->
-
 
     <com.google.android.maps.MapView
             android:id="@+id/mapview"
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
             android:clickable="true"
-            android:apiKey="0AikWNNoeB3D0Hejz5xoQrPENQCObFk9Zbk_3ew"
+            android:apiKey="0AikWNNoeB3AW8b4iKtMPfp_x5YD0m-cJOjiCBw"
             />
 
 </RelativeLayout>
