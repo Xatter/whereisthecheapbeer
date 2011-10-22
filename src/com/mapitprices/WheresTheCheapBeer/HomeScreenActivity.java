@@ -27,26 +27,20 @@ public class HomeScreenActivity extends TabActivity {
         Intent intent;
 
         // Add first tab
-        intent = new Intent().setClass(this, NearbyItemsActivity.class);
         //spec = tabHost.newTabSpec("blah").setIndicator(
 //                "Nearby Prices",
 //                res.getDrawable(android.R.drawable.ic_menu_mylocation))
 //                .setContent(intent);
-
-        spec = tabHost.newTabSpec("items").setIndicator("Cheapest")
-                .setContent(intent);
+        spec = tabHost.newTabSpec("stores")
+                .setIndicator("Nearby")
+                .setContent(new Intent().setClass(this, StoreMapActivity.class));
         tabHost.addTab(spec);
 
-        intent = new Intent().setClass(this, StoreMapActivity.class);
-
-//        spec = tabHost.newTabSpec("blah").setIndicator(
-//                "Nearby",
-//                res.getDrawable(android.R.drawable.ic_menu_mylocation))
-//                .setContent(intent);
-
-        spec = tabHost.newTabSpec("stores").setIndicator("Nearby")
-                .setContent(intent);
+        spec = tabHost.newTabSpec("items")
+                .setIndicator("Cheapest")
+                .setContent(new Intent().setClass(this, NearbyItemsActivity.class));
         tabHost.addTab(spec);
+
 
         tabHost.setCurrentTab(0);
     }
