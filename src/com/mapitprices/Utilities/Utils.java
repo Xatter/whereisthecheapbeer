@@ -7,6 +7,7 @@ import android.location.Location;
 import android.widget.Toast;
 import com.google.android.maps.GeoPoint;
 import com.google.zxing.integration.android.IntentIntegrator;
+import com.mapitprices.WheresTheCheapBeer.R;
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
 
@@ -75,7 +76,8 @@ public class Utils {
     }
 
     public static ProgressDialog createProgressDialog(Context context, String message) {
-        ProgressDialog progressDialog = new ProgressDialog(context);
+        ProgressDialog progressDialog = new ProgressDialog(context, R.style.MapItDialog);
+
         progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
         progressDialog.setMessage(message);
         progressDialog.setIndeterminate(true);

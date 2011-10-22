@@ -18,6 +18,7 @@
             android:anyDensity="true"/>
 
     <application android:label="@string/app_name" android:icon="@drawable/icon"
+                 android:theme="@style/MapItPricesTheme"
                  android:name="com.mapitprices.WheresTheCheapBeer.MyApplication">
         <uses-library android:name="com.google.android.maps"/>
         <meta-data android:name="android.app.default_searchable"

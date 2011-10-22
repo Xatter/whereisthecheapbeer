@@ -9,8 +9,6 @@
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
             android:orientation="vertical"
-            android:background="@color/lightgray"
-
             >
         <TextView
                 android:id="@+id/widget52"
@@ -22,7 +20,6 @@
                 android:layout_marginRight="5px"
                 android:text="Share a new price with everyone!"
                 android:typeface="monospace"
-                android:textColor="@color/black"
                 android:textSize="20sp"
                 >
         </TextView>
@@ -37,7 +34,6 @@
                   android:editable="false"
                   android:focusable="false"
                   android:textSize="18dp"
-                  android:textColor="@color/black"
                 />
         <EditText
                 android:id="@+id/report_price_store"
@@ -49,7 +45,6 @@
                 android:layout_marginRight="5px"
                 android:hint="Press to select Store"
                 android:focusable="false"
-                android:textColor="@color/black"
                 android:textSize="18dp"
                 >
         </EditText>
@@ -84,6 +79,7 @@
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:text="Also checkin to Foursquare?"
+                android:textColor="@color/black"
                 />
         <Button
                 android:id="@+id/report_price_save"

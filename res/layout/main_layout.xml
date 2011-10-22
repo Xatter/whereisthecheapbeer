@@ -7,10 +7,10 @@
             android:id="@+id/widget0"
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
-            android:orientation="vertical"
-            android:background="@color/white"
+            android:padding="10dp"
+            android:orientation="vertical">
 
-            >
+        <!--<android.widget.ImageView android:id="@+id/widget12" android:layout_width="wrap_content" android:layout_height="wrap_content" android:src="@drawable/android_icon_72"/>-->
         <TextView
                 android:id="@+id/widget40"
                 android:layout_width="fill_parent"
@@ -19,7 +19,6 @@
                 android:textSize="50sp"
                 android:typeface="monospace"
                 android:textColor="@color/green_base"
-                android:layout_margin="10dp"
                 >
         </TextView>
         <Button
@@ -27,9 +26,9 @@
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:text="Sign up with Email"
-                android:layout_margin="10dp"
-                android:background="@drawable/btn_green"
                 android:onClick="signup"
+                android:layout_marginTop="5dp"
+                android:layout_marginBottom="5dp"
                 >
         </Button>
         <TextView
@@ -37,7 +36,6 @@
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:text="Already have an account?"
-                android:textColor="@color/text_color"
                 >
         </TextView>
         <Button
@@ -45,8 +43,7 @@
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:text="Log In"
-                android:layout_margin="10dp"
-                android:background="@drawable/btn_green"
+                android:layout_marginTop="10dp"
                 android:onClick="signin"
                 >
         </Button>
@@ -55,9 +52,8 @@
                 android:id="@+id/foursquare_login_button"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="10dp"
                 android:text="Sign in with Foursquare"
-                android:background="@drawable/btn_green"
+                android:layout_marginTop="20dp"
                 android:onClick="foursquare_signin"/>
 
     </LinearLayout>

@@ -9,15 +9,13 @@
             android:id="@+id/widget44"
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
-            android:background="@color/green_base"
             android:orientation="vertical"
-
+            android:padding="10dp"
             >
         <TextView
                 android:id="@+id/widget56"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:textColor="@color/text_color"
                 android:text="Please login:"
                 >
         </TextView>
@@ -50,15 +48,17 @@
         <TextView android:id="@+id/widget212"
                   android:layout_width="fill_parent"
                   android:layout_height="wrap_content"
-                  android:layout_gravity="center_horizontal"
+                  android:gravity="center"
                   android:text="- OR -"
                   android:textSize="18dp"
-                  android:textColor="@color/black"/>
+                  android:layout_marginTop="10dp"
+                  android:layout_marginBottom="10dp"/>
         <Button
                 android:id="@+id/foursquare_login_button"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:text="Sign in with Foursquare"
+                android:layout_marginTop="10dp"
                 android:onClick="foursquare_signin"/>
     </LinearLayout>
 </ScrollView>
