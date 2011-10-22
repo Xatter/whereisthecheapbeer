@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
-    <item android:title="New Price" android:id="@+id/menu_new_price"/>
+    <item android:title="New Price" android:id="@+id/menu_new_price" android:icon="@android:drawable/ic_menu_add"/>
     <item android:title="Scan Barcode" android:id="@+id/menu_scan_barcode"/>
-    <item android:title="Refresh" android:id="@+id/menu_item_refresh"/>
-    <item android:title="Settings" android:id="@+id/menu_item_settings"/>
+    <item android:title="Refresh" android:id="@+id/menu_item_refresh" android:icon="@drawable/ic_menu_refresh"/>
+    <item android:title="Settings" android:id="@+id/menu_item_settings" android:icon="@android:drawable/ic_menu_preferences"/>
 </menu>

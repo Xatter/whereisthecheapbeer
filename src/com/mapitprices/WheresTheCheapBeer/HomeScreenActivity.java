@@ -32,12 +32,12 @@ public class HomeScreenActivity extends TabActivity {
 //                res.getDrawable(android.R.drawable.ic_menu_mylocation))
 //                .setContent(intent);
         spec = tabHost.newTabSpec("stores")
-                .setIndicator("Nearby")
+                .setIndicator("Nearby", res.getDrawable(android.R.drawable.ic_menu_mylocation))
                 .setContent(new Intent().setClass(this, StoreMapActivity.class));
         tabHost.addTab(spec);
 
         spec = tabHost.newTabSpec("items")
-                .setIndicator("Cheapest")
+                .setIndicator("Cheapest", res.getDrawable(R.drawable.dollar))
                 .setContent(new Intent().setClass(this, NearbyItemsActivity.class));
         tabHost.addTab(spec);
 

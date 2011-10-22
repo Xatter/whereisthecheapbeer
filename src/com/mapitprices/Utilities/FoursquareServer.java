@@ -19,6 +19,7 @@ import java.net.URLEncoder;
 public class FoursquareServer {
 
     public final static String FoursquareURL = "https://api.foursquare.com/v2";
+    public final static String FoursquareAPIVersion = "&v=20111022";
 
     public static User getUserInfo() {
         String requestURL = FoursquareURL + "/users/self?" +
@@ -58,9 +59,9 @@ public class FoursquareServer {
                 "/venues/search?" +
                 "ll=" + Double.toString(lat) + "," + Double.toString(lng) +
                 "&client_id=V3DOEGUQF250ZTEFXUO24TUX4XND0YY5UN0F1L23R54B22QO" +
-                "&client_secret=32D1HGRL51TBIQRNBAO35A5JPLHWYDSQXLLAYFO5M0RUPHL5" +
+                "&client_secret=32D1HGRL51TBIQRNBAO35A5JPLHWYDSQXLLAYFO5M0RUPHL5"
 //                "&categoryId=4d4b7105d754a06376d81259" +
-                "&v=20110925";
+                + FoursquareAPIVersion;
 
         String result = RestClient.ExecuteGetCommand(requestURL);
 
@@ -82,9 +83,10 @@ public class FoursquareServer {
                     "ll=" + Double.toString(lat) + "," + Double.toString(lng) +
                     "&client_id=V3DOEGUQF250ZTEFXUO24TUX4XND0YY5UN0F1L23R54B22QO" +
                     "&client_secret=32D1HGRL51TBIQRNBAO35A5JPLHWYDSQXLLAYFO5M0RUPHL5" +
-                    "&query=" + URLEncoder.encode(query.trim(), "UTF-8") +
+                    "&query=" + URLEncoder.encode(query.trim(), "UTF-8")
                     //"&categoryId=4d4b7105d754a06376d81259" +
-                    "&v=20110925";
+                    + FoursquareAPIVersion;
+
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
         }

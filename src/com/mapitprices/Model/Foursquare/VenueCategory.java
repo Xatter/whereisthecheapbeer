@@ -2,6 +2,7 @@ package com.mapitprices.Model.Foursquare;
 
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.webkit.WebIconDatabase;
 
 /**
  * Created by IntelliJ IDEA.
@@ -15,7 +16,7 @@ public class VenueCategory implements Parcelable {
     public String name;
     public String pluralName;
     public String shortName;
-    public String icon;
+    public Icon icon;
     public String[] parents;
     public boolean primary;
 
@@ -28,7 +29,7 @@ public class VenueCategory implements Parcelable {
         name = in.readString();
         pluralName = in.readString();
         shortName = in.readString();
-        icon = in.readString();
+        icon = in.readParcelable(Icon.class.getClassLoader());
         //parents = in.createStringArray();
     }
 
@@ -36,12 +37,12 @@ public class VenueCategory implements Parcelable {
         return 0;  //To change body of implemented methods use File | Settings | File Templates.
     }
 
-    public void writeToParcel(Parcel parcel, int i) {
+    public void writeToParcel(Parcel parcel, int flags) {
         parcel.writeString(id);
         parcel.writeString(name);
         parcel.writeString(pluralName);
         parcel.writeString(shortName);
-        parcel.writeString(icon);
+        parcel.writeParcelable(icon, flags);
         //parcel.writeStringArray(parents);
     }
 
