@@ -3,6 +3,8 @@ package com.mapitprices.Utilities;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.location.Location;
 import android.widget.Toast;
 import com.google.android.maps.GeoPoint;
@@ -11,7 +13,8 @@ import com.mapitprices.WheresTheCheapBeer.R;
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
 
-import java.io.UnsupportedEncodingException;
+import java.io.*;
+import java.net.URL;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
@@ -84,6 +87,4 @@ public class Utils {
         progressDialog.setCancelable(true);
         return progressDialog;
     }
-
-
 }

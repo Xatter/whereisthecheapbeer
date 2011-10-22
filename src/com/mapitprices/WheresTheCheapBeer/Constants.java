@@ -8,7 +8,7 @@ package com.mapitprices.WheresTheCheapBeer;
  * To change this template use File | Settings | File Templates.
  */
 public class Constants {
-    public static final boolean DEBUGMODE = true;
+    public static final boolean DEBUGMODE = false;
     public static final int MIN_DISTANCE = 100; // in meters
     public static final int MIN_TIME = 120000; // 2 minutes in ms
     public static final int APIVERSION = 2;

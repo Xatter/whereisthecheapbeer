@@ -1,15 +1,23 @@
 package com.mapitprices.Utilities;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 import com.mapitprices.Model.Foursquare.Venue;
+import com.mapitprices.Model.Foursquare.VenueCategory;
 import com.mapitprices.WheresTheCheapBeer.R;
 
+import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.text.DecimalFormat;
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -23,6 +31,7 @@ import java.util.List;
 public class VenueResultAdapter extends ArrayAdapter<Venue> {
     public List<Venue> _stores;
     private Context _context;
+    public static HashMap<String, Bitmap> _cache = new HashMap<String, Bitmap>();
 
     public VenueResultAdapter(Context context, int textViewResourceId, List<Venue> objects) {
         super(context, textViewResourceId, objects);
@@ -39,6 +48,31 @@ public class VenueResultAdapter extends ArrayAdapter<Venue> {
         }
 
         Venue i = _stores.get(position);
+
+        ImageView iconView = (ImageView) v.findViewById(R.id.store_icon);
+        for (VenueCategory category : i.categories) {
+            if (category.primary) {
+                URL newurl = null;
+                try {
+                    String iconURL = category.icon.getIconURL();
+                    if (_cache.containsKey(iconURL)) {
+                        iconView.setImageBitmap(_cache.get(iconURL));
+                    } else {
+                        newurl = new URL(category.icon.getIconURL());
+                        Bitmap mIcon_val = BitmapFactory.decodeStream(newurl.openConnection().getInputStream());
+                        _cache.put(iconURL, mIcon_val);
+                        iconView.setImageBitmap(mIcon_val);
+                    }
+                } catch (MalformedURLException e) {
+                    e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+                } catch (IOException e) {
+                    e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+                }
+
+                break;
+            }
+        }
+
         TextView tvName = (TextView) v.findViewById(R.id.store_row_name);
         tvName.setText(i.name);
 
