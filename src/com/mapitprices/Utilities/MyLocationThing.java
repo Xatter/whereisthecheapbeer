@@ -6,6 +6,8 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.location.LocationProvider;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import com.google.android.maps.GeoPoint;
 
 import java.util.LinkedList;
@@ -23,6 +25,7 @@ public class MyLocationThing implements LocationListener {
     private static Location mLocation;
     private boolean mMyLocationEnabled;
     private LinkedList<Runnable> mRunOnFirstFix = new LinkedList<Runnable>();
+    private Handler mHandler = new Handler(Looper.getMainLooper());
 
     private long mLocationUpdateMinTime = 0;
     private float mLocationUpdateMinDistance = 0.0f;
@@ -64,7 +67,7 @@ public class MyLocationThing implements LocationListener {
 
     public boolean runOnFirstFix(Runnable runnable) {
         if (mMyLocationEnabled) {
-            runnable.run();
+            mHandler.post(runnable);
             return true;
         } else {
             mRunOnFirstFix.addLast(runnable);
@@ -82,7 +85,7 @@ public class MyLocationThing implements LocationListener {
     public void onStatusChanged(String provider, int status, Bundle extras) {
         if (status == LocationProvider.AVAILABLE) {
             for (Runnable runnable : mRunOnFirstFix) {
-                runnable.run();
+                mHandler.post(runnable);
             }
             mRunOnFirstFix.clear();
         }

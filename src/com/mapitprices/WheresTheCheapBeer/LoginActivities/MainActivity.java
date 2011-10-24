@@ -123,7 +123,7 @@ public class MainActivity extends Activity {
                 e.printStackTrace();
             }
 
-            if (response.Meta.Code.equals("200")) {
+            if (response != null && response.Meta.Code.equals("200")) {
                 User user = response.Response.user;
 
                 Intent i;

@@ -1,5 +1,6 @@
 package com.mapitprices.WheresTheCheapBeer.MapActivities;
 
+import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
@@ -7,6 +8,8 @@ import android.graphics.drawable.Drawable;
 import android.location.Location;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -33,12 +36,14 @@ import java.util.List;
  * To change this template use File | Settings | File Templates.
  */
 public class StoreMapActivity extends MapActivity {
-    MapView mapView;
-    List<Overlay> mapOverlays;
-    Drawable drawable;
-    StoreItemizedOverlay itemizedOverlay;
-    MyLocationOverlay myLocationOverlay;
-    GoogleAnalyticsTracker tracker;
+    private MapView mapView;
+    private List<Overlay> mapOverlays;
+    private Drawable drawable;
+    private StoreItemizedOverlay itemizedOverlay;
+    private MyLocationOverlay myLocationOverlay;
+    private GoogleAnalyticsTracker tracker;
+    private Handler mHandler = new Handler(Looper.getMainLooper());
+
 
     private ArrayList<Store> mStoresCache = new ArrayList<Store>();
 
@@ -57,7 +62,12 @@ public class StoreMapActivity extends MapActivity {
 
         myLocationOverlay.runOnFirstFix(new Runnable() {
             public void run() {
-                new GetLocationTask().execute(myLocationOverlay.getLastFix());
+                mHandler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        new GetLocationTask().execute(myLocationOverlay.getLastFix());
+                    }
+                });
             }
         });
 
@@ -192,12 +202,12 @@ public class StoreMapActivity extends MapActivity {
         ProgressDialog mProgressDialog;
 
         GetLocationTask() {
-            //mProgressDialog = Utils.createProgressDialog(StoreMapActivity.this, "Getting nearby stores...");
+            mProgressDialog = Utils.createProgressDialog(StoreMapActivity.this, "Getting nearby stores...");
         }
 
         @Override
         protected void onPreExecute() {
-            //mProgressDialog.show();
+            mProgressDialog.show();
         }
 
         @Override
@@ -207,7 +217,8 @@ public class StoreMapActivity extends MapActivity {
         }
 
         @Override
-        protected void onPostExecute(Collection<Store> result) {
+        protected void onPostExecute(final Collection<Store> result) {
+            boolean showNoNearbyDialog = false;
 
             if (result != null) {
                 mStoresCache.clear();
@@ -222,6 +233,9 @@ public class StoreMapActivity extends MapActivity {
                     itemizedOverlay.addOverlay(overlayitem);
 
                     mapOverlays.add(itemizedOverlay);
+                    if (!showNoNearbyDialog && store.getDistance() > 9000) {
+                        showNoNearbyDialog = true;
+                    }
                 }
 
                 MapController controller = mapView.getController();
@@ -233,7 +247,13 @@ public class StoreMapActivity extends MapActivity {
                 mapView.setBuiltInZoomControls(true);
             }
 
-            //mProgressDialog.dismiss();
+            mProgressDialog.dismiss();
+            if (showNoNearbyDialog) {
+                Dialog dialog = new Dialog(StoreMapActivity.this, R.style.InfoDialog);
+                dialog.setContentView(R.layout.nothing_to_see_layout);
+                dialog.setTitle("Welcome!");
+                dialog.show();
+            }
         }
     }
 }

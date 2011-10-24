@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent">
+
+    <LinearLayout
+            android:orientation="vertical"
+            android:padding="5dp"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent">
+        <TextView android:layout_width="fill_parent"
+                  android:layout_height="wrap_content"
+                  android:text="Hey! Thanks for trying my app!"/>
+        <TextView android:layout_height="wrap_content"
+                  android:layout_width="wrap_content"
+                  android:textStyle="italic"
+                  android:text="Unfortuantely it looks like no one has entered any prices near you yet. So I'm going to show you the price data for"
+                />
+        <TextView android:layout_height="wrap_content"
+                  android:layout_width="fill_parent"
+                  android:textStyle="bold"
+                  android:layout_margin="5dp"
+                  android:text=" New York City "/>
+        <TextView android:layout_height="wrap_content"
+                  android:layout_width="wrap_content"
+                  android:text="so you can play with the app :)"/>
+        <TextView android:layout_height="wrap_content"
+                  android:layout_width="fill_parent"
+                  android:layout_marginTop="10dp"
+                  android:text="If you like what you see, and you know the price of some beer around you. Please enter the price and let everyone know."/>
+        <TextView android:layout_width="fill_parent"
+                  android:layout_height="wrap_content"
+                  android:layout_marginTop="20dp"
+                  android:textStyle="italic"
+                  android:text="Press your back button to continue"/>
+    </LinearLayout>
+</ScrollView>
