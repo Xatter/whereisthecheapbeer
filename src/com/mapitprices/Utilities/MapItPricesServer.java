@@ -38,18 +38,18 @@ import java.util.List;
  */
 public class MapItPricesServer {
     //public static String SERVER_URL = "http://10.0.2.2:61418/Beer/"; //Emulator localhost
-    //public static final String SERVER_URL = "http://172.16.210.128//Beer/"; //Mac Laptop windows IP
+    //public static final String SERVER_URL = "http://172.16.210.128/Beer/"; //Mac Laptop windows IP
 
     public static String SERVER_URL = "http://www.mapitprices.com/Beer/";
 
     static {
-//        if (Constants.DEBUGMODE && "google_sdk".equals(Build.PRODUCT)) {
+        if (Constants.DEBUGMODE && "google_sdk".equals(Build.PRODUCT)) {
 //            SERVER_URL = "http://10.0.2.2:61418/Beer/"; //Emulator localhost
-//            //SERVER_URL = "http://172.16.210.128:61418//Beer/"; //Mac Laptop windows IP
-//            //SERVER_URL = "http://www.mapitprices.com/Beer/";
-//        } else {
+            SERVER_URL = "http://192.168.1.115:61418/Beer/"; //Mac Laptop windows IP
 //            SERVER_URL = "http://www.mapitprices.com/Beer/";
-//        }
+        } else {
+            SERVER_URL = "http://www.mapitprices.com/Beer/";
+        }
     }
 
     public static MapItResponse getItemsFromServer(int storeid) {
