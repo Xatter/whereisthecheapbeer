@@ -1,58 +1,61 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-        android:id="@+id/widget44"
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:orientation="vertical"
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        >
-    <TextView
-            android:id="@+id/widget56"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
             android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:text="Create a new User Account"
+            android:layout_height="fill_parent">
+    <LinearLayout
+            android:id="@+id/widget44"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:orientation="vertical"
             >
-    </TextView>
-    <TextView android:id="@+id/tv1"
-              android:layout_width="fill_parent"
-              android:layout_height="wrap_content"
-              android:text="How you want others to see your updates:"/>
+        <TextView
+                android:id="@+id/widget56"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:text="Create a new User Account"
+                >
+        </TextView>
+        <TextView android:id="@+id/tv1"
+                  android:layout_width="fill_parent"
+                  android:layout_height="wrap_content"
+                  android:text="How you want others to see your updates:"/>
 
-    <EditText android:id="@+id/username"
-              android:layout_width="fill_parent"
-              android:layout_height="wrap_content"
-              android:hint="Username"
-              android:textSize="18dp"/>
+        <EditText android:id="@+id/username"
+                  android:layout_width="fill_parent"
+                  android:layout_height="wrap_content"
+                  android:hint="Username"
+                  android:textSize="18dp"/>
 
-    <TextView android:id="@+id/tv2"
-              android:layout_width="fill_parent"
-              android:layout_height="wrap_content"
-              android:text="Login information:"/>
+        <TextView android:id="@+id/tv2"
+                  android:layout_width="fill_parent"
+                  android:layout_height="wrap_content"
+                  android:text="Login information:"/>
 
-    <EditText
-            android:id="@+id/email"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:hint="Email"
-            android:inputType="textEmailAddress"
-            android:textSize="18dp"
-            >
-    </EditText>
-    <EditText
-            android:id="@+id/password"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:hint="Password"
-            android:password="true"
-            android:textSize="18dp"
-            >
-    </EditText>
-    <Button
-            android:id="@+id/widget61"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:text="Join MapItPrices!"
-            android:onClick="createUser"
-            >
-    </Button>
-</LinearLayout>
+        <EditText
+                android:id="@+id/email"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:hint="Email"
+                android:inputType="textEmailAddress"
+                android:textSize="18dp"
+                >
+        </EditText>
+        <EditText
+                android:id="@+id/password"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:hint="Password"
+                android:password="true"
+                android:textSize="18dp"
+                >
+        </EditText>
+        <Button
+                android:id="@+id/widget61"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:text="Join MapItPrices!"
+                android:onClick="createUser"
+                >
+        </Button>
+    </LinearLayout>
+</ScrollView>
