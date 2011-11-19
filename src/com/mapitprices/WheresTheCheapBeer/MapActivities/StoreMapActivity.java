@@ -4,6 +4,7 @@ import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Canvas;
 import android.graphics.drawable.Drawable;
 import android.location.Location;
 import android.os.AsyncTask;
@@ -192,6 +193,11 @@ public class StoreMapActivity extends MapActivity {
             return mOverlays.size();
         }
 
+        @Override
+        public void draw(Canvas canvas, MapView mapView, boolean b) {
+
+        }
+
         public void addOverlay(OverlayItem overlay) {
             mOverlays.add(overlay);
             populate();
@@ -227,15 +233,23 @@ public class StoreMapActivity extends MapActivity {
                 mapOverlays.clear();
                 mapOverlays.add(myLocationOverlay);
 
+                double minDistance = Double.MAX_VALUE;
+                Location myLocation = Constants.USE_GPS ? myLocationOverlay.getLastFix() : Constants.DEFAULT_LOCATION;
+
                 for (Store store : mStoresCache) {
                     GeoPoint point = Utils.LocationToGeoPoint(store.getLatitude(), store.getLongitude());
                     OverlayItem overlayitem = new OverlayItem(point, store.getName(), "");
                     itemizedOverlay.addOverlay(overlayitem);
 
                     mapOverlays.add(itemizedOverlay);
-                    if (!showNoNearbyDialog && store.getDistance() > 9000) {
-                        showNoNearbyDialog = true;
+                    store.Distance = myLocation.distanceTo(store.getLocation());
+                    if (minDistance > store.Distance) {
+                        minDistance = store.Distance;
                     }
+                }
+
+                if (minDistance > 9000) {
+                    showNoNearbyDialog = true;
                 }
 
                 MapController controller = mapView.getController();
@@ -248,6 +262,7 @@ public class StoreMapActivity extends MapActivity {
             }
 
             mProgressDialog.dismiss();
+
             if (showNoNearbyDialog) {
                 Dialog dialog = new Dialog(StoreMapActivity.this, R.style.InfoDialog);
                 dialog.setContentView(R.layout.nothing_to_see_layout);

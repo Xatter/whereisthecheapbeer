@@ -1,5 +1,6 @@
 package com.mapitprices.Utilities;
 
+import android.graphics.drawable.Drawable;
 import android.location.Location;
 import android.os.Build;
 import com.google.android.apps.analytics.GoogleAnalyticsTracker;
@@ -45,8 +46,8 @@ public class MapItPricesServer {
     static {
         if (Constants.DEBUGMODE && "google_sdk".equals(Build.PRODUCT)) {
 //            SERVER_URL = "http://10.0.2.2:61418/Beer/"; //Emulator localhost
-            SERVER_URL = "http://192.168.1.115:61418/Beer/"; //Mac Laptop windows IP
-//            SERVER_URL = "http://www.mapitprices.com/Beer/";
+            //SERVER_URL = "http://192.168.1.115:61418/Beer/"; //Mac Laptop windows IP
+            SERVER_URL = "http://www.mapitprices.com/Beer/";
         } else {
             SERVER_URL = "http://www.mapitprices.com/Beer/";
         }
@@ -71,6 +72,11 @@ public class MapItPricesServer {
 
     public static MapItResponse getNearbyPrices(Location loc) {
         GoogleAnalyticsTracker.getInstance().trackEvent("ServerCall", "getNearbyPrices", "", 0);
+        if(!Constants.USE_GPS)
+        {
+            loc = Constants.DEFAULT_LOCATION;
+        }
+
         JSONObject data = new JSONObject();
 
         if (loc != null) {
@@ -90,6 +96,11 @@ public class MapItPricesServer {
 
     public static Collection<Store> getNearbyStoresWithPricesFromServer(Location loc) {
         GoogleAnalyticsTracker.getInstance().trackEvent("ServerCall", "getNearbyStoresWithPricesFromServer", "", 0);
+        if(!Constants.USE_GPS)
+        {
+            loc = Constants.DEFAULT_LOCATION;
+        }
+
         List<NameValuePair> nameValuePairs = Utils.locationToNameValuePair(loc);
 
         String result = RestClient.ExecuteCommand(SERVER_URL + "GetStores", nameValuePairs);
@@ -291,6 +302,12 @@ public class MapItPricesServer {
 
     public static Collection<Store> getAllNearbyStoresFromServer(Location loc) {
         GoogleAnalyticsTracker.getInstance().trackEvent("ServerCall", "getAllNearbyStoresFromServer", "", 0);
+
+        if(!Constants.USE_GPS)
+        {
+            loc = Constants.DEFAULT_LOCATION;
+        }
+
         List<NameValuePair> nameValuePairs = Utils.locationToNameValuePair(loc);
         String result = RestClient.ExecuteCommand(SERVER_URL + "GetNearbyStores", nameValuePairs);
         return jsonResultToStoreCollection(result);
@@ -324,6 +341,11 @@ public class MapItPricesServer {
         request.item = item;
         request.store = store;
         request.newprice = newPrice;
+
+        if(!Constants.USE_GPS)
+        {
+            location = Constants.DEFAULT_LOCATION;
+        }
 
         try {
             Gson gson = createGson();

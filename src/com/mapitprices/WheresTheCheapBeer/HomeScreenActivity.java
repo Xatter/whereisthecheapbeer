@@ -31,14 +31,17 @@ public class HomeScreenActivity extends TabActivity {
 //                "Nearby Prices",
 //                res.getDrawable(android.R.drawable.ic_menu_mylocation))
 //                .setContent(intent);
-        spec = tabHost.newTabSpec("stores")
-                .setIndicator("Nearby", res.getDrawable(android.R.drawable.ic_menu_mylocation))
-                .setContent(new Intent().setClass(this, StoreMapActivity.class));
-        tabHost.addTab(spec);
 
         spec = tabHost.newTabSpec("items")
                 .setIndicator("Cheapest", res.getDrawable(R.drawable.dollar))
                 .setContent(new Intent().setClass(this, NearbyItemsActivity.class));
+
+        tabHost.addTab(spec);
+
+        spec = tabHost.newTabSpec("stores")
+                .setIndicator("Nearby", res.getDrawable(android.R.drawable.ic_menu_mylocation))
+                .setContent(new Intent().setClass(this, StoreMapActivity.class));
+
         tabHost.addTab(spec);
 
 

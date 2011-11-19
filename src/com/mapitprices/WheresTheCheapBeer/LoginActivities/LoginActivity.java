@@ -111,7 +111,7 @@ public class LoginActivity extends Activity {
                 e.printStackTrace();
             }
 
-            if (response.Meta.Code.startsWith("20")) {
+            if (response != null && response.Meta.Code.startsWith("20")) {
                 User user = response.Response.user;
                 Intent i;
                 if (user != null && user.getSessionToken() != null) {
@@ -135,13 +135,15 @@ public class LoginActivity extends Activity {
                     setResult(RESULT_CANCELED);
                     finish();
                 }
-            } else {
+            } else if (response != null) {
                 Toast.makeText(LoginActivity.this, response.Meta.ErrorMessage, Toast.LENGTH_LONG).show();
 
                 // Invalid login, clear password field.
                 EditText et = (EditText) findViewById(R.id.password);
                 et.setText("");
                 et.requestFocus();
+            } else {
+                Toast.makeText(LoginActivity.this, "Communication with the server failed :(", Toast.LENGTH_SHORT).show();
             }
         }
 

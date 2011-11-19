@@ -15,8 +15,9 @@ public class Store implements Parcelable {
     Address Address;
     double Latitude;
     double Longitude;
-    double Distance;
+    public float Distance;
     public String FoursquareVenueID;
+    public Location Location;
 
     public Store() {
 
@@ -39,7 +40,8 @@ public class Store implements Parcelable {
         Address = in.readParcelable(Address.class.getClassLoader());
         Latitude = in.readDouble();
         Longitude = in.readDouble();
-        Distance = in.readDouble();
+        Distance = in.readFloat();
+        Location = in.readParcelable(android.location.Location.class.getClassLoader());
     }
 
     public int getID() {
@@ -65,7 +67,8 @@ public class Store implements Parcelable {
         dest.writeParcelable(Address, flags);
         dest.writeDouble(Latitude);
         dest.writeDouble(Longitude);
-        dest.writeDouble(Distance);
+        dest.writeFloat(Distance);
+        dest.writeParcelable(Location, flags);
     }
 
     public static final Parcelable.Creator CREATOR = new Parcelable.Creator() {
@@ -99,6 +102,7 @@ public class Store implements Parcelable {
     public void setLocation(Location currentLocation) {
         Latitude = currentLocation.getLatitude();
         Longitude = currentLocation.getLongitude();
+        Location = currentLocation;
     }
 
     public double getLatitude() {
@@ -107,5 +111,17 @@ public class Store implements Parcelable {
 
     public double getLongitude() {
         return Longitude;
+    }
+
+    public Location getLocation() {
+        if (this.Location == null)
+        {
+            this.Location = new Location("");
+        }
+
+        this.Location.setLatitude(this.Latitude);
+        this.Location.setLongitude(this.Longitude);
+
+        return this.Location;
     }
 }
