@@ -1,1 +1,7 @@
-This file was created by IntelliJ IDEA 10.5.1 for binding GitHub repository
+This is the first client for mapitprices.com
+
+It was specifically designed to handle only one category from the main site, namely beer!
+
+The idea was to try and solve some of the user experience issues with a small category of price/map data in order to make the entering/updating of prices as efficient as possible.
+
+In terms of ease of use, I'm mainly completing with Excel so if my application is more difficult to add/update there had better be a pay off.  In this case mapping/searching and eventually shopping list was supposed to be that pay off.
